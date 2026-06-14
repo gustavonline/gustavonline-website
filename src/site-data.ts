@@ -1,5 +1,6 @@
 export const site = {
   brand: "gustavonline",
+  navBrand: "Guster Online",
   name: "Gustav Anderson",
   portrait: "assets/gustav-portrait.jpg",
   logo: "assets/g-logo.png",
@@ -41,12 +42,12 @@ export const actionLinks = [
     href: "https://arcitai.com",
   },
   {
-    title: "Explore my open source templates",
+    title: "My open source templates",
     label: "GitHub stars",
-    href: "https://github.com/gustavonline?tab=stars",
+    href: "https://github.com/stars/gustavonline/lists/templates",
   },
   {
-    title: "Collaborations email me",
+    title: "Collaborations? Email me",
     label: "hello@gustavonline.com",
     href: "mailto:hello@gustavonline.com",
   },

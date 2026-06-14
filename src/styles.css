@@ -66,9 +66,9 @@ input {
 
 .site-header {
   min-height: 78px;
-  display: flex;
+  display: grid;
+  grid-template-columns: 40px 1fr 40px;
   align-items: center;
-  justify-content: space-between;
   border-bottom: 1px solid var(--faint);
   padding: 0 clamp(24px, 16vw, 420px);
 }
@@ -76,13 +76,20 @@ input {
 .site-header a {
   display: inline-flex;
   align-items: center;
-  gap: 9px;
-  font-size: 18px;
-  font-weight: 750;
   letter-spacing: 0;
 }
 
-.site-header a img {
+.logo-link {
+  justify-self: start;
+}
+
+.brand-link {
+  justify-self: center;
+  font-size: 18px;
+  font-weight: 750;
+}
+
+.logo-link img {
   width: 24px;
   height: 24px;
   border-radius: 5px;
@@ -100,6 +107,7 @@ input {
   background: transparent;
   color: var(--muted);
   cursor: pointer;
+  justify-self: end;
   transition:
     background 160ms ease,
     color 160ms ease;
@@ -189,7 +197,7 @@ input {
 
 .newsletter-form {
   width: min(100%, 440px);
-  margin: 48px auto 0;
+  margin: 42px auto 0;
 }
 
 .newsletter-form label {
@@ -255,7 +263,7 @@ input {
 
 .link-section {
   position: relative;
-  margin-top: 88px;
+  margin-top: 54px;
   padding-top: 54px;
   border-top: 1px solid var(--faint);
   display: grid;

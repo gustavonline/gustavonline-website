@@ -34,7 +34,7 @@ The endpoint should return `200 OK` with:
 }
 ```
 
-The Worker should forward the signup to Kit. Kit's own Notion integration should sync subscribers into Notion.
+The Worker should create/update the subscriber in Kit. Kit's own Notion integration should sync subscribers into Notion.
 
 ## Writing Endpoint
 
@@ -80,6 +80,6 @@ Public posts should be returned as:
 Signup handling should:
 
 1. Validate email.
-2. Add the subscriber to Kit.
+2. Create/update the subscriber in Kit.
 3. Let Kit sync the subscriber to Notion.
 4. Return `{ "ok": true }`.

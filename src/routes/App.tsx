@@ -80,9 +80,11 @@ export function App() {
 function Header({ theme, onToggleTheme }: { theme: "light" | "dark"; onToggleTheme: () => void }) {
   return (
     <header className="site-header">
-      <a href="/" aria-label={`${site.brand} home`}>
+      <a className="logo-link" href="/" aria-label={`${site.brand} home`}>
         <img src={site.logo} alt="" />
-        <span>{site.brand}</span>
+      </a>
+      <a className="brand-link" href="/" aria-label={`${site.brand} home`}>
+        {site.navBrand}
       </a>
       <button className="theme-toggle" type="button" onClick={onToggleTheme} aria-label="Toggle light and dark mode">
         {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}

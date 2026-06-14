@@ -3,7 +3,6 @@
 type Env = {
   ALLOWED_ORIGIN: string;
   KIT_API_KEY: string;
-  KIT_FORM_ID: string;
   NOTION_TOKEN: string;
   NOTION_PAPERS_DATA_SOURCE_ID: string;
   PUBLIC_SITE_URL: string;
@@ -57,7 +56,7 @@ async function handleNewsletterSignup(request: Request, env: Env) {
     return json({ error: "Invalid email" }, 400, request, env);
   }
 
-  await addSubscriberToKitForm(email, source, env);
+  await upsertKitSubscriber(email, source, env);
 
   return json({ ok: true }, 200, request, env);
 }
@@ -96,8 +95,8 @@ async function handlePosts(request: Request, env: Env) {
   return json({ posts }, 200, request, env);
 }
 
-async function addSubscriberToKitForm(email: string, source: string, env: Env) {
-  const response = await fetch(`https://api.kit.com/v4/forms/${env.KIT_FORM_ID}/subscribers`, {
+async function upsertKitSubscriber(email: string, source: string, env: Env) {
+  const response = await fetch("https://api.kit.com/v4/subscribers", {
     method: "POST",
     headers: {
       "X-Kit-Api-Key": env.KIT_API_KEY,
@@ -105,13 +104,16 @@ async function addSubscriberToKitForm(email: string, source: string, env: Env) {
     },
     body: JSON.stringify({
       email_address: email,
-      referrer: source,
+      state: "active",
+      fields: {
+        source,
+      },
     }),
   });
 
   if (!response.ok) {
     const text = await response.text();
-    throw new Error(`Kit signup failed: ${response.status} ${text}`);
+    throw new Error(`Kit subscriber upsert failed: ${response.status} ${text}`);
   }
 
   const data = (await response.json()) as { subscriber?: { id?: number }; id?: number };
