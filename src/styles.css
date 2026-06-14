@@ -1,0 +1,395 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: light;
+  --bg: #fbfaf7;
+  --panel: #ffffff;
+  --text: #1f1f1f;
+  --muted: #717171;
+  --faint: #e9e5de;
+  --link: #ec9255;
+  --accent: #616850;
+  font-family:
+    ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  background: var(--bg);
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #080808;
+  --panel: #080808;
+  --text: #f4f1eb;
+  --muted: #8d8a84;
+  --faint: #1d1d1d;
+  --link: #ec9255;
+  --accent: #90977d;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--bg);
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+.page-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.site-header,
+.site-footer {
+  width: 100%;
+  border-color: var(--faint);
+}
+
+.site-header {
+  min-height: 78px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--faint);
+  padding: 0 clamp(24px, 16vw, 420px);
+}
+
+.site-header a {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 18px;
+  font-weight: 750;
+  letter-spacing: 0;
+}
+
+.site-header a img {
+  width: 24px;
+  height: 24px;
+  border-radius: 5px;
+  object-fit: cover;
+}
+
+.theme-toggle {
+  width: 38px;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition:
+    background 160ms ease,
+    color 160ms ease;
+}
+
+.theme-toggle:hover {
+  background: var(--faint);
+  color: var(--text);
+}
+
+.main-panel {
+  width: min(100% - 32px, 620px);
+  margin: 0 auto;
+  padding: clamp(72px, 13vh, 138px) 0 84px;
+}
+
+.profile-section {
+  text-align: center;
+}
+
+.name-row {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+
+.name-row h1 {
+  margin: 0;
+  font-size: clamp(28px, 4.2vw, 38px);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.name-row img {
+  width: 48px;
+  height: 48px;
+  border-radius: 9px;
+  object-fit: cover;
+  object-position: 50% 22%;
+}
+
+.intro-copy {
+  max-width: 570px;
+  margin: 24px auto 0;
+  color: var(--muted);
+  font-size: clamp(16px, 2vw, 19px);
+  line-height: 1.62;
+  font-weight: 400;
+}
+
+.content-note {
+  margin-top: 66px;
+}
+
+.content-note p {
+  margin: 0 0 34px;
+  color: var(--muted);
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.social-links {
+  display: flex;
+  justify-content: center;
+  gap: 28px;
+}
+
+.social-links a {
+  color: var(--muted);
+  transition:
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.social-links a:hover {
+  color: var(--link);
+  transform: translateY(-1px);
+}
+
+.social-links svg {
+  width: 20px;
+  height: 20px;
+  display: block;
+  fill: currentColor;
+}
+
+.newsletter-form {
+  width: min(100%, 440px);
+  margin: 48px auto 0;
+}
+
+.newsletter-form label {
+  display: block;
+  margin-bottom: 10px;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.newsletter-form div {
+  display: grid;
+  grid-template-columns: 1fr 48px;
+  gap: 8px;
+}
+
+.newsletter-form input,
+.newsletter-form button {
+  min-height: 48px;
+  border: 1px solid var(--faint);
+  border-radius: 8px;
+}
+
+.newsletter-form input {
+  width: 100%;
+  background: var(--panel);
+  color: var(--text);
+  padding: 0 14px;
+  outline: none;
+}
+
+.newsletter-form input:focus {
+  border-color: var(--link);
+}
+
+.newsletter-form button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--text);
+  color: var(--bg);
+  cursor: pointer;
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease;
+}
+
+.newsletter-form button:hover {
+  transform: translateY(-1px);
+}
+
+.newsletter-form button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.newsletter-form p {
+  min-height: 20px;
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.link-section {
+  position: relative;
+  margin-top: 88px;
+  padding-top: 54px;
+  border-top: 1px solid var(--faint);
+  display: grid;
+  gap: 18px;
+  text-align: center;
+}
+
+.golden-orbit {
+  position: absolute;
+  z-index: -1;
+  top: 32px;
+  left: 50%;
+  width: min(320px, 72vw);
+  aspect-ratio: 1;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(255, 140, 0, 0.2), rgba(255, 215, 0, 0.12) 38%, transparent 68%);
+  filter: blur(2px);
+  pointer-events: none;
+}
+
+.action-line {
+  display: block;
+  color: var(--muted);
+  font-size: clamp(15px, 1.7vw, 18px);
+  line-height: 1.45;
+  transition: color 160ms ease;
+}
+
+.action-line span {
+  color: inherit;
+}
+
+.action-line strong {
+  margin-left: 6px;
+  color: var(--text);
+  font-weight: 650;
+  transition: color 160ms ease;
+}
+
+.action-line:hover,
+.action-line:hover strong {
+  color: var(--link);
+}
+
+.writing-section {
+  margin-top: 70px;
+  padding-top: 36px;
+  border-top: 1px solid var(--faint);
+}
+
+.section-label {
+  margin: 0 0 20px;
+  color: var(--muted);
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.note-list {
+  display: grid;
+  gap: 14px;
+}
+
+.note-list a {
+  display: grid;
+  gap: 6px;
+  padding: 0 0 18px;
+  border-bottom: 1px solid var(--faint);
+}
+
+.note-list span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.note-list strong {
+  font-size: 16px;
+}
+
+.note-list p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.site-footer {
+  min-height: 86px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--faint);
+  padding: 0 clamp(24px, 16vw, 420px);
+}
+
+.site-footer p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+@media (max-width: 720px) {
+  .site-header,
+  .site-footer {
+    padding-left: 22px;
+    padding-right: 22px;
+  }
+
+  .site-footer {
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .site-footer .social-links {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 460px) {
+  .main-panel {
+    width: min(100% - 28px, 660px);
+    padding-top: 70px;
+  }
+
+  .name-row {
+    flex-direction: column-reverse;
+  }
+
+  .newsletter-form div {
+    grid-template-columns: 1fr;
+  }
+}

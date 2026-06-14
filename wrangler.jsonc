@@ -1,0 +1,17 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "gustavonline-api",
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-06-14",
+  "workers_dev": true,
+  "preview_urls": false,
+  "observability": {
+    "enabled": true
+  },
+  "vars": {
+    "ALLOWED_ORIGIN": "https://gustavonline.github.io",
+    "KIT_FORM_ID": "9564596",
+    "NOTION_PAPERS_DATA_SOURCE_ID": "23fa9322-f9ee-4ffc-8c5a-a44a88b281e9",
+    "PUBLIC_SITE_URL": "https://gustavonline.github.io/gustavonline"
+  }
+}
