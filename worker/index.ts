@@ -1,7 +1,7 @@
 /// <reference types="@cloudflare/workers-types" />
 
 type Env = {
-  ALLOWED_ORIGIN: string;
+  ALLOWED_ORIGINS: string;
   KIT_API_KEY: string;
   NOTION_TOKEN: string;
   NOTION_PAPERS_DATA_SOURCE_ID: string;
@@ -159,7 +159,8 @@ function json(body: unknown, status: number, request: Request, env: Env) {
 
 function corsHeaders(request: Request, env: Env) {
   const origin = request.headers.get("Origin");
-  const allowedOrigin = origin && origin === env.ALLOWED_ORIGIN ? origin : env.ALLOWED_ORIGIN;
+  const allowedOrigins = env.ALLOWED_ORIGINS.split(",").map((allowedOrigin) => allowedOrigin.trim());
+  const allowedOrigin = origin && allowedOrigins.includes(origin) ? origin : allowedOrigins[0];
 
   return {
     "Access-Control-Allow-Origin": allowedOrigin,

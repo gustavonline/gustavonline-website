@@ -19,7 +19,7 @@ Static vars live in `wrangler.jsonc`:
 
 - `NOTION_PAPERS_DATA_SOURCE_ID`: `23fa9322-f9ee-4ffc-8c5a-a44a88b281e9`
 - `PUBLIC_SITE_URL`
-- `ALLOWED_ORIGIN`
+- `ALLOWED_ORIGINS`
 
 Secrets:
 

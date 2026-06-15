@@ -26,7 +26,7 @@ For me, the core product is the ability to turn technical complexity into someth
 
 ## Links
 
-- Portfolio: [gustavonline.github.io/gustavonline](https://gustavonline.github.io/gustavonline)
+- Portfolio: [gustavonline.com](https://gustavonline.com)
 - GitHub: [github.com/gustavonline](https://github.com/gustavonline)
 - YouTube: [youtube.com/@gustavonline](https://www.youtube.com/@gustavonline)
 - ArcitAI: [arcitai.com](https://arcitai.com)
