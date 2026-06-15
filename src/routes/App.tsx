@@ -32,6 +32,7 @@ export function App() {
   return (
     <div className="page-shell">
       <Header theme={theme} onToggleTheme={() => setTheme(theme === "light" ? "dark" : "light")} />
+      <FloatingCards />
       <main className="main-panel">
         <section className="profile-section" aria-label="Profile">
           <div className="name-row">
@@ -73,6 +74,18 @@ export function App() {
         </section>
       </main>
       <Footer />
+    </div>
+  );
+}
+
+function FloatingCards() {
+  return (
+    <div className="floating-card-layer" aria-hidden="true">
+      {site.floatingCards.map((card) => (
+        <figure className={`floating-card floating-card-${card.variant}`} key={card.src}>
+          <img src={card.src} alt={card.alt} />
+        </figure>
+      ))}
     </div>
   );
 }

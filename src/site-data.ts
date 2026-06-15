@@ -33,6 +33,23 @@ export const site = {
   footer: {
     copyright: "© 2026 gustavonline",
   },
+  floatingCards: [
+    {
+      src: "assets/quote-card.png",
+      alt: "I wanna see what happens if I don't give up",
+      variant: "quote",
+    },
+    {
+      src: "assets/workstation-setup.jpg",
+      alt: "Desk setup with MacBook and iPad",
+      variant: "desk",
+    },
+    {
+      src: "assets/orange-gradient.jpg",
+      alt: "Golden orange gradient",
+      variant: "gradient",
+    },
+  ],
 };
 
 export const actionLinks = [
