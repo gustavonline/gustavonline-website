@@ -51,7 +51,6 @@ export function App() {
         </section>
 
         <section className="link-section" aria-label="Actions">
-          <div className="golden-orbit" aria-hidden="true" />
           {actionLinks.map((link) => (
             <a className="action-line" href={link.href} key={link.title}>
               <span>{link.title}</span>
@@ -140,7 +139,7 @@ function NewsletterForm() {
   }
 
   return (
-    <form className="newsletter-form" onSubmit={onSubmit}>
+    <form className="newsletter-form" id="newsletter" onSubmit={onSubmit}>
       <label htmlFor="email">{site.newsletter.label}</label>
       <div>
         <input

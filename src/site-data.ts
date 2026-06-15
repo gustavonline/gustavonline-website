@@ -1,6 +1,6 @@
 export const site = {
   brand: "gustavonline",
-  navBrand: "Guster Online",
+  navBrand: "gustavonline",
   name: "Gustav Anderson",
   portrait: "assets/gustav-portrait.jpg",
   logo: "assets/g-logo.png",
@@ -48,6 +48,21 @@ export const site = {
       src: "assets/orange-gradient.jpg",
       alt: "Golden orange gradient",
       variant: "gradient",
+    },
+    {
+      src: "assets/process-photo.jpg",
+      alt: "Notebook and everyday work process",
+      variant: "process",
+    },
+    {
+      src: "assets/macintosh.jpg",
+      alt: "Macintosh-inspired setup",
+      variant: "macintosh",
+    },
+    {
+      src: "assets/arcitai-mark.jpg",
+      alt: "Arc'It AI visual mark",
+      variant: "arcitai",
     },
   ],
 };
