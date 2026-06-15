@@ -40,8 +40,8 @@ export const site = {
       variant: "quote",
     },
     {
-      src: "assets/workstation-setup.jpg",
-      alt: "Desk setup with MacBook and iPad",
+      src: "assets/office-sun-desk.jpg",
+      alt: "Sunlit office desk setup",
       variant: "desk",
     },
     {
@@ -50,19 +50,14 @@ export const site = {
       variant: "gradient",
     },
     {
-      src: "assets/process-photo.jpg",
-      alt: "Notebook and everyday work process",
-      variant: "process",
+      src: "assets/office-ai-desk.jpg",
+      alt: "Office desk with laptop and light",
+      variant: "macintosh",
     },
     {
       src: "assets/macintosh.jpg",
       alt: "Macintosh-inspired setup",
-      variant: "macintosh",
-    },
-    {
-      src: "assets/arcitai-mark.jpg",
-      alt: "Arc'It AI visual mark",
-      variant: "arcitai",
+      variant: "process",
     },
   ],
 };

@@ -10,6 +10,7 @@ export function App() {
   const [theme, setTheme] = useState<"light" | "dark">(() => {
     return localStorage.getItem(site.themeStorageKey) === "dark" ? "dark" : "light";
   });
+  const [selectedCard, setSelectedCard] = useState<(typeof site.floatingCards)[number] | null>(null);
   const writingQuery = useQuery({
     queryKey: ["writing"],
     queryFn: fetchWriting,
@@ -32,7 +33,7 @@ export function App() {
   return (
     <div className="page-shell">
       <Header theme={theme} onToggleTheme={() => setTheme(theme === "light" ? "dark" : "light")} />
-      <FloatingCards />
+      <FloatingCards onSelect={setSelectedCard} />
       <main className="main-panel">
         <section className="profile-section" aria-label="Profile">
           <div className="name-row">
@@ -73,18 +74,56 @@ export function App() {
         </section>
       </main>
       <Footer />
+      {selectedCard && <ImageModal card={selectedCard} onClose={() => setSelectedCard(null)} />}
     </div>
   );
 }
 
-function FloatingCards() {
+function FloatingCards({ onSelect }: { onSelect: (card: (typeof site.floatingCards)[number]) => void }) {
   return (
-    <div className="floating-card-layer" aria-hidden="true">
+    <div className="floating-card-layer" aria-label="Portfolio image cards">
       {site.floatingCards.map((card) => (
-        <figure className={`floating-card floating-card-${card.variant}`} key={card.src}>
+        <button
+          className={`floating-card floating-card-${card.variant}`}
+          key={card.src}
+          onClick={() => onSelect(card)}
+          type="button"
+        >
           <img src={card.src} alt={card.alt} />
-        </figure>
+        </button>
       ))}
+    </div>
+  );
+}
+
+function ImageModal({
+  card,
+  onClose,
+}: {
+  card: (typeof site.floatingCards)[number];
+  onClose: () => void;
+}) {
+  useEffect(() => {
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    }
+
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [onClose]);
+
+  return (
+    <div className="image-modal" role="dialog" aria-modal="true" aria-label={card.alt}>
+      <button className="image-modal-backdrop" type="button" onClick={onClose} aria-label="Close image preview" />
+      <figure className="image-modal-panel">
+        <button className="image-modal-close" type="button" onClick={onClose} aria-label="Close image preview">
+          ×
+        </button>
+        <img src={card.src} alt={card.alt} />
+        <figcaption>{card.alt}</figcaption>
+      </figure>
     </div>
   );
 }
