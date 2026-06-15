@@ -78,12 +78,14 @@ export function App() {
 }
 
 function Header({ theme, onToggleTheme }: { theme: "light" | "dark"; onToggleTheme: () => void }) {
+  const homeHref = window.location.pathname.startsWith("/gustavonline") ? "/gustavonline/" : "/";
+
   return (
     <header className="site-header">
-      <a className="logo-link" href="/" aria-label={`${site.brand} home`}>
+      <a className="logo-link" href={homeHref} aria-label={`${site.brand} home`}>
         <img src={site.logo} alt="" />
       </a>
-      <a className="brand-link" href="/" aria-label={`${site.brand} home`}>
+      <a className="brand-link" href={homeHref} aria-label={`${site.brand} home`}>
         {site.navBrand}
       </a>
       <button className="theme-toggle" type="button" onClick={onToggleTheme} aria-label="Toggle light and dark mode">

@@ -24,9 +24,11 @@ const indexRoute = createRoute({
 });
 
 const routeTree = rootRoute.addChildren([indexRoute]);
+const routerBasepath = window.location.pathname.startsWith("/gustavonline") ? "/gustavonline" : "/";
 
 const router = createRouter({
   routeTree,
+  basepath: routerBasepath,
   defaultPreload: "intent",
 });
 
