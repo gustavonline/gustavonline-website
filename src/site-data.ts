@@ -42,7 +42,7 @@ export const site = {
     {
       src: "assets/office-sun-desk.jpg",
       alt: "Sunlit office desk setup",
-      variant: "desk",
+      variant: "office-sun",
     },
     {
       src: "assets/orange-gradient.jpg",
@@ -52,12 +52,17 @@ export const site = {
     {
       src: "assets/office-ai-desk.jpg",
       alt: "Office desk with laptop and light",
-      variant: "macintosh",
+      variant: "office-ai",
     },
     {
       src: "assets/macintosh.jpg",
       alt: "Macintosh-inspired setup",
-      variant: "process",
+      variant: "macintosh",
+    },
+    {
+      src: "assets/office-window-desk.jpg",
+      alt: "Window-side office desk setup",
+      variant: "office-window",
     },
   ],
 };

@@ -113,9 +113,9 @@ input {
 }
 
 .floating-card-quote {
-  top: 108px;
-  left: max(26px, calc(50vw - 650px));
-  width: clamp(104px, 11vw, 158px);
+  top: 96px;
+  left: max(26px, calc(50vw - 690px));
+  width: clamp(116px, 12vw, 176px);
   aspect-ratio: 1;
   transform: rotate(-4deg);
 }
@@ -124,22 +124,22 @@ input {
   transform: rotate(-2deg) translateY(-4px);
 }
 
-.floating-card-desk {
-  top: 258px;
-  right: max(30px, calc(50vw - 650px));
-  width: clamp(116px, 11vw, 160px);
+.floating-card-office-sun {
+  top: 250px;
+  right: max(28px, calc(50vw - 700px));
+  width: clamp(116px, 11vw, 166px);
   aspect-ratio: 5 / 4;
   transform: rotate(3deg);
 }
 
-.floating-card-desk:hover {
+.floating-card-office-sun:hover {
   transform: rotate(1deg) translateY(-4px);
 }
 
 .floating-card-gradient {
-  top: 460px;
+  top: 430px;
   right: max(56px, calc(50vw - 710px));
-  width: clamp(88px, 9vw, 128px);
+  width: clamp(92px, 9vw, 136px);
   aspect-ratio: 1;
   border-radius: 999px;
   border: 0;
@@ -159,28 +159,40 @@ input {
   border-radius: 999px;
 }
 
-.floating-card-process {
-  top: 650px;
+.floating-card-office-ai {
+  top: 620px;
   left: max(42px, calc(50vw - 640px));
-  width: clamp(112px, 10vw, 148px);
-  aspect-ratio: 16 / 9;
+  width: clamp(116px, 10vw, 154px);
+  aspect-ratio: 5 / 4;
   transform: rotate(-2deg);
 }
 
-.floating-card-process:hover {
+.floating-card-office-ai:hover {
   transform: rotate(0deg) translateY(-4px);
 }
 
 .floating-card-macintosh {
-  top: 850px;
-  right: max(36px, calc(50vw - 640px));
-  width: clamp(104px, 10vw, 146px);
-  aspect-ratio: 5 / 4;
+  top: 790px;
+  left: max(30px, calc(50vw - 630px));
+  width: clamp(148px, 14vw, 204px);
+  aspect-ratio: 16 / 9;
   transform: rotate(2deg);
 }
 
 .floating-card-macintosh:hover {
   transform: rotate(0deg) translateY(-4px);
+}
+
+.floating-card-office-window {
+  top: 1000px;
+  right: max(46px, calc(50vw - 690px));
+  width: clamp(104px, 10vw, 148px);
+  aspect-ratio: 4 / 5;
+  transform: rotate(4deg);
+}
+
+.floating-card-office-window:hover {
+  transform: rotate(2deg) translateY(-4px);
 }
 
 .site-header,
@@ -257,7 +269,7 @@ input {
   z-index: 20;
   display: grid;
   place-items: center;
-  padding: 24px;
+  padding: 28px;
 }
 
 .image-modal-backdrop {
@@ -270,8 +282,9 @@ input {
 
 .image-modal-panel {
   position: relative;
-  width: min(920px, 100%);
-  max-height: min(82vh, 820px);
+  width: fit-content;
+  max-width: min(94vw, 980px);
+  max-height: 88vh;
   margin: 0;
   padding: 10px;
   border: 1px solid color-mix(in srgb, var(--faint) 78%, transparent);
@@ -281,8 +294,10 @@ input {
 }
 
 .image-modal-panel img {
-  width: 100%;
-  max-height: calc(82vh - 76px);
+  width: auto;
+  height: auto;
+  max-width: min(90vw, 940px);
+  max-height: min(78vh, 820px);
   display: block;
   object-fit: contain;
   border-radius: 9px;
