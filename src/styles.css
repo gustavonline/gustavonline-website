@@ -112,7 +112,7 @@ input {
   border-radius: 7px;
 }
 
-.floating-card-quote {
+.floating-card-slot-a {
   top: 96px;
   left: max(26px, calc(50vw - 690px));
   width: clamp(116px, 12vw, 176px);
@@ -120,11 +120,11 @@ input {
   transform: rotate(-4deg);
 }
 
-.floating-card-quote:hover {
+.floating-card-slot-a:hover {
   transform: rotate(-2deg) translateY(-4px);
 }
 
-.floating-card-office-sun {
+.floating-card-slot-b {
   top: 250px;
   right: max(28px, calc(50vw - 700px));
   width: clamp(116px, 11vw, 166px);
@@ -132,15 +132,59 @@ input {
   transform: rotate(3deg);
 }
 
-.floating-card-office-sun:hover {
+.floating-card-slot-b:hover {
   transform: rotate(1deg) translateY(-4px);
 }
 
-.floating-card-gradient {
+.floating-card-slot-c {
   top: 430px;
   right: max(56px, calc(50vw - 710px));
   width: clamp(92px, 9vw, 136px);
   aspect-ratio: 1;
+  transform: rotate(-6deg);
+}
+
+.floating-card-slot-c:hover {
+  transform: rotate(-3deg) translateY(-4px);
+}
+
+.floating-card-slot-d {
+  top: 620px;
+  left: max(42px, calc(50vw - 640px));
+  width: clamp(116px, 10vw, 154px);
+  aspect-ratio: 5 / 4;
+  transform: rotate(-2deg);
+}
+
+.floating-card-slot-d:hover {
+  transform: rotate(0deg) translateY(-4px);
+}
+
+.floating-card-slot-e {
+  top: 790px;
+  left: max(30px, calc(50vw - 630px));
+  width: clamp(148px, 14vw, 204px);
+  aspect-ratio: 16 / 9;
+  transform: rotate(2deg);
+}
+
+.floating-card-slot-e:hover {
+  transform: rotate(0deg) translateY(-4px);
+}
+
+.floating-card-slot-f {
+  top: 1000px;
+  right: max(46px, calc(50vw - 690px));
+  width: clamp(104px, 10vw, 148px);
+  aspect-ratio: 4 / 5;
+  transform: rotate(4deg);
+}
+
+.floating-card-slot-f:hover {
+  transform: rotate(2deg) translateY(-4px);
+}
+
+.floating-card-kind-gradient {
   border-radius: 999px;
   border: 0;
   background: transparent;
@@ -151,48 +195,13 @@ input {
   mask-image: radial-gradient(circle, #000 0 48%, rgba(0, 0, 0, 0.52) 64%, transparent 78%);
 }
 
-.floating-card-gradient:hover {
-  transform: translateY(-3px) scale(1.03);
-}
-
-.floating-card-gradient img {
+.floating-card-kind-gradient img {
   border-radius: 999px;
 }
 
-.floating-card-office-ai {
-  top: 620px;
-  left: max(42px, calc(50vw - 640px));
-  width: clamp(116px, 10vw, 154px);
-  aspect-ratio: 5 / 4;
-  transform: rotate(-2deg);
-}
-
-.floating-card-office-ai:hover {
-  transform: rotate(0deg) translateY(-4px);
-}
-
-.floating-card-macintosh {
-  top: 790px;
-  left: max(30px, calc(50vw - 630px));
-  width: clamp(148px, 14vw, 204px);
-  aspect-ratio: 16 / 9;
-  transform: rotate(2deg);
-}
-
-.floating-card-macintosh:hover {
-  transform: rotate(0deg) translateY(-4px);
-}
-
-.floating-card-office-window {
-  top: 1000px;
-  right: max(46px, calc(50vw - 690px));
-  width: clamp(104px, 10vw, 148px);
-  aspect-ratio: 4 / 5;
-  transform: rotate(4deg);
-}
-
-.floating-card-office-window:hover {
-  transform: rotate(2deg) translateY(-4px);
+.floating-card-kind-quote img {
+  object-fit: contain;
+  background: #fbfaf7;
 }
 
 .site-header,
@@ -557,11 +566,13 @@ input {
   font-size: 15px;
 }
 
-@media (max-width: 720px) {
+@media (max-width: 1120px) {
   .floating-card-layer {
     display: none;
   }
+}
 
+@media (max-width: 720px) {
   .site-header,
   .site-footer {
     padding-left: 22px;

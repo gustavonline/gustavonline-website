@@ -10,6 +10,7 @@ export function App() {
   const [theme, setTheme] = useState<"light" | "dark">(() => {
     return localStorage.getItem(site.themeStorageKey) === "dark" ? "dark" : "light";
   });
+  const [floatingCards] = useState(() => shuffleCards(site.floatingCards));
   const [selectedCard, setSelectedCard] = useState<(typeof site.floatingCards)[number] | null>(null);
   const writingQuery = useQuery({
     queryKey: ["writing"],
@@ -33,7 +34,7 @@ export function App() {
   return (
     <div className="page-shell">
       <Header theme={theme} onToggleTheme={() => setTheme(theme === "light" ? "dark" : "light")} />
-      <FloatingCards onSelect={setSelectedCard} />
+      <FloatingCards cards={floatingCards} onSelect={setSelectedCard} />
       <main className="main-panel">
         <section className="profile-section" aria-label="Profile">
           <div className="name-row">
@@ -79,12 +80,20 @@ export function App() {
   );
 }
 
-function FloatingCards({ onSelect }: { onSelect: (card: (typeof site.floatingCards)[number]) => void }) {
+const floatingCardSlots = ["slot-a", "slot-b", "slot-c", "slot-d", "slot-e", "slot-f"] as const;
+
+function FloatingCards({
+  cards,
+  onSelect,
+}: {
+  cards: typeof site.floatingCards;
+  onSelect: (card: (typeof site.floatingCards)[number]) => void;
+}) {
   return (
     <div className="floating-card-layer" aria-label="Portfolio image cards">
-      {site.floatingCards.map((card) => (
+      {cards.map((card, index) => (
         <button
-          className={`floating-card floating-card-${card.variant}`}
+          className={`floating-card floating-card-${floatingCardSlots[index % floatingCardSlots.length]} floating-card-kind-${card.variant}`}
           key={card.src}
           onClick={() => onSelect(card)}
           type="button"
@@ -94,6 +103,17 @@ function FloatingCards({ onSelect }: { onSelect: (card: (typeof site.floatingCar
       ))}
     </div>
   );
+}
+
+function shuffleCards(cards: typeof site.floatingCards) {
+  const shuffled = [...cards];
+
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const nextIndex = Math.floor(Math.random() * (index + 1));
+    [shuffled[index], shuffled[nextIndex]] = [shuffled[nextIndex], shuffled[index]];
+  }
+
+  return shuffled;
 }
 
 function ImageModal({
