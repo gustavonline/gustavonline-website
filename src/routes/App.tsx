@@ -1,17 +1,27 @@
 import { useQuery } from "@tanstack/react-query";
 import { Moon, Send, Sun } from "lucide-react";
-import type { FormEvent } from "react";
+import type { CSSProperties, FormEvent } from "react";
 import { useEffect, useState } from "react";
 
 import { actionLinks, footerSocialLinks, site, socialLinks, staticWriting } from "../site-data";
 import { fetchWriting, submitNewsletterSignup } from "../services/content";
 
+type FloatingCard = (typeof site.floatingCards)[number];
+type FloatingCardView = FloatingCard & {
+  motion: {
+    rotation: string;
+    scale: string;
+    x: string;
+    y: string;
+  };
+};
+
 export function App() {
   const [theme, setTheme] = useState<"light" | "dark">(() => {
     return localStorage.getItem(site.themeStorageKey) === "dark" ? "dark" : "light";
   });
-  const [floatingCards] = useState(() => shuffleCards(site.floatingCards));
-  const [selectedCard, setSelectedCard] = useState<(typeof site.floatingCards)[number] | null>(null);
+  const [floatingCards] = useState(() => createFloatingCards(site.floatingCards));
+  const [selectedCard, setSelectedCard] = useState<FloatingCard | null>(null);
   const writingQuery = useQuery({
     queryKey: ["writing"],
     queryFn: fetchWriting,
@@ -86,8 +96,8 @@ function FloatingCards({
   cards,
   onSelect,
 }: {
-  cards: typeof site.floatingCards;
-  onSelect: (card: (typeof site.floatingCards)[number]) => void;
+  cards: FloatingCardView[];
+  onSelect: (card: FloatingCard) => void;
 }) {
   return (
     <div className="floating-card-layer" aria-label="Portfolio image cards">
@@ -96,6 +106,12 @@ function FloatingCards({
           className={`floating-card floating-card-${floatingCardSlots[index % floatingCardSlots.length]} floating-card-kind-${card.variant}`}
           key={card.src}
           onClick={() => onSelect(card)}
+          style={{
+            "--float-rotate": card.motion.rotation,
+            "--float-scale": card.motion.scale,
+            "--float-x": card.motion.x,
+            "--float-y": card.motion.y,
+          } as CSSProperties}
           type="button"
         >
           <img src={card.src} alt={card.alt} />
@@ -105,7 +121,7 @@ function FloatingCards({
   );
 }
 
-function shuffleCards(cards: typeof site.floatingCards) {
+function createFloatingCards(cards: typeof site.floatingCards): FloatingCardView[] {
   const shuffled = [...cards];
 
   for (let index = shuffled.length - 1; index > 0; index -= 1) {
@@ -113,14 +129,26 @@ function shuffleCards(cards: typeof site.floatingCards) {
     [shuffled[index], shuffled[nextIndex]] = [shuffled[nextIndex], shuffled[index]];
   }
 
-  return shuffled;
+  return shuffled.map((card) => ({
+    ...card,
+    motion: {
+      rotation: `${randomBetween(-3, 3)}deg`,
+      scale: randomBetween(0.92, 1.08).toFixed(2),
+      x: `${randomBetween(-16, 16)}px`,
+      y: `${randomBetween(-58, 58)}px`,
+    },
+  }));
+}
+
+function randomBetween(min: number, max: number) {
+  return Math.random() * (max - min) + min;
 }
 
 function ImageModal({
   card,
   onClose,
 }: {
-  card: (typeof site.floatingCards)[number];
+  card: FloatingCard;
   onClose: () => void;
 }) {
   useEffect(() => {

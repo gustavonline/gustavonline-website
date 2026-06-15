@@ -117,11 +117,14 @@ input {
   left: max(26px, calc(50vw - 690px));
   width: clamp(116px, 12vw, 176px);
   aspect-ratio: 1;
-  transform: rotate(-4deg);
+  --slot-rotate: -4deg;
+  transform: translate(var(--float-x, 0), var(--float-y, 0)) rotate(calc(var(--slot-rotate) + var(--float-rotate, 0deg)))
+    scale(var(--float-scale, 1));
 }
 
 .floating-card-slot-a:hover {
-  transform: rotate(-2deg) translateY(-4px);
+  transform: translate(var(--float-x, 0), calc(var(--float-y, 0) - 4px))
+    rotate(calc(var(--slot-rotate) + var(--float-rotate, 0deg) + 2deg)) scale(var(--float-scale, 1));
 }
 
 .floating-card-slot-b {
@@ -129,11 +132,14 @@ input {
   right: max(28px, calc(50vw - 700px));
   width: clamp(116px, 11vw, 166px);
   aspect-ratio: 5 / 4;
-  transform: rotate(3deg);
+  --slot-rotate: 3deg;
+  transform: translate(var(--float-x, 0), var(--float-y, 0)) rotate(calc(var(--slot-rotate) + var(--float-rotate, 0deg)))
+    scale(var(--float-scale, 1));
 }
 
 .floating-card-slot-b:hover {
-  transform: rotate(1deg) translateY(-4px);
+  transform: translate(var(--float-x, 0), calc(var(--float-y, 0) - 4px))
+    rotate(calc(var(--slot-rotate) + var(--float-rotate, 0deg) - 2deg)) scale(var(--float-scale, 1));
 }
 
 .floating-card-slot-c {
@@ -141,11 +147,14 @@ input {
   right: max(56px, calc(50vw - 710px));
   width: clamp(92px, 9vw, 136px);
   aspect-ratio: 1;
-  transform: rotate(-6deg);
+  --slot-rotate: -6deg;
+  transform: translate(var(--float-x, 0), var(--float-y, 0)) rotate(calc(var(--slot-rotate) + var(--float-rotate, 0deg)))
+    scale(var(--float-scale, 1));
 }
 
 .floating-card-slot-c:hover {
-  transform: rotate(-3deg) translateY(-4px);
+  transform: translate(var(--float-x, 0), calc(var(--float-y, 0) - 4px))
+    rotate(calc(var(--slot-rotate) + var(--float-rotate, 0deg) + 3deg)) scale(var(--float-scale, 1));
 }
 
 .floating-card-slot-d {
@@ -153,11 +162,14 @@ input {
   left: max(42px, calc(50vw - 640px));
   width: clamp(116px, 10vw, 154px);
   aspect-ratio: 5 / 4;
-  transform: rotate(-2deg);
+  --slot-rotate: -2deg;
+  transform: translate(var(--float-x, 0), var(--float-y, 0)) rotate(calc(var(--slot-rotate) + var(--float-rotate, 0deg)))
+    scale(var(--float-scale, 1));
 }
 
 .floating-card-slot-d:hover {
-  transform: rotate(0deg) translateY(-4px);
+  transform: translate(var(--float-x, 0), calc(var(--float-y, 0) - 4px))
+    rotate(calc(var(--slot-rotate) + var(--float-rotate, 0deg) + 2deg)) scale(var(--float-scale, 1));
 }
 
 .floating-card-slot-e {
@@ -165,11 +177,14 @@ input {
   left: max(30px, calc(50vw - 630px));
   width: clamp(148px, 14vw, 204px);
   aspect-ratio: 16 / 9;
-  transform: rotate(2deg);
+  --slot-rotate: 2deg;
+  transform: translate(var(--float-x, 0), var(--float-y, 0)) rotate(calc(var(--slot-rotate) + var(--float-rotate, 0deg)))
+    scale(var(--float-scale, 1));
 }
 
 .floating-card-slot-e:hover {
-  transform: rotate(0deg) translateY(-4px);
+  transform: translate(var(--float-x, 0), calc(var(--float-y, 0) - 4px))
+    rotate(calc(var(--slot-rotate) + var(--float-rotate, 0deg) - 2deg)) scale(var(--float-scale, 1));
 }
 
 .floating-card-slot-f {
@@ -177,19 +192,25 @@ input {
   right: max(46px, calc(50vw - 690px));
   width: clamp(104px, 10vw, 148px);
   aspect-ratio: 4 / 5;
-  transform: rotate(4deg);
+  --slot-rotate: 4deg;
+  transform: translate(var(--float-x, 0), var(--float-y, 0)) rotate(calc(var(--slot-rotate) + var(--float-rotate, 0deg)))
+    scale(var(--float-scale, 1));
 }
 
 .floating-card-slot-f:hover {
-  transform: rotate(2deg) translateY(-4px);
+  transform: translate(var(--float-x, 0), calc(var(--float-y, 0) - 4px))
+    rotate(calc(var(--slot-rotate) + var(--float-rotate, 0deg) - 2deg)) scale(var(--float-scale, 1));
 }
 
 .floating-card-kind-gradient {
+  width: clamp(104px, 10vw, 148px);
+  aspect-ratio: 1;
   border-radius: 999px;
   border: 0;
   background: transparent;
   box-shadow: none;
   opacity: 0.64;
+  overflow: visible;
   padding: 0;
   -webkit-mask-image: radial-gradient(circle, #000 0 48%, rgba(0, 0, 0, 0.52) 64%, transparent 78%);
   mask-image: radial-gradient(circle, #000 0 48%, rgba(0, 0, 0, 0.52) 64%, transparent 78%);
