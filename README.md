@@ -1,6 +1,6 @@
 # Gustav Anderson
 
-I'm an IT architect building an AI-first consultancy. I document everyday life, work and learnings with clients, plus the open-source templates I use for agentic engineering and IT architecture.
+I'm an IT architect building a consultancy. I document everyday life, work and learnings, plus the thinking behind onlinesourdough.com.
 
 My current direction is simple: understand complex systems, make them concrete, and turn that understanding into software, workflows, documentation, and useful services.
 
@@ -12,10 +12,10 @@ This repository has two jobs:
 ## What I am building around
 
 - **Software systems:** useful applications, prototypes, APIs, and workflows.
-- **AI-first consultancy:** client work around practical AI workflows, IT architecture, and software systems.
+- **onlinesourdough:** content, resources, and direct access around IT, software, and business architecture.
 - **Agentic engineering:** experiments with AI for planning, documentation, automation, and decision support.
 - **Public learning:** notes, videos, and reflections from learning and building in public.
-- **ArcitAI:** the future service menu for consulting, audits, workshops, and AI workflow design.
+- **arcitai:** done-for-you IT architecture and software project work.
 - **Technical range:** macOS, Windows, Power BI, React, TypeScript, TanStack, Tailwind CSS, Cloudflare, and practical AI workflows.
 
 ## How I think about the work
@@ -29,7 +29,7 @@ For me, the core product is the ability to turn technical complexity into someth
 - Portfolio: [gustavonline.com](https://gustavonline.com)
 - GitHub: [github.com/gustavonline](https://github.com/gustavonline)
 - YouTube: [youtube.com/@gustavonline](https://www.youtube.com/@gustavonline)
-- ArcitAI: [arcitai.com](https://arcitai.com)
+- arcitai: [arcitai.com](https://arcitai.com)
 
 ## Website stack
 
@@ -44,7 +44,7 @@ For me, the core product is the ability to turn technical complexity into someth
 
 ## Content architecture
 
-- `src/site-data.ts` owns editable site content, metadata, links, social profiles, newsletter labels, and fallback notes.
+- `src/site-data.ts` exports one `siteData` object with editable site content, metadata, links, social profiles, newsletter labels, and fallback notes.
 - `src/routes/App.tsx` owns rendering and interaction only.
 - `src/styles.css` owns visual design, spacing, typography, and responsive behavior.
 - `index.html` only contains static fallback metadata. Runtime metadata is applied from `src/site-data.ts`.

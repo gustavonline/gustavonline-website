@@ -1,7 +1,7 @@
 {
   "name": "gustavonline",
   "version": "1.0.0",
-  "description": "I'm an IT architect building an AI-first consultancy and documenting everyday life, work, learnings, and open-source templates for agentic engineering and IT architecture.",
+  "description": "Personal site for gustavonline, documenting IT architecture work, learning and the thinking behind onlinesourdough.com.",
   "type": "module",
   "scripts": {
     "dev": "vite",

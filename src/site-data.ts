@@ -1,4 +1,4 @@
-export const site = {
+export const siteData = {
   brand: "gustavonline",
   navBrand: "gustavonline",
   name: "Gustav Anderson",
@@ -7,28 +7,51 @@ export const site = {
   email: "hello@gustavonline.com",
   themeStorageKey: "gustavonline-theme",
   seo: {
-    title: "gustavonline | IT architect building an AI-first consultancy",
+    title: "gustavonline | IT architect and onlinesourdough",
     description:
-      "I'm an IT architect. Building an AI-first consultancy. Trying to document as much as I possibly can. This space is where I share everyday life, work and learnings with my clients, and the open-source templates I use for agentic engineering and IT architecture.",
+      "I'm an IT architect building a consultancy. gustavonline is where I document everyday work, learning and the thinking behind onlinesourdough.com. onlinesourdough.com is for content, resources and direct access; arcitai.com is for done-for-you projects.",
     ogTitle: "gustavonline - Gustav Anderson",
     ogImage: "assets/gustav-portrait.jpg",
   },
   profile: {
     intro:
-      "I'm an IT architect. Building an AI-first consultancy. Trying to document as much as I possibly can. This space is where I share everyday life, work and learnings with my clients, and the open-source templates I use for agentic engineering and IT architecture.",
-    noteLine: "I post content here",
+      "I'm an IT architect building a consultancy - gustavonline is my space for sharing real decisions and the thinking behind onlinesourdough.com.",
+    noteLine: "I try to post content here",
   },
   newsletter: {
-    label: "Everyday updates and simple notes",
+    label: "Daily notes, thoughts and resources",
     placeholder: "hello@gustavonline.com",
-    idle: "Written in Notion later. Sent when it is useful.",
+    idle: "Check your inbox for a confirmation email. Unsubscribe anytime.",
     loading: "Submitting...",
     success: "You are on the list.",
-    error: "Signup is not connected yet.",
+    error: "Signup ran into an error.",
   },
   writing: {
     label: "notes",
     loadingLabel: "Checking notes",
+    fallbackPosts: [
+      {
+        title: "onlinesourdough.com",
+        summary:
+          "Content, resources and direct access for connecting IT, software and business before quick code becomes something the business depends on.",
+        date: "Draft",
+        url: "https://onlinesourdough.com",
+      },
+      {
+        title: "arcitai.com",
+        summary:
+          "The done-for-you consultancy for IT architecture, software projects, automations and systems that need to be built and handed over properly.",
+        date: "Idea",
+        url: "https://arcitai.com",
+      },
+      {
+        title: "AI needs architecture",
+        summary:
+          "AI should help people become more productive. It still needs architecture, workflow context and careful choices to avoid supermarket-framework debt.",
+        date: "Coming soon",
+        url: "#newsletter",
+      },
+    ],
   },
   footer: {
     copyright: "© 2026 gustavonline",
@@ -65,89 +88,67 @@ export const site = {
       variant: "office-window",
     },
   ],
+  links: {
+    actions: [
+      {
+        title: "Content, resources and direct access",
+        label: "onlinesourdough.com",
+        href: "https://onlinesourdough.com",
+      },
+      {
+        title: "Done-for-you agency service",
+        label: "arcitai.com",
+        href: "https://arcitai.com",
+      },
+      {
+        title: "My open source repos",
+        label: "github/gustavonline",
+        href: "https://github.com/stars/gustavonline/lists/templates",
+      },
+      {
+        title: "Collaborations? Email me",
+        label: "hello@gustavonline.com",
+        href: "mailto:hello@gustavonline.com",
+      },
+    ],
+    social: [
+      {
+        label: "YouTube",
+        href: "https://www.youtube.com/@gustavonline",
+        icon: "youtube",
+      },
+      {
+        label: "Instagram",
+        href: "https://www.instagram.com/gustavonline/",
+        icon: "instagram",
+      },
+      {
+        label: "LinkedIn",
+        href: "https://www.linkedin.com/in/gustavonline/",
+        icon: "linkedin",
+      },
+    ],
+    footerSocial: [
+      {
+        label: "YouTube",
+        href: "https://www.youtube.com/@gustavonline",
+        icon: "youtube",
+      },
+      {
+        label: "Instagram",
+        href: "https://www.instagram.com/gustavonline/",
+        icon: "instagram",
+      },
+      {
+        label: "LinkedIn",
+        href: "https://www.linkedin.com/in/gustavonline/",
+        icon: "linkedin",
+      },
+      {
+        label: "GitHub",
+        href: "https://github.com/gustavonline",
+        icon: "github",
+      },
+    ],
+  },
 };
-
-export const actionLinks = [
-  {
-    title: "Work with me or see client projects",
-    label: "Arc'It AI",
-    href: "https://arcitai.com",
-  },
-  {
-    title: "My open source templates",
-    label: "GitHub stars",
-    href: "https://github.com/stars/gustavonline/lists/templates",
-  },
-  {
-    title: "Collaborations? Email me",
-    label: "hello@gustavonline.com",
-    href: "mailto:hello@gustavonline.com",
-  },
-];
-
-export const staticWriting = [
-  {
-    title: "Building an AI-first business",
-    summary: "Notes from my IT architecture studies, business development and agentic software by building in public.",
-    date: "Draft",
-    url: "#newsletter",
-  },
-  {
-    title: "Everyday work and learnings",
-    summary: "Log behind gustavonline: client work, experiments, decisions and useful templates.",
-    date: "Idea",
-    url: "#arcitai",
-  },
-  {
-    title: "AI needs architecture",
-    summary: "AI tools become useful when they are connected to workflows, business context and decisions.",
-    date: "Coming soon",
-    url: "#newsletter",
-  },
-];
-
-export const socialLinks = [
-  {
-    label: "X",
-    href: "https://x.com/gustavonline",
-    icon: "x",
-  },
-  {
-    label: "YouTube",
-    href: "https://www.youtube.com/@gustavonline",
-    icon: "youtube",
-  },
-  {
-    label: "Instagram",
-    href: "https://www.instagram.com/gustavonline/",
-    icon: "instagram",
-  },
-];
-
-export const footerSocialLinks = [
-  {
-    label: "X",
-    href: "https://x.com/gustavonline",
-    icon: "x",
-  },
-  {
-    label: "GitHub",
-    href: "https://github.com/gustavonline",
-    icon: "github",
-  },
-  {
-    label: "LinkedIn",
-    href: "https://www.linkedin.com/in/gustavonline/",
-    icon: "linkedin",
-  },
-  {
-    label: "YouTube",
-    href: "https://www.youtube.com/@gustavonline",
-    icon: "youtube",
-  },
-  {
-    label: "Instagram",
-    href: "https://www.instagram.com/gustavonline/",
-    icon: "instagram",
-  },
-];

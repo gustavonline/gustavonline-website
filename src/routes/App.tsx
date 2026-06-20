@@ -3,10 +3,10 @@ import { Moon, Send, Sun } from "lucide-react";
 import type { CSSProperties, FormEvent } from "react";
 import { useEffect, useState } from "react";
 
-import { actionLinks, footerSocialLinks, site, socialLinks, staticWriting } from "../site-data";
+import { siteData } from "../site-data";
 import { fetchWriting, submitNewsletterSignup } from "../services/content";
 
-type FloatingCard = (typeof site.floatingCards)[number];
+type FloatingCard = (typeof siteData.floatingCards)[number];
 type FloatingCardView = FloatingCard & {
   motion: {
     rotation: string;
@@ -18,27 +18,27 @@ type FloatingCardView = FloatingCard & {
 
 export function App() {
   const [theme, setTheme] = useState<"light" | "dark">(() => {
-    return localStorage.getItem(site.themeStorageKey) === "dark" ? "dark" : "light";
+    return localStorage.getItem(siteData.themeStorageKey) === "dark" ? "dark" : "light";
   });
-  const [floatingCards] = useState(() => createFloatingCards(site.floatingCards));
+  const [floatingCards] = useState(() => createFloatingCards(siteData.floatingCards));
   const [selectedCard, setSelectedCard] = useState<FloatingCard | null>(null);
   const writingQuery = useQuery({
     queryKey: ["writing"],
     queryFn: fetchWriting,
-    placeholderData: staticWriting,
+    placeholderData: siteData.writing.fallbackPosts,
   });
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
-    localStorage.setItem(site.themeStorageKey, theme);
+    localStorage.setItem(siteData.themeStorageKey, theme);
   }, [theme]);
 
   useEffect(() => {
-    document.title = site.seo.title;
-    setMetaContent("description", site.seo.description);
-    setMetaProperty("og:title", site.seo.ogTitle);
-    setMetaProperty("og:description", site.seo.description);
-    setMetaProperty("og:image", site.seo.ogImage);
+    document.title = siteData.seo.title;
+    setMetaContent("description", siteData.seo.description);
+    setMetaProperty("og:title", siteData.seo.ogTitle);
+    setMetaProperty("og:description", siteData.seo.description);
+    setMetaProperty("og:image", siteData.seo.ogImage);
   }, []);
 
   return (
@@ -48,14 +48,14 @@ export function App() {
       <main className="main-panel">
         <section className="profile-section" aria-label="Profile">
           <div className="name-row">
-            <h1>{site.name}</h1>
-            <img src={site.portrait} alt={site.name} />
+            <h1>{siteData.name}</h1>
+            <img src={siteData.portrait} alt={siteData.name} />
           </div>
 
-          <p className="intro-copy">{site.profile.intro}</p>
+          <p className="intro-copy">{siteData.profile.intro}</p>
 
           <div className="content-note">
-            <p>{site.profile.noteLine}</p>
+            <p>{siteData.profile.noteLine}</p>
             <SocialLinks />
           </div>
 
@@ -63,7 +63,7 @@ export function App() {
         </section>
 
         <section className="link-section" aria-label="Actions">
-          {actionLinks.map((link) => (
+          {siteData.links.actions.map((link) => (
             <a className="action-line" href={link.href} key={link.title}>
               <span>{link.title}</span>
               <strong>{link.label}</strong>
@@ -72,9 +72,9 @@ export function App() {
         </section>
 
         <section className="writing-section" aria-label="Notes">
-          <p className="section-label">{writingQuery.isFetching ? site.writing.loadingLabel : site.writing.label}</p>
+          <p className="section-label">{writingQuery.isFetching ? siteData.writing.loadingLabel : siteData.writing.label}</p>
           <div className="note-list">
-            {(writingQuery.data ?? staticWriting).map((post) => (
+            {(writingQuery.data ?? siteData.writing.fallbackPosts).map((post) => (
               <a href={post.url} key={post.title}>
                 <span>{post.date}</span>
                 <strong>{post.title}</strong>
@@ -121,7 +121,7 @@ function FloatingCards({
   );
 }
 
-function createFloatingCards(cards: typeof site.floatingCards): FloatingCardView[] {
+function createFloatingCards(cards: typeof siteData.floatingCards): FloatingCardView[] {
   const shuffled = [...cards];
 
   for (let index = shuffled.length - 1; index > 0; index -= 1) {
@@ -181,11 +181,11 @@ function Header({ theme, onToggleTheme }: { theme: "light" | "dark"; onToggleThe
 
   return (
     <header className="site-header">
-      <a className="logo-link" href={homeHref} aria-label={`${site.brand} home`}>
-        <img src={site.logo} alt="" />
+      <a className="logo-link" href={homeHref} aria-label={`${siteData.brand} home`}>
+        <img src={siteData.logo} alt="" />
       </a>
-      <a className="brand-link" href={homeHref} aria-label={`${site.brand} home`}>
-        {site.navBrand}
+      <a className="brand-link" href={homeHref} aria-label={`${siteData.brand} home`}>
+        {siteData.navBrand}
       </a>
       <button className="theme-toggle" type="button" onClick={onToggleTheme} aria-label="Toggle light and dark mode">
         {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
@@ -195,7 +195,7 @@ function Header({ theme, onToggleTheme }: { theme: "light" | "dark"; onToggleThe
 }
 
 function SocialLinks({ variant = "top" }: { variant?: "top" | "footer" }) {
-  const links = variant === "footer" ? footerSocialLinks : socialLinks;
+  const links = variant === "footer" ? siteData.links.footerSocial : siteData.links.social;
 
   return (
     <div className="social-links" aria-label="Social links">
@@ -227,13 +227,13 @@ function NewsletterForm() {
 
   return (
     <form className="newsletter-form" id="newsletter" onSubmit={onSubmit}>
-      <label htmlFor="email">{site.newsletter.label}</label>
+      <label htmlFor="email">{siteData.newsletter.label}</label>
       <div>
         <input
           id="email"
           name="email"
           onChange={(event) => setEmail(event.target.value)}
-          placeholder={site.newsletter.placeholder}
+          placeholder={siteData.newsletter.placeholder}
           required
           type="email"
           value={email}
@@ -243,10 +243,10 @@ function NewsletterForm() {
         </button>
       </div>
       <p>
-        {status === "idle" && site.newsletter.idle}
-        {status === "loading" && site.newsletter.loading}
-        {status === "success" && site.newsletter.success}
-        {status === "error" && site.newsletter.error}
+        {status === "idle" && siteData.newsletter.idle}
+        {status === "loading" && siteData.newsletter.loading}
+        {status === "success" && siteData.newsletter.success}
+        {status === "error" && siteData.newsletter.error}
       </p>
     </form>
   );
@@ -255,7 +255,7 @@ function NewsletterForm() {
 function Footer() {
   return (
     <footer className="site-footer">
-      <p>{site.footer.copyright}</p>
+      <p>{siteData.footer.copyright}</p>
       <SocialLinks variant="footer" />
     </footer>
   );

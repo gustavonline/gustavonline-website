@@ -1,20 +1,22 @@
-import { site, staticWriting } from "../site-data";
+import { siteData } from "../site-data";
 
-export type WritingPost = (typeof staticWriting)[number];
+const fallbackPosts = siteData.writing.fallbackPosts;
+
+export type WritingPost = (typeof fallbackPosts)[number];
 
 export async function fetchWriting(): Promise<WritingPost[]> {
   const endpoint = import.meta.env.VITE_WRITING_ENDPOINT as string | undefined;
 
-  if (!endpoint) return staticWriting;
+  if (!endpoint) return fallbackPosts;
 
   try {
     const response = await fetch(endpoint);
-    if (!response.ok) return staticWriting;
+    if (!response.ok) return fallbackPosts;
 
     const data = (await response.json()) as { posts?: WritingPost[] };
-    return data.posts?.length ? data.posts : staticWriting;
+    return data.posts?.length ? data.posts : fallbackPosts;
   } catch {
-    return staticWriting;
+    return fallbackPosts;
   }
 }
 
@@ -30,7 +32,7 @@ export async function submitNewsletterSignup(email: string) {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ email, source: site.brand }),
+    body: JSON.stringify({ email, source: siteData.brand }),
   });
 
   if (!response.ok) {
