@@ -1,42 +1,11 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { RouterProvider, createRootRoute, createRoute, createRouter } from "@tanstack/react-router";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { RouterProvider } from "@tanstack/react-router";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
-import { App } from "./routes/App";
+import { queryClient } from "./lib/query-client";
+import { router } from "./router";
 import "./styles.css";
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 1000 * 60 * 10,
-      retry: 1,
-    },
-  },
-});
-
-const rootRoute = createRootRoute();
-
-const indexRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: "/",
-  component: App,
-});
-
-const routeTree = rootRoute.addChildren([indexRoute]);
-const routerBasepath = window.location.pathname.startsWith("/gustavonline") ? "/gustavonline" : "/";
-
-const router = createRouter({
-  routeTree,
-  basepath: routerBasepath,
-  defaultPreload: "intent",
-});
-
-declare module "@tanstack/react-router" {
-  interface Register {
-    router: typeof router;
-  }
-}
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

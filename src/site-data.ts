@@ -1,3 +1,5 @@
+import type { WritingPost } from "../shared/contracts/content";
+
 export const siteData = {
   brand: "gustavonline",
   navBrand: "gustavonline",
@@ -51,7 +53,7 @@ export const siteData = {
         date: "Coming soon",
         url: "#newsletter",
       },
-    ],
+    ] satisfies WritingPost[],
   },
   footer: {
     copyright: "© 2026 gustavonline",

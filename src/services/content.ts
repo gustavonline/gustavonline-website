@@ -1,43 +1,21 @@
+import { fetchWritingPosts, postNewsletterSignup } from "../adapters/http/content-api";
+import { clientEnv } from "../config/client-env";
 import { siteData } from "../site-data";
+import type { NewsletterSignupResponse, WritingPost } from "../../shared/contracts/content";
 
-const fallbackPosts = siteData.writing.fallbackPosts;
-
-export type WritingPost = (typeof fallbackPosts)[number];
+const fallbackPosts: WritingPost[] = siteData.writing.fallbackPosts;
 
 export async function fetchWriting(): Promise<WritingPost[]> {
-  const endpoint = import.meta.env.VITE_WRITING_ENDPOINT as string | undefined;
+  if (!clientEnv.writingEndpoint) return fallbackPosts;
 
-  if (!endpoint) return fallbackPosts;
-
-  try {
-    const response = await fetch(endpoint);
-    if (!response.ok) return fallbackPosts;
-
-    const data = (await response.json()) as { posts?: WritingPost[] };
-    return data.posts?.length ? data.posts : fallbackPosts;
-  } catch {
-    return fallbackPosts;
-  }
+  const posts = await fetchWritingPosts(clientEnv.writingEndpoint);
+  return posts.length > 0 ? posts : fallbackPosts;
 }
 
-export async function submitNewsletterSignup(email: string) {
-  const endpoint = import.meta.env.VITE_NEWSLETTER_ENDPOINT as string | undefined;
-
-  if (!endpoint) {
+export async function submitNewsletterSignup(email: string): Promise<NewsletterSignupResponse> {
+  if (!clientEnv.newsletterEndpoint) {
     throw new Error("Missing VITE_NEWSLETTER_ENDPOINT");
   }
 
-  const response = await fetch(endpoint, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ email, source: siteData.brand }),
-  });
-
-  if (!response.ok) {
-    throw new Error("Newsletter signup failed");
-  }
-
-  return response.json() as Promise<{ ok: true }>;
+  return postNewsletterSignup(clientEnv.newsletterEndpoint, email, siteData.brand);
 }

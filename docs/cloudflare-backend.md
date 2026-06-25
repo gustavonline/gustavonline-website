@@ -36,6 +36,18 @@ The endpoint should return `200 OK` with:
 
 The Worker should create/update the subscriber in Kit. Kit's own Notion integration should sync subscribers into Notion.
 
+The shared payload contract lives in:
+
+```txt
+shared/contracts/content.ts
+```
+
+The Worker route validates the payload before calling:
+
+```txt
+worker/adapters/kit.ts
+```
+
 ## Writing Endpoint
 
 If writing should later come from Notion, set:
@@ -83,3 +95,25 @@ Signup handling should:
 2. Create/update the subscriber in Kit.
 3. Let Kit sync the subscriber to Notion.
 4. Return `{ "ok": true }`.
+
+## Worker Configuration
+
+Public Worker vars live in `wrangler.jsonc`:
+
+- `ALLOWED_ORIGINS`
+- `NOTION_PAPERS_DATA_SOURCE_ID`
+- `PUBLIC_SITE_URL`
+
+Secrets must be set in Cloudflare and never committed:
+
+```bash
+wrangler secret put KIT_API_KEY
+wrangler secret put NOTION_TOKEN
+```
+
+Worker code is split by boundary:
+
+- `worker/index.ts`: route handlers
+- `worker/http.ts`: JSON and CORS helpers
+- `worker/adapters/kit.ts`: Kit API integration
+- `worker/adapters/notion.ts`: Notion API integration and mapping

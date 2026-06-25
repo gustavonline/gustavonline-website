@@ -42,10 +42,34 @@ For me, the core product is the ability to turn technical complexity into someth
 - GitHub Pages
 - Cloudflare Workers for future backend endpoints
 
+## Template alignment
+
+This repository follows the local SaaS template where it fits a landing page:
+
+- thin route entrypoints
+- feature folders for page UI and hooks
+- shared contracts for API boundaries
+- services separated from HTTP adapters
+- Worker adapters for Kit and Notion
+- CI gates for typecheck, tests and build
+
+It intentionally does not include SaaS-only pieces such as auth, billing, dashboards, paid access or D1 migrations yet.
+
+See:
+
+- [docs/architecture.md](docs/architecture.md)
+- [docs/agent_guide.md](docs/agent_guide.md)
+- [docs/delivery.md](docs/delivery.md)
+
 ## Content architecture
 
-- `src/site-data.ts` exports one `siteData` object with editable site content, metadata, links, social profiles, newsletter labels, and fallback notes.
-- `src/routes/App.tsx` owns rendering and interaction only.
+- `src/site-data.ts` exports editable site content, metadata, links, social profiles, newsletter labels, and fallback notes.
+- `src/routes/App.tsx` stays thin and hands rendering to `src/features/landing`.
+- `src/features/landing` owns landing page components and browser/query hooks.
+- `src/services/content.ts` owns the content/newsletter workflows.
+- `src/adapters/http/content-api.ts` owns frontend HTTP calls.
+- `shared/contracts/content.ts` owns API request/response contracts shared by the frontend and Worker.
+- `worker/adapters` owns Kit and Notion integration details.
 - `src/styles.css` owns visual design, spacing, typography, and responsive behavior.
 - `index.html` only contains static fallback metadata. Runtime metadata is applied from `src/site-data.ts`.
 
@@ -54,6 +78,14 @@ For me, the core product is the ability to turn technical complexity into someth
 ```bash
 npm install
 npm run dev
+```
+
+Run the merge gate locally:
+
+```bash
+npm run typecheck
+npm run test
+npm run build
 ```
 
 ## Deployment
