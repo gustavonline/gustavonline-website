@@ -1,7 +1,7 @@
 {
   "name": "gustavonline",
   "version": "1.0.0",
-  "description": "Personal site for gustavonline, documenting IT architecture work, learning and the thinking behind onlinesourdough.com.",
+  "description": "Personal website for Gustav Anderson.",
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
@@ -29,13 +29,15 @@
     "@tanstack/react-router": "^1.170.15",
     "lucide-react": "^1.18.0",
     "react": "^19.2.7",
-    "react-dom": "^19.2.7"
+    "react-dom": "^19.2.7",
+    "three": "^0.185.1"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20260613.1",
     "@tailwindcss/vite": "^4.3.1",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
+    "@types/three": "^0.185.4",
     "@vitejs/plugin-react": "^6.0.2",
     "tailwindcss": "^4.3.1",
     "typescript": "^6.0.3",

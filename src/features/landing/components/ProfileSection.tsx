@@ -13,7 +13,6 @@ export function ProfileSection() {
       <p className="intro-copy">{siteData.profile.intro}</p>
 
       <div className="content-note">
-        <p>{siteData.profile.noteLine}</p>
         <SocialLinks />
       </div>
 

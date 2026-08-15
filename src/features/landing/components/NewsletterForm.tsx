@@ -1,4 +1,3 @@
-import { Send } from "lucide-react";
 import type { FormEvent } from "react";
 import { useState } from "react";
 
@@ -7,7 +6,7 @@ import { siteData } from "../../../site-data";
 
 type SubmitStatus = "idle" | "loading" | "success" | "error";
 
-export function NewsletterForm() {
+export function NewsletterForm({ showSupport = true }: { showSupport?: boolean }) {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<SubmitStatus>("idle");
 
@@ -25,8 +24,10 @@ export function NewsletterForm() {
   }
 
   return (
-    <form className="newsletter-form" id="newsletter" onSubmit={onSubmit}>
-      <label htmlFor="email">{siteData.newsletter.label}</label>
+    <form className="newsletter-form" id="newsletter" onSubmit={onSubmit} aria-labelledby="newsletter-heading">
+      <h2 className="newsletter-heading" id="newsletter-heading">{siteData.newsletter.label}</h2>
+      {showSupport && <p className="newsletter-support">{siteData.newsletter.support}</p>}
+      <label className="sr-only" htmlFor="email">Email address</label>
       <div>
         <input
           id="email"
@@ -37,11 +38,11 @@ export function NewsletterForm() {
           type="email"
           value={email}
         />
-        <button disabled={status === "loading"} type="submit" aria-label="Subscribe">
-          <Send size={16} />
+        <button disabled={status === "loading"} type="submit">
+          {siteData.newsletter.submitLabel}
         </button>
       </div>
-      <p>{getStatusMessage(status)}</p>
+      <p className="newsletter-status" aria-live="polite">{getStatusMessage(status)}</p>
     </form>
   );
 }
@@ -50,5 +51,5 @@ function getStatusMessage(status: SubmitStatus) {
   if (status === "loading") return siteData.newsletter.loading;
   if (status === "success") return siteData.newsletter.success;
   if (status === "error") return siteData.newsletter.error;
-  return siteData.newsletter.idle;
+  return "";
 }

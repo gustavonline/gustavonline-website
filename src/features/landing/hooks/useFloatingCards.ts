@@ -8,24 +8,24 @@ export function useFloatingCards() {
 }
 
 function createFloatingCards(cards: typeof siteData.floatingCards): FloatingCardView[] {
-  const shuffled = [...cards];
+  const shuffledCards = [...cards];
 
-  for (let index = shuffled.length - 1; index > 0; index -= 1) {
-    const nextIndex = Math.floor(Math.random() * (index + 1));
-    [shuffled[index], shuffled[nextIndex]] = [shuffled[nextIndex], shuffled[index]];
+  for (let index = shuffledCards.length - 1; index > 0; index -= 1) {
+    const randomIndex = Math.floor(Math.random() * (index + 1));
+    [shuffledCards[index], shuffledCards[randomIndex]] = [shuffledCards[randomIndex], shuffledCards[index]];
   }
 
-  return shuffled.map((card) => ({
+  return shuffledCards.map((card) => ({
     ...card,
     motion: {
-      rotation: `${randomBetween(-3, 3)}deg`,
-      scale: randomBetween(0.92, 1.08).toFixed(2),
-      x: `${randomBetween(-16, 16)}px`,
-      y: `${randomBetween(-58, 58)}px`,
+      rotation: "0deg",
+      scale: "1",
+      x: `${randomIntegerBetween(-10, 10)}px`,
+      y: `${randomIntegerBetween(-8, 8)}px`,
     },
   }));
 }
 
-function randomBetween(min: number, max: number) {
-  return Math.random() * (max - min) + min;
+function randomIntegerBetween(min: number, max: number) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }

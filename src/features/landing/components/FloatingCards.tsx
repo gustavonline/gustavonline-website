@@ -2,7 +2,7 @@ import type { CSSProperties } from "react";
 
 import type { FloatingCard, FloatingCardView } from "../types";
 
-const floatingCardSlots = ["slot-a", "slot-b", "slot-c", "slot-d", "slot-e", "slot-f"] as const;
+const floatingCardSlots = ["slot-a", "slot-b", "slot-c", "slot-d", "slot-e", "slot-f", "slot-g", "slot-h"] as const;
 
 export function FloatingCards({
   cards,

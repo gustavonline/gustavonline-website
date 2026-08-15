@@ -1,22 +1,37 @@
 import { Moon, Sun } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 
 import { siteData } from "../../../site-data";
 import type { Theme } from "../types";
 
 export function Header({ theme, onToggleTheme }: { theme: Theme; onToggleTheme: () => void }) {
-  const homeHref = window.location.pathname.startsWith("/gustavonline") ? "/gustavonline/" : "/";
+  const identityMark = getRouteAssetPath(siteData.identityMark);
 
   return (
     <header className="site-header">
-      <a className="logo-link" href={homeHref} aria-label={`${siteData.brand} home`}>
-        <img src={siteData.logo} alt="" />
-      </a>
-      <a className="brand-link" href={homeHref} aria-label={`${siteData.brand} home`}>
-        {siteData.navBrand}
-      </a>
+      <Link className="brand-link" to="/" aria-label={`${siteData.brand} home`}>
+        <img className="header-mark" src={identityMark} alt="" aria-hidden="true" />
+        <span>{siteData.navBrand}</span>
+      </Link>
+      <Link className="header-newsletter-link" to="/newsletter">Newsletter</Link>
       <button className="theme-toggle" type="button" onClick={onToggleTheme} aria-label="Toggle light and dark mode">
         {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
       </button>
     </header>
   );
+}
+
+function getRouteAssetPath(assetPath: string) {
+  const normalizedAssetPath = assetPath.replace(/^\/+/, "");
+  const pathname = window.location.pathname;
+  const basePath =
+    pathname === "/gustavonline" || pathname.startsWith("/gustavonline/")
+      ? "/gustavonline"
+      : "";
+
+  if (import.meta.env.DEV) {
+    return `/${normalizedAssetPath}`;
+  }
+
+  return `${basePath}/${normalizedAssetPath}`;
 }
