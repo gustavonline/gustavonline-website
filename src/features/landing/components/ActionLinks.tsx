@@ -2,12 +2,14 @@ import { siteData } from "../../../site-data";
 
 export function ActionLinks() {
   return (
-    <section className="link-section" aria-label="Actions">
+    <section className="link-section" aria-label="More from Gustav">
       {siteData.links.actions.map((link) => (
-        <a className="action-line" href={link.href} key={link.title}>
-          <span>{link.title}</span>
-          <strong>{link.label}</strong>
-        </a>
+        <div className="action-row" key={link.href}>
+          <span className="action-description">{link.description}</span>
+          <a className="action-line" href={link.href}>
+            {link.label}
+          </a>
+        </div>
       ))}
     </section>
   );

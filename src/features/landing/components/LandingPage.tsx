@@ -17,7 +17,7 @@ export function LandingPage() {
   const floatingCards = useFloatingCards();
   const [selectedCard, setSelectedCard] = useState<FloatingCard | null>(null);
 
-  usePageMetadata();
+  usePageMetadata("home");
 
   return (
     <div className="page-shell">

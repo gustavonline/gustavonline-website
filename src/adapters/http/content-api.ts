@@ -5,14 +5,13 @@ import {
 } from "../../../shared/contracts/content";
 
 export async function fetchWritingPosts(endpoint: string): Promise<WritingPost[]> {
-  try {
-    const response = await fetch(endpoint);
-    if (!response.ok) return [];
+  const response = await fetch(endpoint);
 
-    return parseWritingPostsResponse(await response.json());
-  } catch {
-    return [];
+  if (!response.ok) {
+    throw new Error("Writing archive request failed");
   }
+
+  return parseWritingPostsResponse(await response.json());
 }
 
 export async function postNewsletterSignup(
