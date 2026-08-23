@@ -801,7 +801,7 @@ input {
   height: clamp(430px, 48vw, 570px);
   overflow: hidden;
   border-block: 1px solid var(--faint);
-  background: #fbfaf7;
+  background: var(--bg);
   isolation: isolate;
 }
 
@@ -812,7 +812,7 @@ input {
   z-index: 2;
   pointer-events: none;
   opacity: 0.23;
-  background-image: radial-gradient(#77705f 0.6px, transparent 0.6px);
+  background-image: radial-gradient(color-mix(in srgb, var(--muted) 68%, transparent) 0.6px, transparent 0.6px);
   background-size: 7px 7px;
   mask-image: linear-gradient(to bottom, transparent 0%, #000 75%, transparent 100%);
 }
@@ -849,7 +849,7 @@ input {
   display: grid;
   place-content: center;
   margin: 0;
-  color: #77705f;
+  color: var(--muted);
   font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
   font-size: 11px;
   text-transform: uppercase;
@@ -863,10 +863,10 @@ input {
   height: 44px;
   display: grid;
   place-items: center;
-  border: 1px solid rgba(49, 43, 38, 0.2);
+  border: 1px solid color-mix(in srgb, var(--text) 20%, transparent);
   border-radius: 999px;
-  background: rgba(251, 250, 247, 0.88);
-  color: #38332e;
+  background: color-mix(in srgb, var(--panel) 88%, transparent);
+  color: var(--text);
   cursor: pointer;
   transform: translateY(-50%);
   backdrop-filter: blur(8px);
@@ -930,9 +930,9 @@ input {
   z-index: 5;
   width: min(88%, 430px);
   padding: 30px;
-  border: 1px solid rgba(49, 43, 38, 0.24);
-  background: rgba(251, 250, 247, 0.96);
-  color: #312b26;
+  border: 1px solid color-mix(in srgb, var(--text) 24%, transparent);
+  background: color-mix(in srgb, var(--panel) 96%, transparent);
+  color: var(--text);
   box-shadow: 0 22px 70px rgba(46, 39, 33, 0.16);
   transform: translate(-50%, -50%);
 }
@@ -947,7 +947,7 @@ input {
   place-items: center;
   border: 0;
   background: transparent;
-  color: #6b645c;
+  color: var(--muted);
   cursor: pointer;
 }
 
@@ -960,7 +960,7 @@ input {
 
 .shelf-reader > p:not(.pixel-label) {
   margin: 14px 0 0;
-  color: #6b645c;
+  color: var(--muted);
   line-height: 1.65;
 }
 

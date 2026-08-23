@@ -61,6 +61,7 @@ import {
   createPlaceholderSpine,
   createSpineCover,
 } from "./brief-cover-art";
+import type { Theme } from "../../landing/types";
 import type { ShelfBriefBook } from "./types";
 import { buildWeekBuckets, type WeekBucket } from "./week-layout";
 
@@ -84,6 +85,8 @@ type ShelfCallbacks = {
 };
 
 export type ShelfEngineBootOptions = {
+  /** Theme palette for the shelf scene and canvas backdrop. */
+  theme?: Theme;
   /** Volume to present (and optionally open) on first paint. */
   initialIndex?: number;
   /** Today's book — stronger living shimmer + warm light. */
@@ -134,7 +137,49 @@ type RuntimeBook = {
   textures: InstanceType<typeof Texture>[];
 };
 
-const PAPER = "#fbfaf7";
+type ShelfScenePalette = {
+  background: string;
+  ground: string;
+  hemisphereSky: string;
+  hemisphereGround: string;
+  key: string;
+  keyIntensity: number;
+  rim: string;
+  rimIntensity: number;
+  bounce: string;
+  bounceIntensity: number;
+  spotlight: string;
+};
+
+const scenePalettes: Record<Theme, ShelfScenePalette> = {
+  light: {
+    background: "#fbfaf7",
+    ground: "#e7dfd0",
+    hemisphereSky: "#fffaf2",
+    hemisphereGround: "#6f675c",
+    key: "#fff6e7",
+    keyIntensity: 4.6,
+    rim: "#d8d2c6",
+    rimIntensity: 2.1,
+    bounce: "#ec9255",
+    bounceIntensity: 1.2,
+    spotlight: "#ffe6bc",
+  },
+  dark: {
+    background: "#20201d",
+    ground: "#2b2a25",
+    hemisphereSky: "#c8c0b2",
+    hemisphereGround: "#151512",
+    key: "#e7ceb0",
+    keyIntensity: 3.4,
+    rim: "#777268",
+    rimIntensity: 1.45,
+    bounce: "#b9653d",
+    bounceIntensity: 0.95,
+    spotlight: "#dca56d",
+  },
+};
+
 const shelfTop = 0.34;
 const shelfRowPitch = 2.55;
 const browseCamera = new Vector3(0, 1.42, 6.65);
@@ -239,7 +284,10 @@ export class BriefingShelfEngine {
   private shelfFurniture = new Group();
   private ground: InstanceType<typeof Mesh> | null = null;
   private backWall: InstanceType<typeof Mesh> | null = null;
+  private hemisphereLight: InstanceType<typeof HemisphereLight> | null = null;
   private keyLight: InstanceType<typeof DirectionalLight> | null = null;
+  private rimLight: InstanceType<typeof DirectionalLight> | null = null;
+  private warmBounceLight: InstanceType<typeof PointLight> | null = null;
   private spotlightLight: InstanceType<typeof PointLight> | null = null;
   private runtimeBooks: RuntimeBook[] = [];
   private spotlightIndex: number | null = null;
@@ -285,6 +333,7 @@ export class BriefingShelfEngine {
   private isDisposed = false;
   private bootOpenImmediate = false;
   private spineBrowse = false;
+  private theme: Theme;
 
   constructor(
     canvas: HTMLCanvasElement,
@@ -292,6 +341,7 @@ export class BriefingShelfEngine {
     callbacks: ShelfCallbacks,
     boot: ShelfEngineBootOptions = {},
   ) {
+    this.theme = boot.theme ?? "light";
     this.canvas = canvas;
     this.booksData = books;
     this.spineBrowse = books.some((book) => !book.placeholder);
@@ -358,13 +408,20 @@ export class BriefingShelfEngine {
   }
 
   private setupScene() {
-    this.scene.background = new Color(PAPER);
-    this.scene.fog = new Fog(PAPER, 10, 26);
+    const palette = scenePalettes[this.theme];
+    this.scene.background = new Color(palette.background);
+    this.scene.fog = new Fog(palette.background, 10, 26);
+    this.canvas.style.backgroundColor = palette.background;
 
-    const hemisphere = new HemisphereLight("#fffaf2", "#6f675c", 2.4);
+    const hemisphere = new HemisphereLight(
+      palette.hemisphereSky,
+      palette.hemisphereGround,
+      2.4,
+    );
     this.scene.add(hemisphere);
+    this.hemisphereLight = hemisphere;
 
-    const key = new DirectionalLight("#fff6e7", 4.6);
+    const key = new DirectionalLight(palette.key, palette.keyIntensity);
     key.position.set(-4.2, 7.4, 5.5);
     key.castShadow = true;
     key.shadow.mapSize.set(512, 512);
@@ -378,15 +435,22 @@ export class BriefingShelfEngine {
     this.scene.add(key);
     this.keyLight = key;
 
-    const rim = new DirectionalLight("#d8d2c6", 2.1);
+    const rim = new DirectionalLight(palette.rim, palette.rimIntensity);
     rim.position.set(5, 3, -4);
     this.scene.add(rim);
+    this.rimLight = rim;
 
-    const warmBounce = new PointLight("#ec9255", 1.2, 10, 2);
+    const warmBounce = new PointLight(
+      palette.bounce,
+      palette.bounceIntensity,
+      10,
+      2,
+    );
     warmBounce.position.set(-3, 0.4, 3.2);
     this.scene.add(warmBounce);
+    this.warmBounceLight = warmBounce;
 
-    const spotlight = new PointLight("#ffe6bc", 0, 7.2, 1.65);
+    const spotlight = new PointLight(palette.spotlight, 0, 7.2, 1.65);
     spotlight.position.set(0, 1.6, 1.4);
     this.scene.add(spotlight);
     this.spotlightLight = spotlight;
@@ -394,7 +458,7 @@ export class BriefingShelfEngine {
     const wall = new Mesh(
       new PlaneGeometry(40, 40),
       new MeshStandardMaterial({
-        color: PAPER,
+        color: palette.background,
         roughness: 1,
         metalness: 0,
       }),
@@ -409,7 +473,7 @@ export class BriefingShelfEngine {
     const ground = new Mesh(
       new PlaneGeometry(48, 36),
       new MeshStandardMaterial({
-        color: "#e7dfd0",
+        color: palette.ground,
         roughness: 0.94,
         metalness: 0,
       }),
@@ -422,6 +486,50 @@ export class BriefingShelfEngine {
 
     this.scene.add(this.shelfGroup);
     this.shelfGroup.add(this.shelfFurniture);
+  }
+
+  setTheme(theme: Theme) {
+    if (this.theme === theme) return;
+    this.theme = theme;
+    const palette = scenePalettes[theme];
+
+    if (this.scene.background instanceof Color) {
+      this.scene.background.set(palette.background);
+    } else {
+      this.scene.background = new Color(palette.background);
+    }
+    this.scene.fog?.color.set(palette.background);
+    this.canvas.style.backgroundColor = palette.background;
+
+    if (this.backWall) {
+      (this.backWall.material as InstanceType<typeof MeshStandardMaterial>).color.set(
+        palette.background,
+      );
+    }
+    if (this.ground) {
+      (this.ground.material as InstanceType<typeof MeshStandardMaterial>).color.set(
+        palette.ground,
+      );
+    }
+    if (this.hemisphereLight) {
+      this.hemisphereLight.color.set(palette.hemisphereSky);
+      this.hemisphereLight.groundColor.set(palette.hemisphereGround);
+    }
+    if (this.keyLight) {
+      this.keyLight.color.set(palette.key);
+      this.keyLight.intensity = palette.keyIntensity;
+    }
+    if (this.rimLight) {
+      this.rimLight.color.set(palette.rim);
+      this.rimLight.intensity = palette.rimIntensity;
+    }
+    if (this.warmBounceLight) {
+      this.warmBounceLight.color.set(palette.bounce);
+      this.warmBounceLight.intensity = palette.bounceIntensity;
+    }
+    if (this.spotlightLight) {
+      this.spotlightLight.color.set(palette.spotlight);
+    }
   }
 
   private createBooks() {
@@ -1643,7 +1751,7 @@ export class BriefingShelfEngine {
       spread: phases.spread,
       expand: phases.expand,
       readerRect,
-      pageColor: book?.data.cover ?? PAPER,
+      pageColor: book?.data.cover ?? scenePalettes[this.theme].background,
       viewport: {
         width: Math.max(1, this.canvas.clientWidth),
         height: Math.max(1, this.canvas.clientHeight),
