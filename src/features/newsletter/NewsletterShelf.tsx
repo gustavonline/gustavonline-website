@@ -2,6 +2,7 @@ import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import type { WritingPost } from "../../../shared/contracts/content";
+import type { Theme } from "../landing/types";
 import {
   BriefingShelfEngine,
   type ShelfMode,
@@ -55,7 +56,7 @@ function toShelfBooks(posts: WritingPost[]): ShelfBriefBook[] {
   });
 }
 
-export function NewsletterShelf({ posts }: { posts: WritingPost[] }) {
+export function NewsletterShelf({ posts, theme }: { posts: WritingPost[]; theme: Theme }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const engineRef = useRef<BriefingShelfEngine | null>(null);
   const books = useMemo(() => toShelfBooks(posts), [posts]);
@@ -84,7 +85,7 @@ export function NewsletterShelf({ posts }: { posts: WritingPost[] }) {
         },
         onReady: () => setReady(true),
       },
-      { initialIndex: 0, spotlightIndex: posts.length > 0 ? 0 : null },
+      { initialIndex: 0, spotlightIndex: posts.length > 0 ? 0 : null, theme },
     );
     engineRef.current = engine;
 
@@ -97,6 +98,10 @@ export function NewsletterShelf({ posts }: { posts: WritingPost[] }) {
   useEffect(() => {
     engineRef.current?.updateBooks(books);
   }, [books]);
+
+  useEffect(() => {
+    engineRef.current?.setTheme(theme);
+  }, [theme]);
 
   const isReading = mode !== "browse";
   const selectedPost = selectedIndex === null ? null : posts[selectedIndex] ?? null;
