@@ -2,6 +2,18 @@
 
 This portfolio is built to deploy as a static GitHub Pages app. Dynamic features should be added through Cloudflare Workers or Cloudflare Pages Functions instead of Vercel or Next.js.
 
+## Responsibility model
+
+The deployed `gustavonline-api` Worker is the shared newsletter/editorial
+boundary for Gustav Online, Arc'IT AI, and onlinesourdough when those sites
+integrate with it. The currently verified runtime consumer described by this
+repository is Gustav Online's frontend for newsletter signups and public posts;
+this repository does not claim that Arc'IT AI or onlinesourdough currently calls
+the newsletter endpoint.
+
+Arc'IT AI owns Project Inquiries and future Testimonials. The separate
+`onlinesourdough-resources` project owns Resources.
+
 The intended content flow is:
 
 1. Write papers/notes in Notion `PapersDB`.
@@ -14,7 +26,7 @@ The intended content flow is:
 Set this environment variable before building the frontend:
 
 ```bash
-VITE_NEWSLETTER_ENDPOINT=https://your-worker.your-subdomain.workers.dev/newsletter
+VITE_NEWSLETTER_ENDPOINT=https://gustavonline-api.gustavonline.workers.dev/newsletter
 ```
 
 The frontend sends:
@@ -25,6 +37,11 @@ The frontend sends:
   "source": "gustavonline"
 }
 ```
+
+Newsletter `source` values are explicit: `gustavonline`, `arcitai`, or
+`onlinesourdough`. Client-provided values outside that allowlist are rejected.
+Browser access is separately restricted to the exact origins in
+`ALLOWED_ORIGINS`; the Worker does not use wildcard CORS.
 
 The endpoint should return `200 OK` with:
 
@@ -53,7 +70,7 @@ worker/adapters/kit.ts
 If writing should later come from Notion, set:
 
 ```bash
-VITE_WRITING_ENDPOINT=https://your-worker.your-subdomain.workers.dev/posts
+VITE_WRITING_ENDPOINT=https://gustavonline-api.gustavonline.workers.dev/posts
 ```
 
 The endpoint should return:
@@ -72,6 +89,13 @@ The endpoint should return:
 ```
 
 Until these variables are configured, the site uses local static content.
+
+## Live rollback migration note
+
+The deployed Worker may still expose the old `/project-inquiry` route as a
+temporary rollback fallback. It is not part of this Gustav Online source
+boundary and must not be removed live until separately authorized Arc'IT
+cutover verification has passed.
 
 ## Notion Data Sources
 

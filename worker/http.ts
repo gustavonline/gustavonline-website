@@ -17,10 +17,10 @@ export function json(body: unknown, status: number, request: Request, env: Env) 
 export function corsHeaders(request: Request, env: Env) {
   const origin = request.headers.get("Origin");
   const allowedOrigins = env.ALLOWED_ORIGINS.split(",").map((allowedOrigin) => allowedOrigin.trim());
-  const allowedOrigin = origin && allowedOrigins.includes(origin) ? origin : allowedOrigins[0];
+  const allowedOrigin = origin && allowedOrigins.includes(origin) ? origin : undefined;
 
   return {
-    "Access-Control-Allow-Origin": allowedOrigin,
+    ...(allowedOrigin ? { "Access-Control-Allow-Origin": allowedOrigin } : {}),
     "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type",
     "Access-Control-Max-Age": "86400",

@@ -11,12 +11,20 @@ export type WritingPostsResponse = {
 
 export type NewsletterSignupPayload = {
   email: string;
-  source: string;
+  source: NewsletterSource;
 };
 
 export type NewsletterSignupResponse = {
   ok: true;
 };
+
+export const newsletterSourceOptions = [
+  "gustavonline",
+  "arcitai",
+  "onlinesourdough",
+] as const;
+
+export type NewsletterSource = (typeof newsletterSourceOptions)[number];
 
 export type ValidationResult<T> =
   | {
@@ -40,17 +48,26 @@ export function parseWritingPostsResponse(value: unknown): WritingPost[] {
 
 export function normalizeNewsletterSignupPayload(
   value: unknown,
-  fallbackSource: string,
+  fallbackSource: NewsletterSource,
 ): ValidationResult<NewsletterSignupPayload> {
   const record = toRecord(value);
-  const email = typeof record?.email === "string" ? record.email.trim().toLowerCase() : "";
-  const source =
-    typeof record?.source === "string" && record.source.trim().length > 0 ? record.source.trim() : fallbackSource;
+  const email =
+    typeof record?.email === "string" ? record.email.trim().toLowerCase() : "";
+  const requestedSource =
+    typeof record?.source === "string" ? record.source.trim() : "";
+  const source = requestedSource || fallbackSource;
 
   if (!isValidEmail(email)) {
     return {
       ok: false,
       error: "Invalid email",
+    };
+  }
+
+  if (!isNewsletterSource(source)) {
+    return {
+      ok: false,
+      error: "Invalid newsletter source",
     };
   }
 
@@ -80,6 +97,12 @@ export function isValidEmail(email: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
+function isNewsletterSource(value: string): value is NewsletterSource {
+  return newsletterSourceOptions.includes(value as NewsletterSource);
+}
+
 function toRecord(value: unknown): Record<string, unknown> | null {
-  return typeof value === "object" && value !== null ? (value as Record<string, unknown>) : null;
+  return typeof value === "object" && value !== null
+    ? (value as Record<string, unknown>)
+    : null;
 }

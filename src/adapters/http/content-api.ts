@@ -1,5 +1,6 @@
 import {
   parseWritingPostsResponse,
+  type NewsletterSource,
   type NewsletterSignupResponse,
   type WritingPost,
 } from "../../../shared/contracts/content";
@@ -17,7 +18,7 @@ export async function fetchWritingPosts(endpoint: string): Promise<WritingPost[]
 export async function postNewsletterSignup(
   endpoint: string,
   email: string,
-  source: string,
+  source: NewsletterSource,
 ): Promise<NewsletterSignupResponse> {
   const response = await fetch(endpoint, {
     method: "POST",
