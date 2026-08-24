@@ -39,6 +39,20 @@ npm run worker:deploy
 
 Worker deployment should be automated only after Cloudflare environments and secrets are confirmed.
 
+The live `gustavonline-api` Worker is the shared newsletter/editorial boundary
+for Gustav Online, Arc'IT AI, and onlinesourdough when those sites integrate
+with it. The currently verified runtime consumer described by this repository
+is Gustav Online; no current Arc'IT AI or onlinesourdough newsletter call is
+claimed here. Arc'IT AI owns Project Inquiries and future Testimonials, while
+the separate `onlinesourdough-resources` project owns Resources.
+
+### Live rollback migration note
+
+The deployed Worker may still expose the old `/project-inquiry` route as a
+temporary rollback fallback. It is not part of this source boundary and must
+not be removed live until separately authorized Arc'IT cutover verification has
+passed.
+
 ## Required Build Env
 
 The frontend can build without these variables and will fall back to local content:

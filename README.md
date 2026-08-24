@@ -1,8 +1,10 @@
 # Gustav Anderson
 
-I'm an IT architect building a consultancy. I document everyday life, work and learnings, plus the thinking behind onlinesourdough.com.
+I'm a business & software architect building AI-native systems for founder-led businesses.
 
-My current direction is simple: understand complex systems, make them concrete, and turn that understanding into software, workflows, documentation, and useful services.
+Gustav Online is my personal and demand brand: a public record and CV of practical notes, experiments, cases, and the work behind the work, including the thinking behind onlinesourdough.
+
+The north star is **Business Freedom**: more control of time, capacity, and direction, not maximum automation.
 
 This repository has two jobs:
 
@@ -11,25 +13,25 @@ This repository has two jobs:
 
 ## What I am building around
 
-- **Software systems:** useful applications, prototypes, APIs, and workflows.
-- **onlinesourdough:** content, resources, and direct access around IT, software, and business architecture.
-- **Agentic engineering:** experiments with AI for planning, documentation, automation, and decision support.
-- **Public learning:** notes, videos, and reflections from learning and building in public.
-- **arcitai:** done-for-you IT architecture and software project work.
+- **Gustav Online:** the personal and demand brand, and the public record of the work as it evolves.
+- **AI-native systems:** useful software, workflows, APIs, prototypes, and decision support for founder-led businesses.
+- **onlinesourdough:** the method, content, and resources for the DIY and done-with-you route.
+- **Arc'IT AI:** the done-for-you delivery route.
+- **Public learning:** practical notes, experiments, cases, videos, and reflections from building in public.
 - **Technical range:** macOS, Windows, Power BI, React, TypeScript, TanStack, Tailwind CSS, Cloudflare, and practical AI workflows.
 
 ## How I think about the work
 
-The model I am exploring is inspired by the idea of one core product delivered in multiple formats.
+The through-line is turning business and technical complexity into systems that are structured, useful, and understandable. AI and automation are tools for that work, not the goal by themselves.
 
-For me, the core product is the ability to turn technical complexity into something structured, useful, and understandable. Over time, that can become hands-on builds, focused strategy sessions, reusable templates, and educational content.
+Gustav Online documents the thinking and evidence from the work. onlinesourdough makes the method and resources useful through DIY and done-with-you paths, while Arc'IT AI handles done-for-you delivery.
 
 ## Links
 
 - Portfolio: [gustavonline.com](https://gustavonline.com)
 - GitHub: [github.com/gustavonline](https://github.com/gustavonline)
 - YouTube: [youtube.com/@gustavonline](https://www.youtube.com/@gustavonline)
-- arcitai: [arcitai.com](https://arcitai.com)
+- Arc'IT AI: [arcitai.com](https://arcitai.com)
 
 ## Website stack
 
@@ -40,7 +42,7 @@ For me, the core product is the ability to turn technical complexity into someth
 - TanStack Query
 - Tailwind CSS
 - GitHub Pages
-- Cloudflare Workers for future backend endpoints
+- Cloudflare Workers for the deployed backend endpoints
 
 ## Template alignment
 
@@ -92,8 +94,16 @@ npm run build
 
 The site is built with `npm run build` and deployed through the GitHub Pages workflow in `.github/workflows/deploy.yml`.
 
-Newsletter and writing integrations are intentionally frontend-configurable through Cloudflare Worker endpoints. See [docs/cloudflare-backend.md](docs/cloudflare-backend.md).
+The deployed `gustavonline-api` Worker at
+`https://gustavonline-api.gustavonline.workers.dev` is the shared
+newsletter/editorial boundary for Gustav Online, Arc'IT AI, and onlinesourdough
+when those sites integrate with it. The currently verified runtime consumer
+described by this repository is Gustav Online; it does not claim that Arc'IT AI
+or onlinesourdough currently calls the newsletter endpoint. Arc'IT AI owns
+Project Inquiries and future Testimonials, while onlinesourdough-resources owns
+Resources. See [docs/cloudflare-backend.md](docs/cloudflare-backend.md) and
+[worker/README.md](worker/README.md).
 
 ## Current status
 
-This profile and portfolio are intentionally evolving. I use them as a public record of the journey through IT architecture, agentic engineering, software, and independent client work.
+This profile and portfolio are intentionally evolving. They are the public record and CV of my work in business architecture, software, AI-native systems, and public learning.

@@ -1,5 +1,5 @@
 export const siteData = {
-  brand: "gustavonline",
+  brand: "gustavonline" as const,
   navBrand: "gustavonline",
   name: "Gustav Anderson",
   portrait: "assets/gustav-portrait.jpg",

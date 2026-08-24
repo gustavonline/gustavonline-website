@@ -1,13 +1,16 @@
 import { describe, expect, it } from "vitest";
 
-import { normalizeNewsletterSignupPayload, parseWritingPostsResponse } from "../shared/contracts/content";
+import {
+  normalizeNewsletterSignupPayload,
+  parseWritingPostsResponse,
+} from "../shared/contracts/content";
 
 describe("content contracts", () => {
   it("normalizes newsletter signup payloads at the API boundary", () => {
     const result = normalizeNewsletterSignupPayload(
       {
         email: " HELLO@GUSTAVONLINE.COM ",
-        source: " landing-page ",
+        source: " gustavonline ",
       },
       "gustavonline",
     );
@@ -16,13 +19,40 @@ describe("content contracts", () => {
       ok: true,
       value: {
         email: "hello@gustavonline.com",
-        source: "landing-page",
+        source: "gustavonline",
       },
     });
   });
 
+  it("accepts only explicit newsletter source values", () => {
+    expect(
+      normalizeNewsletterSignupPayload(
+        { email: "hello@example.com", source: "arcitai" },
+        "gustavonline",
+      ),
+    ).toEqual({
+      ok: true,
+      value: {
+        email: "hello@example.com",
+        source: "arcitai",
+      },
+    });
+
+    expect(
+      normalizeNewsletterSignupPayload(
+        { email: "hello@example.com", source: "arbitrary-client-value" },
+        "gustavonline",
+      ),
+    ).toEqual({
+      ok: false,
+      error: "Invalid newsletter source",
+    });
+  });
+
   it("rejects invalid newsletter emails", () => {
-    expect(normalizeNewsletterSignupPayload({ email: "nope" }, "gustavonline")).toEqual({
+    expect(
+      normalizeNewsletterSignupPayload({ email: "nope" }, "gustavonline"),
+    ).toEqual({
       ok: false,
       error: "Invalid email",
     });

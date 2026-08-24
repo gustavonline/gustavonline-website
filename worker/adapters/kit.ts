@@ -1,6 +1,11 @@
+import type { NewsletterSource } from "../../shared/contracts/content";
 import type { Env } from "../types";
 
-export async function upsertKitSubscriber(email: string, source: string, env: Env) {
+export async function upsertKitSubscriber(
+  email: string,
+  source: NewsletterSource,
+  env: Env,
+) {
   const response = await fetch("https://api.kit.com/v4/subscribers", {
     method: "POST",
     headers: {
@@ -17,8 +22,7 @@ export async function upsertKitSubscriber(email: string, source: string, env: En
   });
 
   if (!response.ok) {
-    const text = await response.text();
-    throw new Error(`Kit subscriber upsert failed: ${response.status} ${text}`);
+    throw new Error("Kit subscriber upsert failed");
   }
 
   const data = (await response.json()) as { subscriber?: { id?: number }; id?: number };

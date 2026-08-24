@@ -1,6 +1,9 @@
 /// <reference types="@cloudflare/workers-types" />
 
-import { normalizeNewsletterSignupPayload, type NewsletterSignupResponse } from "../shared/contracts/content";
+import {
+  normalizeNewsletterSignupPayload,
+  type NewsletterSignupResponse,
+} from "../shared/contracts/content";
 import { listPublishedPosts } from "./adapters/notion";
 import { upsertKitSubscriber } from "./adapters/kit";
 import { corsHeaders, json } from "./http";
@@ -34,12 +37,35 @@ async function handleNewsletterSignup(request: Request, env: Env) {
     return json({ error: result.error }, 400, request, env);
   }
 
-  await upsertKitSubscriber(result.value.email, result.value.source, env);
+  try {
+    await upsertKitSubscriber(result.value.email, result.value.source, env);
+  } catch {
+    return json(
+      { error: "Newsletter signup is temporarily unavailable. Please try again." },
+      502,
+      request,
+      env,
+    );
+  }
 
-  return json({ ok: true } satisfies NewsletterSignupResponse, 200, request, env);
+  return json(
+    { ok: true } satisfies NewsletterSignupResponse,
+    200,
+    request,
+    env,
+  );
 }
 
 async function handlePosts(request: Request, env: Env) {
-  const posts = await listPublishedPosts(env);
-  return json({ posts }, 200, request, env);
+  try {
+    const posts = await listPublishedPosts(env);
+    return json({ posts }, 200, request, env);
+  } catch {
+    return json(
+      { error: "Posts are temporarily unavailable. Please try again." },
+      502,
+      request,
+      env,
+    );
+  }
 }
