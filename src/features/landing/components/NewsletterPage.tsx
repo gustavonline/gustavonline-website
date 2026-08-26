@@ -22,6 +22,10 @@ export function NewsletterPage() {
             <Link to="/">Back home <span aria-hidden="true">↗</span></Link>
           </section>
 
+          <div className="archive-signup">
+            <NewsletterForm showSupport={false} />
+          </div>
+
           {writingQuery.isPending ? (
             <div className="archive-query-state" role="status">Loading the archive…</div>
           ) : writingQuery.isError ? (
@@ -29,13 +33,14 @@ export function NewsletterPage() {
               <strong>The archive could not be reached.</strong>
               <p>Please try again later. No local entries are shown as published.</p>
             </div>
+          ) : posts.length === 0 ? (
+            <div className="archive-query-state archive-empty-state" role="status">
+              <strong>Archive starts here.</strong>
+              <p>No issues have been published yet.</p>
+            </div>
           ) : (
             <NewsletterShelf posts={posts} theme={theme} />
           )}
-
-          <div className="archive-signup">
-            <NewsletterForm showSupport={false} />
-          </div>
         </>
       )}
     </SiteLayout>
