@@ -779,17 +779,21 @@ input {
 }
 
 .archive-query-state {
-  min-height: 390px;
-  display: grid;
-  place-content: center;
-  margin-top: 48px;
+  margin-top: 28px;
+  padding: 18px 20px;
   border-block: 1px solid var(--faint);
   color: var(--muted);
   text-align: center;
 }
 
 .archive-query-state p {
-  margin: 8px 0 0;
+  margin: 6px 0 0;
+}
+
+.archive-query-state strong {
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .bookshelf-section {
@@ -973,13 +977,13 @@ input {
 
 .archive-signup {
   max-width: 620px;
-  margin: 0 auto;
-  padding: 24px 0 12px;
+  margin: 32px auto 0;
+  padding: 0 0 12px;
   text-align: center;
 }
 
 .archive-signup .newsletter-form {
-  margin-top: 58px;
+  margin-top: 0;
 }
 
 @media (max-width: 1120px) {
