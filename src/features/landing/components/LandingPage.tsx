@@ -10,7 +10,6 @@ import { Footer } from "./Footer";
 import { Header } from "./Header";
 import { ImageModal } from "./ImageModal";
 import { ProfileSection } from "./ProfileSection";
-import { WritingSection } from "./WritingSection";
 
 export function LandingPage() {
   const { theme, toggleTheme } = useTheme();
@@ -21,12 +20,12 @@ export function LandingPage() {
 
   return (
     <div className="page-shell">
+      <a className="family-skip" href="#main-content">Skip to content</a>
       <Header theme={theme} onToggleTheme={toggleTheme} />
       <FloatingCards cards={floatingCards} onSelect={setSelectedCard} />
-      <main className="main-panel">
+      <main id="main-content" tabIndex={-1} className="main-panel">
         <ProfileSection />
         <ActionLinks />
-        <WritingSection />
       </main>
       <Footer />
       {selectedCard && <ImageModal card={selectedCard} onClose={() => setSelectedCard(null)} />}

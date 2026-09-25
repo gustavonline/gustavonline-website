@@ -1,24 +1,25 @@
+import { familyHref } from "./family/preview";
+
 export const siteData = {
   brand: "gustavonline" as const,
   navBrand: "gustavonline",
   name: "Gustav Anderson",
-  portrait: "assets/gustav-portrait.jpg",
-  identityMark: "assets/gustav-pixel-g-384.png",
+  portrait: "/assets/gustav-portrait.jpg",
+  identityMark: "/assets/gustav-pixel-g-384.png",
   email: "hello@gustavonline.com",
   themeStorageKey: "gustavonline-theme",
   seo: {
-    homeTitle: "Gustav Online | Gustav Anderson",
-    newsletterTitle: "Newsletter archive | Gustav Online",
+    homeTitle: "gustavonline | Gustav Anderson",
+    newsletterTitle: "Newsletter | gustavonline",
     description:
       "Practical AI notes, experiments and tools for founders and business leaders by Gustav Anderson.",
     newsletterDescription:
-      "Practical AI notes, experiments and tools for founders and business leaders from Gustav Online.",
-    ogTitle: "Gustav Online | Gustav Anderson",
-    ogImage: "assets/gustav-portrait.jpg",
+      "Practical AI notes, experiments and tools for founders and business leaders from gustavonline.",
+    ogTitle: "gustavonline | Gustav Anderson",
+    ogImage: "/assets/gustav-portrait.jpg",
   },
   profile: {
-    intro:
-      "I’m a business & software architect exploring how practical AI can become useful software and better ways of working.",
+    intro: "Founder",
   },
   newsletter: {
     label: "Notes on practical AI for founders & business leaders",
@@ -33,47 +34,44 @@ export const siteData = {
     label: "Notes",
     loadingLabel: "Checking notes",
   },
-  footer: {
-    copyright: "© 2026 gustavonline",
-  },
   floatingCards: [
     {
-      src: "assets/quote-card.png",
+      src: "/assets/quote-card.png",
       alt: "I wanna see what happens if I don't give up",
       variant: "quote",
     },
     {
-      src: "assets/office-sun-desk.jpg",
+      src: "/assets/office-sun-desk.jpg",
       alt: "Sunlit office desk setup",
       variant: "office-sun",
     },
     {
-      src: "assets/office-ai-desk.jpg",
+      src: "/assets/office-ai-desk.jpg",
       alt: "Office desk with laptop and light",
       variant: "office-ai",
     },
     {
-      src: "assets/macintosh.jpg",
+      src: "/assets/macintosh.jpg",
       alt: "Macintosh-inspired setup",
       variant: "macintosh",
     },
     {
-      src: "assets/office-window-desk.jpg",
+      src: "/assets/office-window-desk.jpg",
       alt: "Window-side office desk setup",
       variant: "office-window",
     },
     {
-      src: "assets/onlinesourdough-content-publishing-desk-640.png",
+      src: "/assets/onlinesourdough-content-publishing-desk-640.png",
       alt: "OnlineSourdough content publishing desk",
       variant: "pixel-content",
     },
     {
-      src: "assets/onlinesourdough-complete-bake-workstation-640.png",
+      src: "/assets/onlinesourdough-complete-bake-workstation-640.png",
       alt: "OnlineSourdough Complete Bake workstation",
       variant: "pixel-bake",
     },
     {
-      src: "assets/arcitai-city-workshop-640.jpg",
+      src: "/assets/arcitai-city-workshop-640.jpg",
       alt: "Arc’IT AI city and workshop",
       variant: "arc-city",
     },
@@ -81,30 +79,27 @@ export const siteData = {
   links: {
     actions: [
       {
-        description: "Content, resources and direct access",
-        label: "onlinesourdough.com",
-        href: "https://onlinesourdough.com",
+        description: "Practical AI resources and hands-on guidance.",
+        label: "onlinesourdough",
+        href: familyHref("onlinesourdough"),
       },
       {
-        description: "Done-for-you agency service",
-        label: "arcitai.com",
-        href: "https://arcitai.com",
+        description: "Done-for-you AI and secure software",
+        label: "Arc’IT AI",
+        href: familyHref("arcitai"),
       },
+      { description: "AI inference", label: "Kastanje AI", href: "https://kastanje-demo.gustavonline.workers.dev/" },
       {
-        description: "My open source repos",
-        label: "github/gustavonline",
-        href: "https://github.com/gustavonline",
-      },
-      {
-        description: "Collaborations? Email me",
-        label: "hello@gustavonline.com",
-        href: "mailto:hello@gustavonline.com",
+        description: "Experiments, workflows and tools for making AI useful in real business.",
+        label: "Newsletter",
+        href: "/newsletter",
       },
     ],
     social: [
       { label: "YouTube", href: "https://www.youtube.com/@gustavonline", icon: "youtube" },
       { label: "Instagram", href: "https://www.instagram.com/gustavonline/", icon: "instagram" },
       { label: "LinkedIn", href: "https://www.linkedin.com/in/gustavonline/", icon: "linkedin" },
+      { label: "GitHub", href: "https://github.com/gustavonline", icon: "github" },
     ],
     footerSocial: [
       { label: "YouTube", href: "https://www.youtube.com/@gustavonline", icon: "youtube" },

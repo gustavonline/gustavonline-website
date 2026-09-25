@@ -25,8 +25,9 @@ export function SiteLayout({
 
   return (
     <div className="page-shell">
+      <a className="family-skip" href="#main-content">Skip to content</a>
       <Header theme={theme} onToggleTheme={toggleTheme} />
-      <main className={`main-panel ${mainClassName}`.trim()}>{content}</main>
+      <main id="main-content" tabIndex={-1} className={`main-panel ${mainClassName}`.trim()}>{content}</main>
       <Footer />
     </div>
   );
