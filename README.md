@@ -6,10 +6,9 @@ Gustav Online is my personal and demand brand: a public record and CV of practic
 
 The north star is **Business Freedom**: more control of time, capacity, and direction, not maximum automation.
 
-This repository has two jobs:
+This private repository contains the source for my portfolio website.
 
-- It is my GitHub profile README.
-- It is the source for my portfolio website.
+The public GitHub profile is maintained separately in [gustavonline/gustavonline](https://github.com/gustavonline/gustavonline).
 
 ## What I am building around
 
