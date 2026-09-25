@@ -27,7 +27,12 @@ const newsletterRoute = createRoute({
   component: lazyRouteComponent(() => import("./routes/NewsletterApp"), "NewsletterApp"),
 });
 
-const routeTree = rootRoute.addChildren([indexRoute, newsletterRoute]);
+const thankYouRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/newsletter/thank-you",
+  component: lazyRouteComponent(() => import("./routes/NewsletterApp"), "NewsletterApp"),
+});
+const routeTree = rootRoute.addChildren([indexRoute, newsletterRoute, thankYouRoute]);
 const pathname = window.location.pathname.replace(/\/+$/, "") || "/";
 const routerBasepath =
   pathname === "/gustavonline" || pathname.startsWith("/gustavonline/")

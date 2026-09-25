@@ -6,12 +6,18 @@ import type { Theme } from "../types";
 export function useTheme() {
   const [theme, setTheme] = useState<Theme>(() => {
     if (typeof window === "undefined") return "light";
-    return window.localStorage.getItem(siteData.themeStorageKey) === "dark" ? "dark" : "light";
+    const requested = new URLSearchParams(window.location.search).get("theme");
+    if (requested === "light" || requested === "dark") return requested;
+    try {
+      const saved = window.localStorage.getItem(siteData.themeStorageKey);
+      if (saved === "dark" || saved === "light") return saved;
+    } catch { /* Storage is optional. */ }
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
   });
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
-    window.localStorage.setItem(siteData.themeStorageKey, theme);
+    try { window.localStorage.setItem(siteData.themeStorageKey, theme); } catch { /* Storage is optional. */ }
   }, [theme]);
 
   return {

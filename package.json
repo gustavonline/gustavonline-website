@@ -4,8 +4,10 @@
   "description": "Personal website for Gustav Anderson.",
   "type": "module",
   "scripts": {
+    "review:build": "VITE_REVIEW_PREVIEW=true vite build --outDir output/family-preview",
+    "review:preview": "vite preview --outDir output/family-preview --host 127.0.0.1 --port 4181 --strictPort",
     "dev": "vite --host 127.0.0.1",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && node scripts/prepare-pages.mjs",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -33,7 +35,7 @@
     "three": "^0.185.1"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20260613.1",
+    "@cloudflare/workers-types": "^5.20260925.2",
     "@tailwindcss/vite": "^4.3.1",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
@@ -42,7 +44,7 @@
     "tailwindcss": "^4.3.1",
     "typescript": "^6.0.3",
     "vite": "^8.0.16",
-    "vitest": "^4.0.15",
-    "wrangler": "^4.100.0"
+    "vitest": "^4.1.11",
+    "wrangler": "^4.141.0"
   }
 }
