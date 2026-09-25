@@ -7,7 +7,6 @@ const origin = "https://gustavonline.com";
 const routes = [
   { path: "newsletter", title: `Newsletter | ${brand}`, description: "Notes from the work. A newsletter by Gustav Anderson." },
   { path: "newsletter/thank-you", title: `Newsletter signup | ${brand}`, description: "Your newsletter signup.", noindex: true },
-  
 ];
 for (const route of routes) {
   const dir = new URL(`${route.path}/`, dist);
