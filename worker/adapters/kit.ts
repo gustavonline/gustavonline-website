@@ -19,12 +19,22 @@ export async function upsertKitSubscriber(
         source,
       },
     }),
+    signal: AbortSignal.timeout(10_000),
   });
 
   if (!response.ok) {
+    console.error("kit_subscriber_request_failed", { status: response.status });
     throw new Error("Kit subscriber upsert failed");
   }
 
-  const data = (await response.json()) as { subscriber?: { id?: number }; id?: number };
-  return data.subscriber ?? data;
+  const data: unknown = await response.json();
+  if (!data || typeof data !== "object" || !("subscriber" in data)) {
+    throw new Error("Kit subscriber acknowledgement missing");
+  }
+  const subscriber = data.subscriber;
+  if (!subscriber || typeof subscriber !== "object" || !("id" in subscriber) ||
+      typeof subscriber.id !== "number" || subscriber.id <= 0) {
+    throw new Error("Kit subscriber acknowledgement invalid");
+  }
+  return { id: subscriber.id };
 }

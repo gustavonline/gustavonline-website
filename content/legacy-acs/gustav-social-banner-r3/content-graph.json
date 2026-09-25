@@ -1,0 +1,45 @@
+{
+  "contract_version": "acs-content-graph/1.0",
+  "family": {
+    "id": "gustav-social-banner-r3",
+    "version": 1,
+    "review": {
+      "status": "approved",
+      "reviewer": "acs-editorial-review-r3",
+      "reference": "final-review.md"
+    }
+  },
+  "nodes": [
+    {
+      "id": "gustav-social-banner-r3-positioning",
+      "version": 1,
+      "kind": "master",
+      "path": "POSITIONING.md",
+      "format": "text/markdown",
+      "sha256": "sha256:bc73c8af07e264273bcee9d95af5ace277f8c7269f4d4e06888f839d9b1e557d",
+      "channel_targets": [
+        "linkedin-banner",
+        "x-banner"
+      ],
+      "provenance": {
+        "type": "editorial-decision",
+        "statement": "Exact R3 banner copy and ADS layout guidance derived from current owner feedback and the accepted R2 source synthesis without adding claims or changing the offer architecture.",
+        "references": [
+          "linkage:gustav-social-banner-r3::agentic-content-system::copy-r1",
+          "../gustav-social-banner-r2/POSITIONING.md",
+          "accepted-source:Freedom-first Business Model",
+          "accepted-source:The onlinesourdough Method",
+          "accepted-source:onlinesourdough — Offers",
+          "accepted-source:Personal brand / Content Eco System",
+          "accepted-source:Work with onlinesourdough"
+        ]
+      },
+      "review": {
+        "status": "approved",
+        "reviewer": "acs-editorial-review-r3",
+        "reference": "final-review.md"
+      }
+    }
+  ],
+  "edges": []
+}

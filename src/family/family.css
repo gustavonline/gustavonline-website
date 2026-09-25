@@ -1,0 +1,72 @@
+/* Shared visual contract. Each site owns its deployable copy; no cross-repo runtime. */
+.family-skip { position:fixed; z-index:100; top:8px; left:12px; padding:12px 20px; background:var(--family-bg); color:var(--family-ink); transform:translateY(-160%); }
+.family-skip:focus { transform:translateY(0); }
+:root { --family-bg: var(--bg, var(--paper)); --family-ink: var(--text, var(--ink)); --family-line: var(--faint, var(--line)); }
+.family-footer { max-width:1120px; width:calc(100% - 80px); margin:0 auto; padding:24px 0; border-top:1px solid var(--family-line); display:flex; align-items:center; justify-content:space-between; gap:24px; font-size:14px; line-height:1.5; position:relative; z-index:1; }
+.family-sites,.family-social { display:flex; align-items:center; gap:28px; }
+.family-sites a { display:inline-flex; gap:8px; align-items:center; min-height:44px; text-decoration:none; }
+.family-sites a:hover { text-decoration:underline; text-underline-offset:4px; }
+.family-sites img { width:28px; height:28px; object-fit:cover; object-position:50% 22%; border-radius:3px; }
+.family-social { gap:4px; }
+.family-social a { display:grid; place-items:center; width:44px; height:44px; color:inherit; opacity:.78; }
+.family-social a:hover { opacity:1; }
+.family-social svg { width:19px; height:19px; fill:currentColor; }
+.family-newsletter { width:min(100% - 48px,600px); margin:0 auto; padding:92px 0 104px; }
+.family-newsletter h1 { font-family:"Geist Pixel",Pixel,monospace; font-size:clamp(40px,5vw,58px); font-weight:400; line-height:1.12; letter-spacing:-1px; margin:0 0 28px; text-wrap:balance; }
+.family-newsletter > p { font-size:18px; line-height:1.65; max-width:490px; color:var(--muted); margin:20px 0 0; }
+.family-newsletter .newsletter-byline { font-size:15px; color:var(--family-ink); }
+.family-signup { margin:38px 0 0; text-align:left; }
+.family-signup label { display:block; font-size:14px; margin-bottom:10px; }
+.family-form-row { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:10px; }
+.family-form-row input { min-width:0; width:100%; min-height:50px; padding:12px 14px; font:inherit; font-size:16px; border:1px solid var(--family-line); border-radius:2px; background:var(--family-bg); color:var(--family-ink); }
+.family-button { display:inline-flex; align-items:center; justify-content:center; gap:16px; min-height:50px; border:1px solid var(--family-ink); border-radius:2px; padding:12px 22px; background:var(--family-ink); color:var(--family-bg); font:inherit; font-size:15px; text-decoration:none; cursor:pointer; }
+.family-button:hover { opacity:.85; text-decoration:none; }
+.family-button:disabled { opacity:.55; cursor:wait; }
+.family-signup p { font-size:13px; line-height:1.65; color:var(--muted); margin:16px 0 0; }
+.family-signup [role="status"]:empty { display:none; }
+.family-newsletter .review-notice { font-size:12px; margin-top:22px; color:var(--muted); }
+.family-thanks { min-height:65vh; }
+.family-thanks .family-button { margin-top:36px; }
+.theme-toggle { width:44px; height:44px; display:grid; place-items:center; }
+.theme-toggle-icon { display:block; width:17px; height:17px; border-radius:999px; box-shadow:inset -6px -4px 0 0 currentColor; }
+:root[data-theme="dark"] .theme-toggle-icon { background:currentColor; box-shadow:0 -8px 0 -6px currentColor,0 8px 0 -6px currentColor,8px 0 0 -6px currentColor,-8px 0 0 -6px currentColor,6px 6px 0 -6px currentColor,-6px -6px 0 -6px currentColor,6px -6px 0 -6px currentColor,-6px 6px 0 -6px currentColor; }
+@media(max-width:620px) {
+ .family-footer { width:calc(100% - 40px); flex-direction:column; align-items:stretch; gap:10px; padding:20px 0; }
+ .family-sites { gap:22px; flex-wrap:wrap; font-size:13px; }
+ .family-social { align-self:flex-end; }
+ .family-newsletter { padding:64px 0 76px; }
+ .family-newsletter > p { font-size:17px; }
+ .family-form-row { grid-template-columns:1fr; }
+ .family-thanks { min-height:60vh; }
+}
+@media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto!important; } }
+/* Family shell: equal outer gutters, distinct brand accents and icon-only theme feedback. */
+:root { --family-shell: 1120px; }
+.family-footer { max-width:var(--family-shell); }
+.family-mark { flex:none; width:28px; height:28px; fill:currentColor; }
+.family-mark-bread { width:30px; height:21px; }
+.family-mark-arcit,.family-sites .family-mark { color:var(--family-ink); }
+.family-sites a { gap:8px; }
+.family-sites a:hover, .family-sites a:focus-visible,
+.family-social a:hover, .family-social a:focus-visible { color:var(--family-accent); opacity:1; }
+.site-header .theme-toggle,
+.site-header .theme-toggle:hover,
+.site-header .theme-toggle:focus-visible {
+  width:44px; height:44px; padding:0; border:0; border-radius:0;
+  background:transparent; box-shadow:none;
+}
+.site-header .theme-toggle { color:var(--muted); transition:color 160ms ease; }
+.site-header .theme-toggle:hover,
+.site-header .theme-toggle:focus-visible { color:var(--family-accent); }
+.site-header .theme-toggle:focus-visible { outline:2px solid var(--family-accent); outline-offset:0; }
+.site-header a:hover, .site-header a:focus-visible,
+.site-header .offers-trigger:hover, .site-header .offers-trigger:focus-visible,
+.site-header .studio-trigger:hover, .site-header .studio-trigger:focus-visible {
+  color:var(--family-accent); background:transparent;
+}
+.header-utilities { display:flex; align-items:center; justify-self:end; gap:20px; font-size:14px; }
+.header-utilities > a { display:inline-flex; align-items:center; min-height:44px; }
+@media(max-width:620px) {
+  .header-utilities { gap:10px; }
+  .family-sites { column-gap:20px; font-size:14px; }
+}

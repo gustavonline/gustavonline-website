@@ -16,6 +16,42 @@ afterEach(() => {
 });
 
 describe("Worker public routes", () => {
+  it("acknowledges a valid Kit subscriber without returning personal data", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response(JSON.stringify({
+      subscriber: { id: 123, state: "active" },
+    })));
+    const response = await worker.fetch(new Request("https://api.example.com/newsletter", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Origin: "https://gustavonline.com" },
+      body: JSON.stringify({ email: "reader@example.com", source: "arcitai" }),
+    }), env);
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({ ok: true });
+  });
+
+  it("does not turn malformed Kit success into a subscription acknowledgement", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response(JSON.stringify({ ok: true })));
+    const response = await worker.fetch(new Request("https://api.example.com/newsletter", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: "reader@example.com", source: "gustavonline" }),
+    }), env);
+    expect(response.status).toBe(502);
+  });
+
+  it("keeps provider failures generic and records only the HTTP status", async () => {
+    const log = vi.spyOn(console, "error").mockImplementation(() => {});
+    vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response("private upstream detail", {status:401}));
+    const response = await worker.fetch(new Request("https://api.example.com/newsletter", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: "reader@example.com", source: "onlinesourdough" }),
+    }), env);
+    expect(response.status).toBe(502);
+    expect(await response.text()).not.toContain("private upstream detail");
+    expect(log).toHaveBeenCalledWith("kit_subscriber_request_failed", {status:401});
+  });
+
   it("serves published posts from the Notion-backed source", async () => {
     const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValue(
       new Response(

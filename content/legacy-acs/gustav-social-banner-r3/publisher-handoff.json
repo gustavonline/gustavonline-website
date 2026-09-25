@@ -1,0 +1,21 @@
+{
+  "contract_version": "acs-publisher-handoff/1.0",
+  "family_id": "gustav-social-banner-r3",
+  "graph_version": 1,
+  "graph_sha256": "sha256:f81fd0c2f4dfd9b298b7ba5f67fff0f2c354ce3024745192b436bebb3f27c9e8",
+  "status": "awaiting-separate-authorization",
+  "supervised": true,
+  "not_posted": true,
+  "external_posting": false,
+  "selected_nodes": [
+    {
+      "node_id": "gustav-social-banner-r3-positioning",
+      "version": 1,
+      "sha256": "sha256:bc73c8af07e264273bcee9d95af5ace277f8c7269f4d4e06888f839d9b1e557d",
+      "channel_targets": [
+        "linkedin-banner",
+        "x-banner"
+      ]
+    }
+  ]
+}

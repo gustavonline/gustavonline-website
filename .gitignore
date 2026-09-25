@@ -6,3 +6,6 @@ dist/
 .env.*.local
 npm-debug.log*
 tsconfig.tsbuildinfo
+
+# Local owner-review build, never a release artifact
+output/family-preview/

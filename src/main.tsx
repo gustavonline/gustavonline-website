@@ -6,6 +6,8 @@ import { createRoot } from "react-dom/client";
 import { queryClient } from "./lib/query-client";
 import { router } from "./router";
 import "./styles.css";
+import "./family/family.css";
+import "./family/site.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
