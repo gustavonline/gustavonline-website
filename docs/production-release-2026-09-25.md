@@ -28,4 +28,3 @@ Keep the previous production commit/deployment as the rollback point.
 GitHub Pages: revert the release through the normal PR workflow and verify the Pages run.
 Arc’IT Pages/Worker: redeploy the recorded prior deployment/version if production verification fails.
 Detailed final commit, deployment and public readback evidence is recorded in the Arc’IT production release report.
-
