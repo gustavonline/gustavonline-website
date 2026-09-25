@@ -9,7 +9,7 @@
     "enabled": true
   },
   "vars": {
-    "ALLOWED_ORIGINS": "https://gustavonline.com,https://www.gustavonline.com,http://gustavonline.com,http://www.gustavonline.com,https://gustavonline.github.io",
+    "ALLOWED_ORIGINS": "https://gustavonline.com,https://www.gustavonline.com,http://gustavonline.com,http://www.gustavonline.com,https://gustavonline.github.io,https://onlinesourdough.com,https://www.onlinesourdough.com,https://arcitai.com,https://www.arcitai.com",
     "NOTION_PAPERS_DATA_SOURCE_ID": "23fa9322-f9ee-4ffc-8c5a-a44a88b281e9",
     "PUBLIC_SITE_URL": "https://gustavonline.com"
   }
