@@ -94,6 +94,11 @@ export const siteData = {
         label: "Newsletter",
         href: "/newsletter",
       },
+      {
+        description: "A retro music café with Elvis playlists and changing scenes.",
+        label: "Elvis Presley Café",
+        href: "https://gustavonline.github.io/elvispresley.cafe/",
+      },
     ],
     social: [
       { label: "YouTube", href: "https://www.youtube.com/@gustavonline", icon: "youtube" },

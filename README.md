@@ -6,7 +6,7 @@ Gustav Online is my personal and demand brand: a public record and CV of practic
 
 The north star is **Business Freedom**: more control of time, capacity, and direction, not maximum automation.
 
-This private repository contains the source for my portfolio website.
+This public repository contains the source for my portfolio website.
 
 The public GitHub profile is maintained separately in [gustavonline/gustavonline](https://github.com/gustavonline/gustavonline).
 
@@ -106,3 +106,11 @@ Resources. See [docs/cloudflare-backend.md](docs/cloudflare-backend.md) and
 ## Current status
 
 This profile and portfolio are intentionally evolving. They are the public record and CV of my work in business architecture, software, AI-native systems, and public learning.
+
+## License
+
+Original code and documentation are available under the [MIT License](LICENSE).
+Third-party code, fonts, copied reference material, and other third-party assets
+retain their own licenses and attribution. Brand names, logos, portraits, and
+editorial media are not licensed for reuse by this software license.
+See [third-party notices](THIRD_PARTY_NOTICES.md) and the bundled font license.
