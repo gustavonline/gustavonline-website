@@ -1,0 +1,14 @@
+.gustavonline-company {
+  max-width: var(--family-shell, 1120px);
+  width: calc(100% - 80px);
+  margin: -8px auto 24px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 620px) {
+  .gustavonline-company { width: calc(100% - 40px); }
+}
