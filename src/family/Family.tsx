@@ -14,20 +14,34 @@ const social = [
 ];
 
 export function FamilyFooter({ brand }: { brand: FamilyBrand }) {
-  return <div className="family-footer">
-    <nav className="family-sites" aria-label="Other sites by Gustav">
-      {(Object.keys(labels) as FamilyBrand[]).filter((key) => key !== brand).map((key) =>
-        <a key={key} href={familyHref(key)}>
-          <FamilyMark brand={key} />
-          {labels[key]} <span aria-hidden="true">↗</span>
-        </a>)}
-    </nav>
-    <nav className="family-social" aria-label="Social profiles">
-      {social.map(([label, href, icon]) => <a key={label} href={href} aria-label={label} title={label}>
-        <BrandIcon name={icon} />
-      </a>)}
-    </nav>
-  </div>;
+  return (
+    <div className="family-footer">
+      <nav className="family-sites" aria-label="Other sites by Gustav">
+        {(Object.keys(labels) as FamilyBrand[])
+          .filter((key) => key !== brand)
+          .map((key) => (
+            <a key={key} href={familyHref(key)}>
+              <span className="family-site-mark"><FamilyMark brand={key} /></span>
+              {labels[key]} <span aria-hidden="true">↗</span>
+            </a>
+          ))}
+      </nav>
+      <div className="family-footer-details">
+        <nav className="family-social" aria-label="Social profiles">
+          {social.map(([label, href, icon]) => (
+            <a key={label} href={href} aria-label={label} title={label}>
+              <BrandIcon name={icon} />
+            </a>
+          ))}
+        </nav>
+        <p className="family-footer-meta">
+          {brand === "gustavonline" ? "VAT: DK46128435" : (
+            <>Part of <a href={familyHref("gustavonline")}>Gustav Online</a></>
+          )}
+        </p>
+      </div>
+    </div>
+  );
 }
 
 export function NewsletterContent({ brand, children }: { brand: FamilyBrand; children?: ReactNode }) {

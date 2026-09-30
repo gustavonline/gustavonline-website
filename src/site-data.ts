@@ -88,7 +88,7 @@ export const siteData = {
         label: "Arc’IT AI",
         href: familyHref("arcitai"),
       },
-      { description: "AI inference", label: "Kastanje AI", href: "https://kastanje-demo.gustavonline.workers.dev/" },
+      { description: "Kastanje Labs · AI infrastructure and tools", label: "Danish AI Infra Lab", href: "https://github.com/kastanje-labs" },
       {
         description: "Experiments, workflows and tools for making AI useful in real business.",
         label: "Newsletter",
