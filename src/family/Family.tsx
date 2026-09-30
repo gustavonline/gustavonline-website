@@ -5,7 +5,7 @@ import { familyHref, localReview, type FamilyBrand } from "./preview";
 
 import { newsletterReceipt, submitNewsletter } from "./newsletter";
 
-const labels = { gustavonline: "gustavonline", onlinesourdough: "onlinesourdough", arcitai: "Arc’IT AI" };
+const labels = { onlinesourdough: "onlinesourdough", arcitai: "Arc’IT AI", gustavonline: "gustavonline" };
 const social = [
   ["YouTube", "https://www.youtube.com/@gustavonline", "youtube"],
   ["Instagram", "https://www.instagram.com/gustavonline/", "instagram"],
