@@ -70,3 +70,17 @@
   .header-utilities { gap:10px; }
   .family-sites { column-gap:20px; font-size:14px; }
 }
+
+/* Shared footer sizing and attribution across the brand family. */
+.family-footer { align-items:flex-start; font-family:Geist,sans-serif; }
+.family-sites { flex-wrap:wrap; }
+.family-site-mark { display:grid; place-items:center; flex:none; width:32px; height:32px; }
+.family-site-mark .family-mark { width:28px; height:28px; }
+.family-site-mark .family-mark-bread { width:30px; height:21px; }
+.family-footer-details { display:flex; flex-direction:column; align-items:flex-end; gap:4px; }
+.family-footer-meta { margin:0; font-size:12px; line-height:1.5; color:inherit; opacity:.75; }
+.family-footer-meta a { color:inherit; text-decoration:none; }
+.family-footer-meta a:hover,.family-footer-meta a:focus-visible { text-decoration:underline; text-underline-offset:3px; }
+@media(max-width:620px) {
+  .family-footer-details { align-self:flex-end; }
+}
