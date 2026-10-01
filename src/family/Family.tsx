@@ -9,7 +9,7 @@ const labels = { onlinesourdough: "onlinesourdough", arcitai: "Arc’IT AI", gus
 const social = [
   ["YouTube", "https://www.youtube.com/@gustavonline", "youtube"],
   ["Instagram", "https://www.instagram.com/gustavonline/", "instagram"],
-  ["LinkedIn", "https://www.linkedin.com/in/gustavonline/", "linkedin"],
+  ["LinkedIn", "https://www.linkedin.com/in/gustavandersonn/", "linkedin"],
   ["GitHub", "https://github.com/gustavonline", "github"],
 ];
 
