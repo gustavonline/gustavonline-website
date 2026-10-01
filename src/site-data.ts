@@ -103,13 +103,13 @@ export const siteData = {
     social: [
       { label: "YouTube", href: "https://www.youtube.com/@gustavonline", icon: "youtube" },
       { label: "Instagram", href: "https://www.instagram.com/gustavonline/", icon: "instagram" },
-      { label: "LinkedIn", href: "https://www.linkedin.com/in/gustavonline/", icon: "linkedin" },
+      { label: "LinkedIn", href: "https://www.linkedin.com/in/gustavandersonn/", icon: "linkedin" },
       { label: "GitHub", href: "https://github.com/gustavonline", icon: "github" },
     ],
     footerSocial: [
       { label: "YouTube", href: "https://www.youtube.com/@gustavonline", icon: "youtube" },
       { label: "Instagram", href: "https://www.instagram.com/gustavonline/", icon: "instagram" },
-      { label: "LinkedIn", href: "https://www.linkedin.com/in/gustavonline/", icon: "linkedin" },
+      { label: "LinkedIn", href: "https://www.linkedin.com/in/gustavandersonn/", icon: "linkedin" },
       { label: "GitHub", href: "https://github.com/gustavonline", icon: "github" },
     ],
   },
