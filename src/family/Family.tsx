@@ -20,7 +20,7 @@ export function FamilyFooter({ brand }: { brand: FamilyBrand }) {
         {(Object.keys(labels) as FamilyBrand[])
           .filter((key) => key !== brand)
           .map((key) => (
-            <a key={key} href={familyHref(key)}>
+            <a key={key} href={familyHref(key)} target="_blank" rel="noopener noreferrer">
               <span className="family-site-mark"><FamilyMark brand={key} /></span>
               {labels[key]} <span aria-hidden="true">↗</span>
             </a>
@@ -29,14 +29,14 @@ export function FamilyFooter({ brand }: { brand: FamilyBrand }) {
       <div className="family-footer-details">
         <nav className="family-social" aria-label="Social profiles">
           {social.map(([label, href, icon]) => (
-            <a key={label} href={href} aria-label={label} title={label}>
+            <a key={label} href={href} aria-label={label} title={label} target="_blank" rel="noopener noreferrer">
               <BrandIcon name={icon} />
             </a>
           ))}
         </nav>
         <p className="family-footer-meta">
           {brand === "gustavonline" ? "VAT: DK46128435" : (
-            <>Part of <a href={familyHref("gustavonline")}>Gustav Online</a></>
+            <>Part of <a href={familyHref("gustavonline")} target="_blank" rel="noopener noreferrer">Gustav Online</a></>
           )}
         </p>
       </div>

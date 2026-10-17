@@ -7,7 +7,7 @@ export function SocialLinks({ variant = "top" }: { variant?: "top" | "footer" })
   return (
     <nav className="social-links" aria-label="Social profiles">
       {links.map((link) => (
-        <a href={link.href} key={link.label} aria-label={link.label} title={link.label}>
+        <a href={link.href} key={link.label} aria-label={link.label} title={link.label} target="_blank" rel="noopener noreferrer">
           <BrandIcon name={link.icon} />
         </a>
       ))}
