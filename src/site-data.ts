@@ -79,16 +79,16 @@ export const siteData = {
   links: {
     actions: [
       {
-        description: "Practical AI resources and hands-on guidance.",
+        description: "Methods, resources and learning for digital business.",
         label: "onlinesourdough",
         href: familyHref("onlinesourdough"),
       },
       {
-        description: "Done-for-you AI and secure software",
+        description: "IT consulting, architecture and custom software.",
         label: "Arc’IT AI",
         href: familyHref("arcitai"),
       },
-      { description: "AI Infrastructure and Tools", label: "Kastanje Lab", href: "https://github.com/kastanje-labs" },
+      { description: "Experiments in AI infrastructure and coding-agent tools.", label: "Kastanje Labs", href: "https://github.com/kastanje-labs" },
       {
         description: "Experiments, workflows and tools for making AI useful in real business.",
         label: "Newsletter",
