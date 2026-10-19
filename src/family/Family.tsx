@@ -4,6 +4,7 @@ import { FamilyMark } from "./FamilyMark";
 import { familyHref, localReview, type FamilyBrand } from "./preview";
 
 import { newsletterReceipt, submitNewsletter } from "./newsletter";
+import { siteData } from "../site-data";
 
 const labels = { onlinesourdough: "onlinesourdough", arcitai: "Arc’IT AI", gustavonline: "gustavonline" };
 const social = [
@@ -75,7 +76,7 @@ export function NewsletterContent({ brand, children }: { brand: FamilyBrand; chi
     <section className="family-newsletter" aria-labelledby="newsletter-title">
       <h1 id="newsletter-title">Notes from<br />the work</h1>
       <p className="newsletter-byline">A newsletter by Gustav Anderson.</p>
-      <p>Experiments, workflows and lessons from using AI in a real business.</p>
+      <p>{siteData.newsletter.support}</p>
       <form className="family-signup" onSubmit={submit} aria-busy={pending}>
         <label htmlFor="newsletter-email">Email address</label>
         <div className="family-form-row">

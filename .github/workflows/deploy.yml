@@ -37,11 +37,15 @@ jobs:
       - name: Test
         run: npm run test
 
+      - name: Check published profile sources
+        run: node scripts/check-profile-publish.mjs
+
       - name: Build
         run: npm run build
         env:
           VITE_WRITING_ENDPOINT: https://gustavonline-api.gustavonline.workers.dev/posts
           VITE_NEWSLETTER_ENDPOINT: https://gustavonline-api.gustavonline.workers.dev/newsletter
+          VITE_GITHUB_PROFILE_REFRESH: 'true'
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
