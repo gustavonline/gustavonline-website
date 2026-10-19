@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" role="img" aria-label="Factory">
+  <!-- Local project icon proposal for the Gustav Online website: three connected modules. Not an Arc'IT AI brand asset. -->
+  <rect x="8" y="8" width="240" height="240" rx="56" fill="#4265A0"/>
+  <g fill="none" stroke="#FFFAF0" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M112 90h32"/>
+    <path d="M86 116v50h16M170 116v50h-16"/>
+  </g>
+  <g fill="#FFFAF0">
+    <rect x="60" y="64" width="52" height="52" rx="8"/>
+    <rect x="144" y="64" width="52" height="52" rx="8"/>
+    <rect x="102" y="140" width="52" height="52" rx="8"/>
+  </g>
+</svg>

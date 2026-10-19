@@ -5,15 +5,74 @@
 .header-newsletter-link { font:14px Geist,sans-serif; text-transform:none; letter-spacing:0!important; min-height:44px; }
 .page-shell { min-height:100svh; }
 .main-panel:not(.newsletter-main) { max-width:600px; padding:88px 0 80px; }
+/* Landing: Selected work as project tabs — real project icons and names, one case below. */
+.selected-work { --work-accent:color-mix(in srgb,var(--brand-orange) 62%,var(--text)); margin-top:64px; scroll-margin-top:24px; }
+.selected-work-heading h2 { margin:0 0 6px; font-weight:450; font-size:22px; letter-spacing:-.02em; }
+.work-tablist { display:flex; justify-content:space-between; gap:24px; margin-top:20px; border-bottom:1px solid var(--faint); }
+.work-tab { display:flex; align-items:center; gap:10px; min-width:0; min-height:48px; margin-bottom:-1px; padding:8px 0 12px; border:0; border-bottom:2px solid transparent; background:none; color:var(--muted); font:inherit; text-align:left; cursor:pointer; }
+.work-tab:hover { color:var(--text); }
+.work-tab[aria-selected="true"] { color:var(--text); border-bottom-color:var(--brand-orange); }
+.work-tab:focus-visible { outline:2px solid var(--link); outline-offset:2px; }
+/* The real project icons carry their own grounds; only the outer corners are softened. */
+.work-icon { display:block; flex:none; width:28px; height:28px; border-radius:7px; }
+/* Fallback for a selected project without a known icon: a quiet monogram, not a new logo. */
+.work-monogram { display:grid; place-items:center; background:var(--faint); color:var(--text); font-size:18px; font-weight:450; }
+.work-tab-title { min-width:0; max-width:100%; overflow-wrap:anywhere; font-size:15px; line-height:1.3; }
+/* A small collection mark gives the fourth tab the same visual weight. */
+.work-more-icon { display:grid; place-items:center; color:var(--text); }
+/* All panels overlap in one grid, so the tallest sets the height and switching never jumps.
+   Focus panels share the first two rows (subgrid), keeping the text and Explore
+   aligned. The More panel spans a final flexible row as well: a flexible track absorbs a
+   spanning item's extra height, so a longer list only adds space below, never between rows. */
+.work-panels { display:grid; grid-template-rows:repeat(2,auto) 1fr; padding-top:24px; }
+.work-panel { grid-column:1; grid-row:1 / -1; display:grid; grid-template-rows:subgrid; align-content:start; visibility:hidden; }
+.work-panel.is-active { visibility:visible; }
+@supports not (grid-template-rows:subgrid) { .work-panel { display:block; } }
+.work-panel-more { display:block; }
+.work-panel:focus-visible { outline:2px solid var(--link); outline-offset:6px; }
+/* More: a quiet directory of single link rows (about 34px each): name, faint dotted
+   leader, optional note, arrow. Rows wrap naturally on narrow screens. */
+.work-directory { display:grid; gap:0; margin:-4px 0 0; padding:0; list-style:none; }
+.work-directory a { display:flex; flex-wrap:wrap; align-items:center; gap:2px 10px; min-height:34px; padding-block:5px; box-sizing:border-box; font-size:15px; line-height:1.4; }
+.work-directory-name { flex:0 1 auto; min-width:0; }
+.work-directory-leader { flex:1 1 16px; min-width:16px; border-bottom:1px dotted color-mix(in srgb,var(--muted) 45%,transparent); }
+.work-directory-note { flex:none; color:var(--muted); font-size:12px; }
+.work-directory-arrow { flex:none; color:var(--muted); font-size:13px; }
+.work-directory a:hover .work-directory-name,.work-directory a:focus-visible .work-directory-name,
+.work-directory a:hover .work-directory-arrow,.work-directory a:focus-visible .work-directory-arrow { color:var(--work-accent); }
+.work-copy p { margin:0; font-size:15px; line-height:1.7; }
+.work-copy p + p { margin-top:14px; }
+.work-copy a { text-decoration:underline; text-decoration-color:var(--work-accent); text-underline-offset:3px; }
+.work-copy a:hover,.work-copy a:focus-visible { color:var(--work-accent); }
+.work-source { display:inline-flex; align-items:center; justify-self:start; align-self:start; gap:6px; min-height:44px; margin-top:10px; font-size:14px; }
+.work-source:hover,.work-source:focus-visible { color:var(--work-accent); }
+
+/* Decorative contribution-style field: no controls, never captures pointer input. */
+.pixel-field { position:relative; pointer-events:none; }
+.pixel-field-surface { width:100%; opacity:.94; transition:opacity 480ms ease; }
+:root[data-theme="dark"] .pixel-field-surface { opacity:.86; }
+.pixel-field.is-dimmed .pixel-field-surface { opacity:0; }
+.pixel-field canvas { display:block; width:100%; height:100%; }
+/* Legacy Left (wide screens, direct URL only): a taller field in the left gutter. */
+.pixel-field-side { --field-edge:max(40px,calc((100% - 1120px)/2)); position:absolute; z-index:1; top:160px; left:var(--field-edge); width:min(260px,calc(50% - 348px - var(--field-edge))); }
+.pixel-field-side .pixel-field-surface { height:560px; -webkit-mask-image:linear-gradient(to left,transparent,#000 12%),linear-gradient(to bottom,#000 84%,transparent); -webkit-mask-composite:source-in; mask-image:linear-gradient(to left,transparent,#000 12%),linear-gradient(to bottom,#000 84%,transparent); mask-composite:intersect; }
+/* Top (the chosen placement): header → 48px → field → 48px → profile. */
+.landing-layout-top .landing-main,.landing-layout-left .landing-main { padding-top:48px; }
+.pixel-field-top { margin-bottom:48px; }
+.pixel-field-top .pixel-field-surface { height:120px; -webkit-mask-image:linear-gradient(to right,#000 80%,transparent); mask-image:linear-gradient(to right,#000 80%,transparent); }
+.landing-layout-profile .pixel-field-top { margin:32px 0 0; }
+.landing-layout-profile .link-section { margin-top:36px; }
+@media(min-width:1100px) { .landing-layout-left .landing-main { padding-top:88px; } }
+
 .profile-section { text-align:left; }
 .name-row { display:flex; align-items:flex-start; justify-content:flex-start; gap:20px; }
 .name-row h1 { font-size:32px; font-weight:450; line-height:1.2; }
-.name-row img { width:62px; height:70px; border-radius:4px; }
+.name-row img { width:62px; height:70px; border-radius:4px; object-position:50% 34%; }
 .intro-copy { font-size:16px; margin:10px 0 0; line-height:1.4; }
 .social-links { justify-content:flex-start; flex-wrap:wrap; gap:0; margin:12px 0 0 -12px; }
 .social-links a { min-height:44px; width:44px; display:grid; place-items:center; }
 .social-links svg { width:19px; height:19px; }
-.link-section { margin-top:72px; border-top:1px solid var(--faint); }
+.link-section { margin-top:72px; border-top:0; }
 .action-row { display:flex; flex-direction:column; align-items:stretch; gap:6px; padding:18px 0; text-decoration:none; }
 .action-line { display:flex; justify-content:space-between; font-size:18px; font-weight:400; border:0; padding:0; }
 .action-description { font-size:14px; line-height:1.6; }
@@ -36,4 +95,16 @@
  .name-row h1 { font-size:26px; }
  .name-row img { width:50px; height:60px; }
  .link-section { margin-top:64px; }
+ .selected-work { margin-top:64px; }
+ .work-tab { gap:8px; }
+ .work-icon { width:24px; height:24px; border-radius:6px; }
+ .work-tab-title { font-size:14px; }
+ .work-monogram { font-size:16px; }
+ /* Four tabs become a 2 × 2 grid so project names stay readable at 320px. */
+ .work-tablist { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:4px 12px; }
+ .work-directory a { gap:2px 8px; font-size:14px; }
+ .work-directory-leader { flex-basis:0; min-width:0; }
+ .landing-layout-top .landing-main,.landing-layout-left .landing-main { padding-top:32px; }
+ .pixel-field-top { margin-bottom:36px; }
+ .pixel-field-top .pixel-field-surface { height:96px; }
 }

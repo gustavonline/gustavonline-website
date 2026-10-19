@@ -1,10 +1,12 @@
 import { familyHref } from "./family/preview";
 
+// Project names, icons and copy come from the generated GitHub profile data.
+
 export const siteData = {
   brand: "gustavonline" as const,
   navBrand: "gustavonline",
   name: "Gustav Anderson",
-  portrait: "/assets/gustav-portrait.jpg",
+  portrait: "/assets/gustav-linkedin-portrait.jpg",
   identityMark: "/assets/gustav-pixel-g-384.png",
   email: "hello@gustavonline.com",
   themeStorageKey: "gustavonline-theme",
@@ -12,18 +14,22 @@ export const siteData = {
     homeTitle: "gustavonline | Gustav Anderson",
     newsletterTitle: "Newsletter | gustavonline",
     description:
-      "Practical AI notes, experiments and tools for founders and business leaders by Gustav Anderson.",
+      "I help businesses architect, develop and maintain secure solutions. Projects and notes by Gustav Anderson.",
     newsletterDescription:
-      "Practical AI notes, experiments and tools for founders and business leaders from gustavonline.",
+      "Notes on understanding business problems, designing systems and building solutions that last. By Gustav Anderson.",
     ogTitle: "gustavonline | Gustav Anderson",
-    ogImage: "/assets/gustav-portrait.jpg",
+    ogImage: "/assets/gustav-linkedin-portrait.jpg",
   },
   profile: {
     intro: "Founder",
   },
+  selectedWork: {
+    title: "Current work",
+    moreTitle: "More projects",
+  },
   newsletter: {
-    label: "Notes on practical AI for founders & business leaders",
-    support: "Experiments, workflows and tools for making AI useful in real business.",
+    label: "Notes from the work",
+    support: "Notes on understanding business problems, designing systems and building solutions that last.",
     submitLabel: "Join free",
     placeholder: "Email address",
     loading: "Submitting...",
@@ -79,18 +85,17 @@ export const siteData = {
   links: {
     actions: [
       {
-        description: "Methods, resources and learning for digital business.",
+        description: "Methods, resources and workshops for working better with AI.",
         label: "onlinesourdough",
         href: familyHref("onlinesourdough"),
       },
       {
-        description: "IT consulting, architecture and custom software.",
+        description: "Helping businesses architect, develop and maintain secure solutions.",
         label: "Arc’IT AI",
         href: familyHref("arcitai"),
       },
-      { description: "Experiments in AI infrastructure and coding-agent tools.", label: "Kastanje Labs", href: "https://github.com/kastanje-labs" },
       {
-        description: "Experiments, workflows and tools for making AI useful in real business.",
+        description: "Notes on business, systems and the work of building useful solutions.",
         label: "Newsletter",
         href: "/newsletter",
       },
