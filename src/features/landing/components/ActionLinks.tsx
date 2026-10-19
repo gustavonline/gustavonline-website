@@ -1,4 +1,5 @@
 import { siteData } from "../../../site-data";
+import { brandForLabel } from "./brandMarks";
 
 export function ActionLinks() {
   return (
@@ -12,6 +13,7 @@ export function ActionLinks() {
             href={link.href}
             target={external ? "_blank" : undefined}
             rel={external ? "noopener noreferrer" : undefined}
+            data-brand={brandForLabel(link.label)}
           >
             <span className="action-line">{link.label} <span aria-hidden="true">↗</span></span>
             <span className="action-description">{link.description}</span>
