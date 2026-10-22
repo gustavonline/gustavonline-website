@@ -23,7 +23,7 @@ export function FamilyFooter({ brand }: { brand: FamilyBrand }) {
           .map((key) => (
             <a key={key} href={familyHref(key)} target="_blank" rel="noopener noreferrer">
               <span className="family-site-mark"><FamilyMark brand={key} /></span>
-              {labels[key]} <span aria-hidden="true">↗</span>
+              <span className="brand-name-token" data-brand-name={key}>{labels[key]}</span> <span aria-hidden="true">↗</span>
             </a>
           ))}
       </nav>
@@ -37,7 +37,7 @@ export function FamilyFooter({ brand }: { brand: FamilyBrand }) {
         </nav>
         <p className="family-footer-meta">
           {brand === "gustavonline" ? "VAT: DK46128435" : (
-            <>Part of <a href={familyHref("gustavonline")} target="_blank" rel="noopener noreferrer">Gustav Online</a></>
+            <>Part of <a href={familyHref("gustavonline")} target="_blank" rel="noopener noreferrer"><span className="brand-name-token" data-brand-name="gustavonline">gustavonline</span></a></>
           )}
         </p>
       </div>

@@ -1,0 +1,42 @@
+/* Brand names keep their identity across headers, offer menus and footers. */
+@font-face {
+  font-family: "Geist Sans";
+  src: url("/assets/fonts/geist-sans-variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: Inter;
+  src: url("/assets/fonts/inter-latin-variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Geist Pixel";
+  src: url("../assets/fonts/geist-pixel-square.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+:root {
+  --font-sans: "Geist Sans", Arial, sans-serif;
+  font-family: var(--font-sans);
+}
+.brand-name-token[data-brand-name="arcitai"],
+.offers-menu .brand-arcitai {
+  font-family: Inter, Arial, sans-serif;
+  font-weight: 400;
+  font-synthesis: none;
+  letter-spacing: -0.035em;
+}
+.brand-name-token[data-brand-name="gustavonline"],
+.brand-name-token[data-brand-name="onlinesourdough"],
+.offers-menu .brand-onlinesourdough {
+  font-family: "Geist Pixel", monospace;
+  font-weight: 400;
+  font-synthesis: none;
+  letter-spacing: 0;
+}
+.family-footer,
+.family-newsletter h1 {
+  font-family: var(--font-sans);
+}

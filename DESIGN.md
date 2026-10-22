@@ -3,6 +3,17 @@
 The portfolio keeps Gustav Online's warm background (`#fbfaf7`), orange accent
 (`#ee7f3c`), Geist typography, portrait and narrow reading column.
 
+## Family alignment
+
+The header is 72px tall within the shared 1120px shell. Brand wordmarks use
+18px type: Geist Pixel for gustavonline/onlinesourdough and Inter for Arc’IT,
+all at weight 400. Body text uses Geist Sans. The main column is 648px with
+16px project copy. The Arc’IT footer mark is the approved solid blue square
+with the white six-piece symbol, also in dark mode.
+
+Keep personal positioning broad and grounded in the work. Use Founder when a
+role is useful; avoid self-appointed architect titles or a learning timeline.
+
 ## Contributions and identity
 
 The field above the profile uses the dates, counts and levels in Gustav's public
