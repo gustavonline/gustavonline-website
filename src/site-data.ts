@@ -14,9 +14,9 @@ export const siteData = {
     homeTitle: "gustavonline | Gustav Anderson",
     newsletterTitle: "Newsletter | gustavonline",
     description:
-      "I help businesses architect, develop and maintain secure solutions. Projects and notes by Gustav Anderson.",
+      "Work, ideas and experiments with data, AI and software. By Gustav Anderson.",
     newsletterDescription:
-      "Notes on understanding business problems, designing systems and building solutions that last. By Gustav Anderson.",
+      "Notes and ideas from putting data, AI and software to work. By Gustav Anderson.",
     ogTitle: "gustavonline | Gustav Anderson",
     ogImage: "/assets/gustav-linkedin-portrait.jpg",
   },
@@ -29,7 +29,7 @@ export const siteData = {
   },
   newsletter: {
     label: "Notes from the work",
-    support: "Notes on understanding business problems, designing systems and building solutions that last.",
+    support: "Notes and ideas from putting data, AI and software to work.",
     submitLabel: "Join free",
     placeholder: "Email address",
     loading: "Submitting...",
@@ -85,17 +85,17 @@ export const siteData = {
   links: {
     actions: [
       {
-        description: "Methods, resources and workshops for working better with AI.",
+        description: "Resources and ongoing collaboration to make data and AI useful in your business.",
         label: "onlinesourdough",
         href: familyHref("onlinesourdough"),
       },
       {
-        description: "Helping businesses architect, develop and maintain secure solutions.",
+        description: "Data and AI consultancy shaped around your business.",
         label: "Arc’IT AI",
         href: familyHref("arcitai"),
       },
       {
-        description: "Notes on business, systems and the work of building useful solutions.",
+        description: "Notes and ideas from putting data, AI and software to work.",
         label: "Newsletter",
         href: "/newsletter",
       },

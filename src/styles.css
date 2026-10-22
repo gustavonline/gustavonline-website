@@ -309,7 +309,7 @@ input {
 .header-newsletter-link {
   margin-right: 18px;
   color: var(--muted);
-  font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+  font-family: var(--font-sans);
   font-size: 11px;
   letter-spacing: 0.04em !important;
   text-transform: uppercase;
@@ -329,7 +329,7 @@ input {
 .brand-link {
   justify-self: start;
   gap: 8px;
-  font-family: "Geist Pixel", "Geist Mono", monospace;
+  font-family: var(--font-sans);
   font-size: 18px;
   font-variant-ligatures: none;
   font-weight: 400;
@@ -446,7 +446,7 @@ input {
 .pixel-label {
   margin: 0 0 18px;
   color: var(--muted);
-  font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+  font-family: var(--font-sans);
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -527,7 +527,7 @@ input {
   max-width: 620px;
   margin: 0 auto 12px;
   color: var(--text);
-  font-family: "Geist Pixel", "Geist Mono", monospace;
+  font-family: var(--font-sans);
   font-size: clamp(28px, 3vw, 34px);
   font-weight: 400;
   letter-spacing: -0.026em;
@@ -576,7 +576,7 @@ input {
   background: var(--text);
   color: var(--bg);
   cursor: pointer;
-  font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+  font-family: var(--font-sans);
   font-size: 11px;
   letter-spacing: 0.06em;
   transition:
@@ -670,7 +670,7 @@ input {
 
 .notes-heading a {
   color: var(--link);
-  font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+  font-family: var(--font-sans);
   font-size: 11px;
   text-transform: uppercase;
 }
@@ -856,7 +856,7 @@ input {
   place-content: center;
   margin: 0;
   color: var(--muted);
-  font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+  font-family: var(--font-sans);
   font-size: 11px;
   text-transform: uppercase;
 }
@@ -902,7 +902,7 @@ input {
   min-height: 56px;
   border-bottom: 1px solid var(--faint);
   color: var(--muted);
-  font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+  font-family: var(--font-sans);
   font-size: 10px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -959,7 +959,7 @@ input {
 
 .shelf-reader h3 {
   margin: 0;
-  font-family: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  font-family: var(--font-sans);
   font-size: 30px;
   font-weight: 500;
 }

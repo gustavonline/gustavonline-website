@@ -12,7 +12,7 @@
 .family-social a:hover { opacity:1; }
 .family-social svg { width:19px; height:19px; fill:currentColor; }
 .family-newsletter { width:min(100% - 48px,600px); margin:0 auto; padding:92px 0 104px; }
-.family-newsletter h1 { font-family:"Geist Pixel",Pixel,monospace; font-size:clamp(40px,5vw,58px); font-weight:400; line-height:1.12; letter-spacing:-1px; margin:0 0 28px; text-wrap:balance; }
+.family-newsletter h1 { font-family:var(--font-sans); font-size:clamp(40px,5vw,58px); font-weight:400; line-height:1.12; letter-spacing:-1px; margin:0 0 28px; text-wrap:balance; }
 .family-newsletter > p { font-size:18px; line-height:1.65; max-width:490px; color:var(--muted); margin:20px 0 0; }
 .family-newsletter .newsletter-byline { font-size:15px; color:var(--family-ink); }
 .family-signup { margin:38px 0 0; text-align:left; }
@@ -72,7 +72,7 @@
 }
 
 /* Shared footer sizing and attribution across the brand family. */
-.family-footer { align-items:flex-start; font-family:Geist,sans-serif; }
+.family-footer { align-items:flex-start; font-family:var(--font-sans); }
 .family-sites { flex-wrap:wrap; }
 .family-site-mark { display:grid; place-items:center; flex:none; width:32px; height:32px; }
 .family-site-mark .family-mark { width:28px; height:28px; }

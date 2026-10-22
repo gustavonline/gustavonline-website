@@ -1,8 +1,8 @@
 # Gustav Anderson
 
-I'm a business & software architect building AI-native systems for founder-led businesses.
+I'm Gustav, a founder working with data, AI and software.
 
-Gustav Online is my personal and demand brand: a public record and CV of practical notes, experiments, cases, and the work behind the work, including the thinking behind onlinesourdough.
+Gustav Online brings together my projects, ideas and experiments, including the thinking behind onlinesourdough and Arc’IT AI.
 
 The north star is **Business Freedom**: more control of time, capacity, and direction, not maximum automation.
 
@@ -12,7 +12,7 @@ The public GitHub profile is maintained separately in [gustavonline/gustavonline
 
 ## What I am building around
 
-- **Gustav Online:** the personal and demand brand, and the public record of the work as it evolves.
+- **Gustav Online:** the personal site and public record of the work as it evolves.
 - **AI-native systems:** useful software, workflows, APIs, prototypes, and decision support for founder-led businesses.
 - **onlinesourdough:** the method, content, and resources for the DIY and done-with-you route.
 - **Arc'IT AI:** the done-for-you delivery route.
@@ -105,7 +105,7 @@ Resources. See [docs/cloudflare-backend.md](docs/cloudflare-backend.md) and
 
 ## Current status
 
-This profile and portfolio are intentionally evolving. They are the public record and CV of my work in business architecture, software, AI-native systems, and public learning.
+This profile and portfolio bring together the work, ideas and practical methods I share publicly.
 
 ## License
 
