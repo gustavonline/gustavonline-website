@@ -65,10 +65,10 @@ export function SelectedWork({ profile }: { profile: GithubProfile | null }) {
       </header>
       <div className={`work-tablist work-tablist-${tabIds.length}`} role="tablist" aria-label="Projects" onKeyDown={onKeyDown}>
         {items.map((item, index) => (
-          <button key={item.id} {...tabProps(index)} data-brand={item.brand}>
+          <button key={item.id} {...tabProps(index)} data-brand={item.brand} aria-label={item.title === "The Onlinesourdough Method" ? "The Onlinesourdough Method (OSM)" : item.title} title={item.title}>
             <ProjectIcon icon={item.icon} monogram={item.monogram} />
             <span className="work-tab-title">
-              {item.title.split(/(?<=[a-z])(?=[A-Z])/).map((part, index) => (
+              {(item.title === "The Onlinesourdough Method" ? "OSM" : item.title).split(/(?<=[a-z])(?=[A-Z])/).map((part, index) => (
                 <Fragment key={index}>
                   {index > 0 && <wbr />}
                   {part}
