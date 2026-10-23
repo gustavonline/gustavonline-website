@@ -6,7 +6,7 @@ They are distinct from the organisation marks in `../brand-marks/`.
 | File | Project | Source | Status |
 | --- | --- | --- | --- |
 | `factory.svg` | Factory | Original, drawn for this website: three connected modules in Arc’IT blue `#4265A0` with off-white `#FFFAF0`. | Portfolio illustration approved with this website; the Factory repository owns its official identity. |
-| `aios.svg` | AIOS | Copied from the AIOS plugin package `assets/branding/aios-icon.svg` (version 0.29.0, the hub with four nodes on a cream ground). | Existing project icon, unchanged. |
+| `aios.svg` | The Onlinesourdough Method | Copied from the former AIOS plugin package `assets/branding/aios-icon.svg` (version 0.29.0, the hub with four nodes on a cream ground). | Existing project icon, unchanged. |
 | `codex-bridge.svg` | Codex Bridge | Published orange/olive double arch from `gustavonline/codex-claude-bridge`, PR 17. | Existing project icon; public source preview. |
 | `openpaperdesign.svg` | OpenPaperDesign | Installed plugin 0.1.0 `assets/icon.svg`; its geometry is unchanged inside a cream tile for light/dark contrast. | Existing project mark, framed for the portfolio. |
 | `pi-desktop.svg` | Pi Desktop | `gustavonline/pi-desktop`, `assets/branding/pi-desktop-icon.svg`. | Existing project icon, unchanged. |

@@ -10,7 +10,7 @@ import { resolveMore, resolveWork } from "./selectedWork";
 type RawProject = { owner: string; repo: string; name: string; url: string; description: string; commits: number; isPublic: boolean; icon?: string; status?: string; category?: string; readme?: unknown };
 
 const rawProjects = (): RawProject[] => [
-  { owner: "onlinesourdough", repo: "onlinesourdough/AIOS-Plugin", name: "AIOS", url: "https://github.com/onlinesourdough/AIOS-Plugin", description: "Synthetic.", commits: 4, isPublic: true },
+  { owner: "onlinesourdough", repo: "onlinesourdough/OSM-plugin", name: "The Onlinesourdough Method", url: "https://github.com/onlinesourdough/OSM-plugin", description: "Synthetic.", commits: 4, isPublic: true },
   { owner: "arcitai", repo: "arcitai/factory", name: "Factory", url: "https://github.com/arcitai/factory", description: "Synthetic.", commits: 7, isPublic: true },
   { owner: "gustavonline", repo: "gustavonline/hidden-tool", name: "Hidden", url: "https://github.com/gustavonline/hidden-tool", description: "Synthetic private.", commits: 9, isPublic: false },
   { owner: "gustavonline", repo: "gustavonline/sample-app", name: "Sample App", url: "https://github.com/gustavonline/sample-app", description: "A synthetic public description.", commits: 1, isPublic: true },
@@ -124,20 +124,20 @@ describe("selected projects", () => {
     const profile = parseGithubProfile(syntheticProfile())!;
     expect(selectedProjects(profile).map((project) => project.repo)).toEqual([
       "arcitai/factory",
-      "onlinesourdough/AIOS-Plugin",
+      "onlinesourdough/OSM-plugin",
       "gustavonline/sample-app",
     ]);
   });
 
   it("uses the projection for every repository, with one uniform Explore label", () => {
     const work = resolveWork(parseGithubProfile(syntheticProfile()));
-    expect(work.map((item) => item.title)).toEqual(["Factory", "AIOS", "Sample App"]);
+    expect(work.map((item) => item.title)).toEqual(["Factory", "The Onlinesourdough Method", "Sample App"]);
     expect(work[0].paragraphs).toEqual(["Synthetic."]);
     expect(work[2].paragraphs).toEqual(["A synthetic public description."]);
     // Commit counts stay internal: no visible activity line for unknown projects.
     expect(JSON.stringify(work[2])).not.toMatch(/commit/i);
     expect(work[2].source?.href).toBe("https://github.com/gustavonline/sample-app");
-    expect(work.map((item) => item.source.label)).toEqual(["Explore Factory", "Explore AIOS", "Explore Sample App"]);
+    expect(work.map((item) => item.source.label)).toEqual(["Explore Factory", "Explore The Onlinesourdough Method", "Explore Sample App"]);
     expect(work.map((item) => item.brand)).toEqual(["arcitai", "onlinesourdough", "gustav"]);
   });
 
@@ -176,7 +176,7 @@ const syntheticV2 = () => ({
   ...syntheticProfile(),
   schemaVersion: 2,
   readmeSha256: "synthetic",
-  projects: [project("arcitai/factory"), project("arcitai/agentic-powerbi-system"), project("onlinesourdough/AIOS-Plugin")],
+  projects: [project("arcitai/factory"), project("arcitai/agentic-powerbi-system"), project("onlinesourdough/OSM-plugin")],
   moreProjects: [
     project("gustavonline/pi-desktop", { status: "Community handoff", category: "community" }),
     project("arcitai/factory"),
@@ -190,7 +190,7 @@ const syntheticV2 = () => ({
 describe("schema 2", () => {
   it("shows the focus projects exactly in the projection's order, even two from one owner", () => {
     const profile = parseGithubProfile(syntheticV2())!;
-    expect(selectedProjects(profile).map((item) => item.repo)).toEqual(["arcitai/factory", "arcitai/agentic-powerbi-system", "onlinesourdough/AIOS-Plugin"]);
+    expect(selectedProjects(profile).map((item) => item.repo)).toEqual(["arcitai/factory", "arcitai/agentic-powerbi-system", "onlinesourdough/OSM-plugin"]);
     expect(resolveWork(profile).map((item) => item.brand)).toEqual(["arcitai", "arcitai", "onlinesourdough"]);
   });
 
