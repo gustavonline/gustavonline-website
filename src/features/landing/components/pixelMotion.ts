@@ -57,6 +57,23 @@ export function revealZone({ inField, hover, cue, pinned }: { inField: boolean; 
   return pinned;
 }
 
+export type TouchPoint = { id: number; x: number; y: number; at: number };
+
+/** Finger travel (px) and press length (ms) that still count as a tap rather than a scroll or long press. */
+export const TAP_SLOP = 10;
+export const TAP_MAX_MS = 500;
+
+/**
+ * Whether a touch press and its release form a tap. The page keeps native scrolling:
+ * a scroll gesture is cancelled by the browser (no release) or travels beyond the slop,
+ * so it never opens or closes a zone. Only the same finger that went down counts.
+ */
+export function isTouchTap(start: TouchPoint | null, end: TouchPoint) {
+  if (!start || start.id !== end.id) return false;
+  const duration = end.at - start.at;
+  return duration >= 0 && duration <= TAP_MAX_MS && Math.hypot(end.x - start.x, end.y - start.y) <= TAP_SLOP;
+}
+
 /** Upper bound for a fragment's pointer loosening, so the mark always stays recognisable. */
 export const LOOSEN_LIMIT = 0.75;
 
