@@ -300,6 +300,8 @@ export class BriefingShelfEngine {
   private pointer = new Vector2(10, 10);
   private animationFrame = 0;
   private resizeObserver: ResizeObserver;
+  private viewObserver: IntersectionObserver | null = null;
+  private inView = true;
   private mode: ShelfMode = "browse";
   private selectedIndex: number | null = null;
   private activeIndex = 0;
@@ -391,6 +393,9 @@ export class BriefingShelfEngine {
     this.controls.maxDistance = 7.2;
     this.controls.minPolarAngle = Math.PI * 0.22;
     this.controls.maxPolarAngle = Math.PI * 0.78;
+    // OrbitControls disables all touch scrolling on its element, but the controls stay
+    // disabled here. Shelf browsing is a horizontal drag, so vertical swipes keep scrolling the page.
+    this.canvas.style.touchAction = "pan-y pinch-zoom";
 
     this.resizeObserver = new ResizeObserver(this.handleResize);
     this.setupScene();
@@ -403,6 +408,11 @@ export class BriefingShelfEngine {
     }
     this.callbacks.onReady();
     this.animate();
+    if (typeof IntersectionObserver !== "undefined") {
+      this.viewObserver = new IntersectionObserver(this.handleIntersection);
+      this.viewObserver.observe(canvas);
+    }
+    document.addEventListener("visibilitychange", this.syncAnimation);
     // Upgrade placeholder covers after the first frame so the shelf isn't blank.
     queueMicrotask(() => this.scheduleCoverUpgrades());
   }
@@ -1790,6 +1800,26 @@ export class BriefingShelfEngine {
     this.camera.lookAt(this.focusCameraTarget);
   }
 
+  private handleIntersection = (entries: IntersectionObserverEntry[]) => {
+    const entry = entries[entries.length - 1];
+    if (!entry) return;
+    this.inView = entry.isIntersecting;
+    this.syncAnimation();
+  };
+
+  /** The render loop runs only while the shelf is on screen in a visible tab; it resumes without a time jump. */
+  private syncAnimation = () => {
+    if (this.isDisposed) return;
+    const shouldRun = this.inView && !document.hidden;
+    if (shouldRun && !this.animationFrame) {
+      this.lastTimestamp = performance.now();
+      this.animationFrame = requestAnimationFrame(this.animate);
+    } else if (!shouldRun && this.animationFrame) {
+      cancelAnimationFrame(this.animationFrame);
+      this.animationFrame = 0;
+    }
+  };
+
   private animate = () => {
     if (this.isDisposed) return;
     this.animationFrame = requestAnimationFrame(this.animate);
@@ -2406,7 +2436,10 @@ export class BriefingShelfEngine {
     this.isDisposed = true;
     this.coverUpgradeQueue = [];
     cancelAnimationFrame(this.animationFrame);
+    this.animationFrame = 0;
     this.resizeObserver.disconnect();
+    this.viewObserver?.disconnect();
+    document.removeEventListener("visibilitychange", this.syncAnimation);
     this.controls.dispose();
     this.canvas.removeEventListener("wheel", this.handleWheel);
     this.canvas.removeEventListener("pointerdown", this.handlePointerDown);
