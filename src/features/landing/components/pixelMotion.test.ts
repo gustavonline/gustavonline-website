@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { fragmentState, loosenFragment, nearestZone, revealZone, wanderCell } from "./pixelMotion";
+import { fragmentState, isTouchTap, loosenFragment, nearestZone, revealZone, TAP_MAX_MS, TAP_SLOP, wanderCell } from "./pixelMotion";
 
 describe("reveal activation", () => {
   it("follows the mouse over a zone even when a project cue or an old tap exists", () => {
@@ -69,6 +69,26 @@ describe("pointer loosening", () => {
     expect(Math.hypot(fragment.dx, fragment.dy)).toBeLessThan(10);
     expect(fragment.scale).toBeGreaterThanOrEqual(0.65);
     expect(fragment.alpha).toBeGreaterThanOrEqual(0.7);
+  });
+});
+
+describe("touch tap detection", () => {
+  const down = { id: 3, x: 100, y: 40, at: 1000 };
+
+  it("treats a short, still press of the same finger as a tap", () => {
+    expect(isTouchTap(down, { id: 3, x: 104, y: 46, at: 1180 })).toBe(true);
+    expect(isTouchTap(down, { id: 3, x: 100 + TAP_SLOP, y: 40, at: 1000 + TAP_MAX_MS })).toBe(true);
+  });
+
+  it("leaves scroll gestures, long presses and other fingers alone", () => {
+    expect(isTouchTap(down, { id: 3, x: 100, y: 90, at: 1150 })).toBe(false); // Vertical swipe: native scroll.
+    expect(isTouchTap(down, { id: 3, x: 101, y: 41, at: 1000 + TAP_MAX_MS + 1 })).toBe(false);
+    expect(isTouchTap(down, { id: 4, x: 100, y: 40, at: 1100 })).toBe(false);
+    expect(isTouchTap(down, { id: 3, x: 100, y: 40, at: 900 })).toBe(false);
+  });
+
+  it("ignores a release whose press was cancelled by a scroll or never started on touch", () => {
+    expect(isTouchTap(null, { id: 3, x: 100, y: 40, at: 1100 })).toBe(false);
   });
 });
 

@@ -3,9 +3,10 @@ import { useEffect, useRef, useState } from "react";
 import { contributionGrid, type ContributionGrid, type Contributions } from "../githubProfile";
 import type { LandingMotion } from "../hooks/useLandingLayout";
 import { useMediaQuery } from "../hooks/useMediaQuery";
+import { useSaveData } from "../hooks/useSaveData";
 import type { Theme } from "../types";
 import { brandOrder, markSprite, OLIVE, onMarksLoad, palettes, paletteShades, revealBrands, type MarkBrand } from "./brandMarks";
-import { clamp, easeOut, fragmentState, LOOSEN_LIMIT, loosenFragment, nearestZone, revealZone, wanderCell } from "./pixelMotion";
+import { clamp, easeOut, fragmentState, isTouchTap, LOOSEN_LIMIT, loosenFragment, nearestZone, revealZone, type TouchPoint, wanderCell } from "./pixelMotion";
 
 /*
  * Contribution field. Each tile is a real GitHub contribution day from the profile
@@ -42,6 +43,8 @@ const HALO_LIMIT = [1, 0.6, 0.15];
 const LOOSEN_RADIUS = 24;
 const LOOSEN_SPEED = 14; // Pointer travel (px per frame) that gives the full stir.
 const MAX_FRAGMENTS = 64;
+/** Touch targets that keep their own meaning: a tap there never opens a field zone. */
+const TAP_IGNORE = "a, button, input, select, textarea, label, summary, [role='tab'], header";
 
 type Slot = { x: number; y: number; size: number };
 /** Per-mark pointer loosening: one value per fragment, plus where the stir came from. */
@@ -104,7 +107,9 @@ export function PixelField({
   });
   const [range, setRange] = useState<Range | null>(null);
   const reducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
-  const still = reducedMotion || dimmed;
+  // Reduced motion and data saving both get the complete settled frame instead of a running loop.
+  const saveData = useSaveData();
+  const still = reducedMotion || saveData || dimmed;
   const highlightRef = useRef<MarkBrand | null>(highlight);
 
   useEffect(() => {
@@ -569,9 +574,11 @@ export function PixelField({
     const settleIfChanged = () => {
       if (still && motion === "reveal" && cols && rows && activeZone() !== shownZone) render(0);
     };
-    let lastDownType = "";
+    // The finger currently down, if this press could still become a tap.
+    let touchStart: TouchPoint | null = null;
+    const touchPoint = (event: PointerEvent): TouchPoint => ({ id: event.pointerId, x: event.clientX, y: event.clientY, at: event.timeStamp });
     const onPointerDown = (event: PointerEvent) => {
-      lastDownType = event.pointerType;
+      touchStart = event.pointerType === "touch" && event.isPrimary ? touchPoint(event) : null;
     };
     const onPointerMove = (event: PointerEvent) => {
       if (event.pointerType === "touch") return;
@@ -588,15 +595,26 @@ export function PixelField({
     const onPointerOut = (event: PointerEvent) => {
       if (!event.relatedTarget) clearPointer();
     };
-    // Touch only: a tap near a zone opens it; tapping it again or elsewhere closes it. The field keeps pointer-events:none, so this listens on window
-    // and never blocks scrolling or links; a scroll gesture does not produce a click.
-    const onTap = (event: MouseEvent) => {
-      if (lastDownType !== "touch") return;
+    // Touch only: a tap near a zone opens it; tapping it again or elsewhere closes it. The field keeps
+    // pointer-events:none, so this listens passively on window and never blocks scrolling or links.
+    // A tap is a short, still press and release of one finger (not a click event, which mobile Safari
+    // does not deliver for non-interactive content). The browser cancels a press that becomes a scroll.
+    const onTouchCancel = () => {
+      touchStart = null;
+    };
+    const onTouchEnd = (event: PointerEvent) => {
+      const start = touchStart;
+      touchStart = null;
+      if (event.pointerType !== "touch" || !isTouchTap(start, touchPoint(event))) return;
+      // Controls and anything layered over the field (such as the open site menu) only close a pin.
+      const target = event.target instanceof Element ? event.target : null;
+      const overControl = target?.closest(TAP_IGNORE) != null;
       const rect = canvas.getBoundingClientRect();
       const x = event.clientX - rect.left - originX;
       const y = event.clientY - rect.top - originY;
-      const inside = x >= 0 && y >= 0 && x <= cols * step && y <= rows * step;
+      const inside = !overControl && x >= 0 && y >= 0 && x <= cols * step && y <= rows * step;
       const nearest = inside ? nearestZone(x, y, zoneCenters(), slotWidth() * TAP_REACH) : -1;
+      if (nearest === -1 && memory.pinned === -1) return;
       memory.pinned = nearest === memory.pinned ? -1 : nearest;
       if (still) render(0);
     };
@@ -617,7 +635,10 @@ export function PixelField({
       window.addEventListener("pointerout", onPointerOut);
       window.addEventListener("blur", clearPointer);
     }
-    if (motion === "reveal" && !dimmed) window.addEventListener("click", onTap);
+    if (motion === "reveal" && !dimmed) {
+      window.addEventListener("pointerup", onTouchEnd, { passive: true });
+      window.addEventListener("pointercancel", onTouchCancel, { passive: true });
+    }
 
     resize();
     start();
@@ -633,7 +654,8 @@ export function PixelField({
       window.removeEventListener("pointermove", onPointerMove);
       window.removeEventListener("pointerout", onPointerOut);
       window.removeEventListener("blur", clearPointer);
-      window.removeEventListener("click", onTap);
+      window.removeEventListener("pointerup", onTouchEnd);
+      window.removeEventListener("pointercancel", onTouchCancel);
     };
   }, [theme, still, motion, placement, dimmed, contributions]);
 

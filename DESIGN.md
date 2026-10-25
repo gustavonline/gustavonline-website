@@ -64,3 +64,44 @@ the prior site; profile data changes are recovered in the profile repository.
 Project icon provenance is recorded in
 [project marks](public/assets/project-marks/README.md). Upstream logos, licences
 and credits remain owned by their respective projects.
+
+
+## Approved mobile release — October25
+
+
+The October25 owner correction replaces the in-flow panel with a full-viewport overlay. The compact
+header stays reachable while scrolling, and Current work has an 84px anchor offset.
+The newsletter shelf preserves vertical scrolling and pinch zoom. On phones the
+page shell clips only the horizontal axis, so its overflow does not prevent the
+sticky header from following the document scroll. These refinements
+were checked by the lead after the Opus implementation.
+
+
+## October 24 phone and tablet pass — local review
+
+Desktop above 760px is unchanged: brand, Newsletter, theme, ~600px column.
+At 760px and below the header is 64px: brand (photo mark + Pixel wordmark),
+theme and an icon-only44px button, labelled Open menu/Close menu for assistive
+technology. Its dialog includes the topbar and ordinary nav links; the opaque
+fixed panel fills the viewport under the header without moving content, with
+Home, Current work (`/#selected-work`),
+Newsletter and the two other family sites. The closed panel is `hidden`. It
+closes on Escape (focus returns to Menu), a link, a press or focus outside it,
+and when the window grows past 760px. The panel scrolls within
+`100dvh − header` and has 44px+ rows.
+
+- One gutter token (`--page-gutter`, 20–24px on phones) aligns header, column,
+  newsletter, shelf and footer. Body copy in action rows is 16px on phones.
+  Project tabs stay 2 × 2 with 15px names. Directory rows are 44px tall.
+- Phone field: same real calendar and Top + Reveal, with a 132px canvas. The
+  outer spacing shrinks, so the tiles keep ~56–60px of ground on each side
+  and assembling mark fragments are not clipped. Ambient motion runs without
+  hover. A touch tap is a short, still press and release; scroll gestures,
+  long presses and taps on controls or the open menu never pin a zone. This
+  replaces the window `click` listener, which mobile Safari does not reliably
+  deliver for non-interactive content. Reduced motion **or data saving**
+  shows the complete settled frame.
+- The newsletter shelf no longer blocks vertical page scrolling on touch;
+  browsing is a horizontal drag. Its render loop pauses when the shelf is
+  offscreen or the tab is hidden. On phones, shelf arrows and the reader close
+  button are 44px, and the reader scrolls inside the stage instead of clipping.
