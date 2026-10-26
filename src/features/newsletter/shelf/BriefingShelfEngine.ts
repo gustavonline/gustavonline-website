@@ -362,9 +362,8 @@ export class BriefingShelfEngine {
     this.presentedIndex = this.spineBrowse ? null : bootIndex;
     this.scrollIndex = bootIndex;
     this.targetScrollIndex = bootIndex;
-    this.reducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
+    // The site keeps its animation enabled independently of OS motion settings.
+    this.reducedMotion = false;
 
     this.renderer = new WebGLRenderer({
       canvas,

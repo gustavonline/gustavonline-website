@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 
 import { contributionGrid, type ContributionGrid, type Contributions } from "../githubProfile";
 import type { LandingMotion } from "../hooks/useLandingLayout";
-import { useMediaQuery } from "../hooks/useMediaQuery";
 import { useSaveData } from "../hooks/useSaveData";
 import type { Theme } from "../types";
 import { brandOrder, markSprite, OLIVE, onMarksLoad, palettes, paletteShades, revealBrands, type MarkBrand } from "./brandMarks";
@@ -106,10 +105,9 @@ export function PixelField({
     zones: [0, 0, 0],
   });
   const [range, setRange] = useState<Range | null>(null);
-  const reducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
-  // Reduced motion and data saving both get the complete settled frame instead of a running loop.
+  // Brand animation runs independently of OS motion settings; keep data-saving and dimming.
   const saveData = useSaveData();
-  const still = reducedMotion || saveData || dimmed;
+  const still = saveData || dimmed;
   const highlightRef = useRef<MarkBrand | null>(highlight);
 
   useEffect(() => {
@@ -570,7 +568,7 @@ export function PixelField({
     };
 
     const onVisibility = () => (document.hidden ? stop() : start());
-    /** With reduced motion, redraw the settled frame only when the open zone actually changes. */
+    /** When paused, redraw the settled frame only when the open zone actually changes. */
     const settleIfChanged = () => {
       if (still && motion === "reveal" && cols && rows && activeZone() !== shownZone) render(0);
     };

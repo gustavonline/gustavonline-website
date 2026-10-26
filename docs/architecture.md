@@ -98,3 +98,13 @@ The Worker owns the live integrations:
 - `POST /newsletter` validates the signup payload and upserts a Kit subscriber.
 
 Required Worker vars and secrets are documented in `docs/cloudflare-backend.md`.
+
+
+## Current animation policy · 26 October 2026
+
+The owner explicitly chose to keep the public brand animations running even when
+`prefers-reduced-motion: reduce` is enabled. This supersedes earlier reduced-motion
+fallback descriptions for the current public UI. Offscreen and hidden-tab suspension,
+explicit player controls, playback-error fallbacks and data-saving behaviour remain.
+OS settings are not changed. Verify the running animation with the media preference
+set to `reduce`, as well as with the default preference.
