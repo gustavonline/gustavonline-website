@@ -39,7 +39,7 @@
  .family-form-row { grid-template-columns:1fr; }
  .family-thanks { min-height:60vh; }
 }
-@media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto!important; } }
+
 /* Family shell: equal outer gutters, distinct brand accents and icon-only theme feedback. */
 :root { --family-shell: 1120px; }
 .family-footer { max-width:var(--family-shell); }

@@ -32,7 +32,7 @@ export function Header({ theme, onToggleTheme }: { theme: Theme; onToggleTheme: 
       if (!target) return;
       focusWork.current = false;
       target.tabIndex = -1;
-      target.scrollIntoView({ block: "start", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+      target.scrollIntoView({ block: "start", behavior: "smooth" });
       target.focus({ preventScroll: true });
     });
     return () => cancelAnimationFrame(request);
@@ -90,20 +90,9 @@ export function Header({ theme, onToggleTheme }: { theme: Theme; onToggleTheme: 
         aria-controls={MENU_ID}
         onClick={() => setMenuOpen((open) => !open)}
       >
-        <span className="menu-toggle-icon" aria-hidden="true" />
+        <span className="menu-toggle-icon" aria-hidden="true"><span /></span>
       </button>
       <nav ref={panelRef} id={MENU_ID} className="site-menu" aria-label="Site" hidden={!expanded}>
-        <ul className="site-menu-links">
-          <li>
-            <Link to="/" activeOptions={{ exact: true, includeHash: true }} onClick={closeMenu}>Home</Link>
-          </li>
-          <li>
-            <Link to="/" hash="selected-work" activeOptions={{ exact: true, includeHash: true }} onClick={() => { focusWork.current = true; closeMenu(); }}>{siteData.selectedWork.title}</Link>
-          </li>
-          <li>
-            <Link to="/newsletter" activeOptions={{ exact: true }} onClick={closeMenu}>Newsletter</Link>
-          </li>
-        </ul>
         <p className="site-menu-label" id="site-menu-family">Other sites</p>
         <ul className="site-menu-family" aria-labelledby="site-menu-family">
           <li>
@@ -115,6 +104,17 @@ export function Header({ theme, onToggleTheme }: { theme: Theme; onToggleTheme: 
             <a href={familyHref("arcitai")} target="_blank" rel="noopener noreferrer" onClick={closeMenu}>
               <span className="brand-name-token" data-brand-name="arcitai">Arc’IT AI</span> <span aria-hidden="true">↗</span>
             </a>
+          </li>
+        </ul>
+        <ul className="site-menu-links">
+          <li>
+            <Link to="/" activeOptions={{ exact: true, includeHash: true }} onClick={closeMenu}>Home</Link>
+          </li>
+          <li>
+            <Link to="/" hash="selected-work" activeOptions={{ exact: true, includeHash: true }} onClick={() => { focusWork.current = true; closeMenu(); }}>{siteData.selectedWork.title}</Link>
+          </li>
+          <li>
+            <Link to="/newsletter" activeOptions={{ exact: true }} onClick={closeMenu}>Newsletter</Link>
           </li>
         </ul>
       </nav>
