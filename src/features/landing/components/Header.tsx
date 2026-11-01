@@ -1,3 +1,4 @@
+import { ArrowIcon } from "../../../family/ArrowIcon";
 import { Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 
@@ -97,12 +98,12 @@ export function Header({ theme, onToggleTheme }: { theme: Theme; onToggleTheme: 
         <ul className="site-menu-family" aria-labelledby="site-menu-family">
           <li>
             <a href={familyHref("onlinesourdough")} target="_blank" rel="noopener noreferrer" onClick={closeMenu}>
-              <span className="brand-name-token" data-brand-name="onlinesourdough">onlinesourdough</span> <span aria-hidden="true">↗</span>
+              <span className="brand-name-token" data-brand-name="onlinesourdough">onlinesourdough</span> <span aria-hidden="true"><ArrowIcon /></span>
             </a>
           </li>
           <li>
             <a href={familyHref("arcitai")} target="_blank" rel="noopener noreferrer" onClick={closeMenu}>
-              <span className="brand-name-token" data-brand-name="arcitai">Arc’IT AI</span> <span aria-hidden="true">↗</span>
+              <span className="brand-name-token" data-brand-name="arcitai">Arc’IT AI</span> <span aria-hidden="true"><ArrowIcon /></span>
             </a>
           </li>
         </ul>
