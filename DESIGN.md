@@ -23,6 +23,10 @@ SVG wordmarks and marks require no installed fonts. Switzer is fetched unchanged
 from Fontshare at build time with a pinned checksum; its binary is not published
 in Git. Runtime fonts are same-origin.
 
+UI direction and external-link icons use the decorative SVG in
+`src/family/ArrowIcon.tsx`, sized in em and coloured with currentColor.
+Keep arrows out of copy strings: platform text fonts can render them as emoji.
+
 Keep existing content, artwork, routes and interactions. Verify direct pages,
 mobile navigation, both themes and shared brand labels before each release.
 

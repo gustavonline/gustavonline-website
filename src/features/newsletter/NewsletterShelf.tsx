@@ -1,3 +1,4 @@
+import { ArrowIcon } from "../../family/ArrowIcon";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
@@ -176,7 +177,7 @@ export function NewsletterShelf({ posts, theme }: { posts: WritingPost[]; theme:
                 <p className="pixel-label">PUBLISHED NOTE · {selectedPost.date}</p>
                 <h3>{selectedPost.title}</h3>
                 <p>{selectedPost.summary}</p>
-                <a href={selectedPost.url}>Open the full note <span aria-hidden="true">↗</span></a>
+                <a href={selectedPost.url}>Open the full note <span aria-hidden="true"><ArrowIcon /></span></a>
               </>
             ) : (
               <>

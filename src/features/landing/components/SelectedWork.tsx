@@ -1,3 +1,4 @@
+import { ArrowIcon } from "../../../family/ArrowIcon";
 import { Fragment, useEffect, useRef, useState, type KeyboardEvent } from "react";
 import { PanelsTopLeft } from "lucide-react";
 
@@ -120,7 +121,7 @@ function ProjectPanel({ item, active }: { item: WorkItem; active: boolean }) {
         {item.paragraphs.map((paragraph, index) => <StoryParagraph key={index} text={paragraph} />)}
       </div>
       <a className="work-source" href={item.source.href} target="_blank" rel="noopener noreferrer">
-        {item.source.label} <span aria-hidden="true">↗</span>
+        {item.source.label} <span aria-hidden="true"><ArrowIcon /></span>
       </a>
     </div>
   );
@@ -144,9 +145,7 @@ function MorePanel({ items, active }: { items: MoreItem[]; active: boolean }) {
               <span className="work-directory-name">{item.title}</span>
               <span className="work-directory-leader" aria-hidden="true" />
               {item.note && <span className="work-directory-note">{item.note}</span>}
-              <span className="work-directory-arrow" aria-hidden="true">
-                ↗
-              </span>
+              <span className="work-directory-arrow" aria-hidden="true"><ArrowIcon /></span>
             </a>
           </li>
         ))}
