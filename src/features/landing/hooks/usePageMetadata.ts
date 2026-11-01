@@ -19,6 +19,8 @@ export function usePageMetadata(page: PageMetadata) {
     setMetaProperty("og:title", isNewsletter ? title : siteData.seo.ogTitle);
     setMetaProperty("og:description", description);
     setMetaProperty("og:image", new URL(siteData.seo.ogImage, window.location.href).toString());
+    setMetaContent("twitter:card", "summary_large_image");
+    setMetaContent("twitter:image", new URL(siteData.seo.ogImage, window.location.href).toString());
     setMetaProperty("og:type", "website");
     setMetaProperty("og:url", canonicalUrl.toString());
     setCanonical(canonicalUrl.toString());
