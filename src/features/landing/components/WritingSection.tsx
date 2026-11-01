@@ -1,3 +1,4 @@
+import { ArrowIcon } from "../../../family/ArrowIcon";
 import { Link } from "@tanstack/react-router";
 
 import { siteData } from "../../../site-data";
@@ -17,7 +18,7 @@ export function WritingSection() {
         <p className="section-label" id="notes-title">
           {writingQuery.isFetching ? siteData.writing.loadingLabel : siteData.writing.label}
         </p>
-        <Link to="/newsletter">Archive <span aria-hidden="true">→</span></Link>
+        <Link to="/newsletter">Archive <span aria-hidden="true"><ArrowIcon direction="right" /></span></Link>
       </div>
 
       {writingQuery.isError ? (
