@@ -14,7 +14,7 @@ const MENU_ID = "site-menu";
 /* The compact header opens a full-viewport navigation dialog. Ordinary links keep
  * their navigation semantics, while the overlay locks scrolling and background focus. */
 export function Header({ theme, onToggleTheme }: { theme: Theme; onToggleTheme: () => void }) {
-  const identityMark = getRouteAssetPath(siteData.identityMark);
+  const identityMark = getRouteAssetPath(theme === "dark" ? siteData.identityMarkDark : siteData.identityMark);
   const compact = useMediaQuery(COMPACT_HEADER);
   const [menuOpen, setMenuOpen] = useState(false);
   const expanded = compact && menuOpen;

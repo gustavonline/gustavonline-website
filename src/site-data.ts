@@ -7,7 +7,8 @@ export const siteData = {
   navBrand: "gustavonline",
   name: "Gustav Anderson",
   portrait: "/assets/gustav-linkedin-portrait.jpg",
-  identityMark: "/assets/gustav-pixel-g-384.png",
+  identityMark: "/assets/gustav-g.svg",
+  identityMarkDark: "/assets/gustav-g-dark.svg",
   email: "hello@gustavonline.com",
   themeStorageKey: "gustavonline-theme",
   seo: {

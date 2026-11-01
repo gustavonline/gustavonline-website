@@ -30,8 +30,13 @@ SOFTWARE.
 
 ## Geist Pixel
 
-Geist Pixel is used for the Gustav Online wordmark and newsletter display
-heading. The WOFF2 font was copied unchanged from the local Arc'IT AI source
+Geist Pixel was previously used for the Gustav Online wordmark and newsletter
+display heading; the retained file and its provenance remain below. The November
+2026 revised typography preview uses Figtree for Gustav Online. Cross-brand
+names use Geist Pixel Square (onlinesourdough) and Switzer (Arc’IT AI). Sources, versions and the separate font licences are
+listed in `public/assets/fonts/TYPOGRAPHY-SOURCES.md`.
+
+The Geist Pixel WOFF2 font was copied unchanged from the local Arc'IT AI source
 at `/Users/gustavanderson/Downloads/AIOS/projects/arcitai/public/assets/fonts/geist-pixel-square.woff2`
 into the Gustav Online project-local path
 `src/assets/fonts/geist-pixel-square.woff2`. That file is the same

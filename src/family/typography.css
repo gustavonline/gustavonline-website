@@ -1,42 +1,67 @@
-/* Brand names keep their identity across headers, offer menus and footers. */
+/* Brand identity follows the named brand across all three independent sites. */
 @font-face {
   font-family: "Geist Sans";
   src: url("/assets/fonts/geist-sans-variable.woff2") format("woff2");
-  font-weight: 100 900;
-  font-display: swap;
-}
-@font-face {
-  font-family: Inter;
-  src: url("/assets/fonts/inter-latin-variable.woff2") format("woff2");
+  font-style: normal;
   font-weight: 100 900;
   font-display: swap;
 }
 @font-face {
   font-family: "Geist Pixel";
-  src: url("../assets/fonts/geist-pixel-square.woff2") format("woff2");
+  src: url("/assets/fonts/geist-pixel-square.woff2") format("woff2");
+  font-style: normal;
   font-weight: 400;
   font-display: swap;
 }
+@font-face {
+  font-family: Figtree;
+  src: url("/assets/fonts/figtree-latin-variable.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 300 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: Switzer;
+  src: url("/assets/fonts/switzer-variable.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
 :root {
-  --font-sans: "Geist Sans", Arial, sans-serif;
+  --font-gustav: Figtree, Arial, sans-serif;
+  --font-sourdough: "Geist Pixel", monospace;
+  --font-arcit: Switzer, Arial, sans-serif;
+  --font-sans: Figtree, Arial, sans-serif;
+  --font-brand: var(--font-gustav);
   font-family: var(--font-sans);
 }
 .brand-name-token[data-brand-name="arcitai"],
 .offers-menu .brand-arcitai {
-  font-family: Inter, Arial, sans-serif;
-  font-weight: 400;
+  font-family: var(--font-arcit);
+  font-weight: 500;
+  font-synthesis: none;
+  letter-spacing: -0.025em;
+}
+.brand-name-token[data-brand-name="gustavonline"] {
+  font-family: var(--font-gustav);
+  font-weight: 600;
   font-synthesis: none;
   letter-spacing: -0.035em;
 }
-.brand-name-token[data-brand-name="gustavonline"],
 .brand-name-token[data-brand-name="onlinesourdough"],
 .offers-menu .brand-onlinesourdough {
-  font-family: "Geist Pixel", monospace;
+  font-family: var(--font-sourdough);
   font-weight: 400;
   font-synthesis: none;
   letter-spacing: 0;
 }
-.family-footer,
-.family-newsletter h1 {
+.family-footer {
   font-family: var(--font-sans);
 }
+
+/* Each theme keeps the same orange/olive glow with a readable Figtree G. */
+.family-g-mark { display: inline-grid; width: 28px; height: 28px; flex: none; }
+.family-g-mark img { grid-area: 1 / 1; width: 100%; height: 100%; object-fit: contain; }
+.family-g-mark .family-g-dark { display: none; }
+:root[data-theme="dark"] .family-g-mark .family-g-light { display: none; }
+:root[data-theme="dark"] .family-g-mark .family-g-dark { display: block; }

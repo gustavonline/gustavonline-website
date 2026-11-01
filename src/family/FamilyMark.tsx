@@ -14,13 +14,10 @@ const boule = [
 export function FamilyMark({ brand }: { brand: FamilyBrand }) {
   if (brand === "gustavonline")
     return (
-      <img
-        className="family-portrait"
-        src="/assets/gustav-linkedin-portrait.jpg"
-        width="28"
-        height="28"
-        alt=""
-      />
+      <span className="family-g-mark" aria-hidden="true">
+        <img className="family-g-light" src="/assets/gustav-g.svg" width="28" height="28" alt="" />
+        <img className="family-g-dark" src="/assets/gustav-g-dark.svg" width="28" height="28" alt="" />
+      </span>
     );
   if (brand === "onlinesourdough")
     return (
