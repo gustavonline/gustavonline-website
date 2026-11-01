@@ -60,6 +60,7 @@ import {
   createPlaceholderFront,
   createPlaceholderSpine,
   createSpineCover,
+  newsletterFontFamily,
 } from "./brief-cover-art";
 import type { Theme } from "../../landing/types";
 import type { ShelfBriefBook } from "./types";
@@ -706,7 +707,7 @@ export class BriefingShelfEngine {
     if (ctx) {
       ctx.clearRect(0, 0, width, height);
       ctx.fillStyle = "rgba(245, 240, 230, 0.92)";
-      ctx.font = `600 28px ${'system-ui, -apple-system, "SF Pro Text", sans-serif'}`;
+      ctx.font = `600 28px ${newsletterFontFamily()}`;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.fillText(label, width / 2, height / 2);

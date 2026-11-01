@@ -3,7 +3,7 @@ import type { Theme } from "../types";
 /*
  * Brand family used by the tile field: Gustav Online, onlinesourdough and Arc'IT AI.
  * Organisation marks are the approved SVGs in public/assets/brand-marks with their
- * LinkedIn banner R11 panels; Gustav uses the pixel G. (Kastanje was removed from
+ * current LinkedIn banner panels; Gustav uses the Figtree G. (Kastanje was removed from
  * the website; its asset file is kept only as archive.)
  */
 
@@ -31,7 +31,7 @@ export const marks: Record<OrgBrand, MarkSpec> = {
 };
 
 export const gustavPanel = "#f4f1ea";
-const gustavMarkSrc = "/assets/gustav-pixel-g-384.png";
+const gustavMarkSrc = "/assets/gustav-g.svg";
 
 /** Palette row for Gustav's reveal halo: olive, so the G zone separates from the orange field. */
 export const OLIVE = 3;
@@ -133,7 +133,7 @@ export function markSprite(brand: number, size: number, ratio: number) {
     const box = markBox(markBrand, 0, 0, pixels);
     context.drawImage(image, box.x, box.y, box.w, box.h);
   } else {
-    // The G image has a light ground; multiply keeps the G and its glow on the panel.
+    // The transparent Figtree G and its orange/olive glow blend with the panel.
     context.globalCompositeOperation = "multiply";
     context.drawImage(image, 0, 0, pixels, pixels);
   }

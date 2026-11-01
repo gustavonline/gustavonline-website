@@ -13,7 +13,10 @@
     "test:watch": "vitest",
     "typecheck": "tsc -b",
     "worker:dev": "wrangler dev",
-    "worker:deploy": "wrangler deploy"
+    "worker:deploy": "wrangler deploy",
+    "predev": "node scripts/prepare-brand-fonts.mjs",
+    "prebuild": "node scripts/prepare-brand-fonts.mjs",
+    "prereview:build": "node scripts/prepare-brand-fonts.mjs"
   },
   "repository": {
     "type": "git",

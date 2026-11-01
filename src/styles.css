@@ -15,7 +15,7 @@
   --text: #1f1f1f;
   --muted: #717171;
   --faint: #e9e5de;
-  /* Orange core sampled from the current gustav-pixel-g-384.png identity mark. */
+  /* Original orange retained in the Figtree G identity mark. */
   --brand-orange: #ee7f3c;
   --link: var(--brand-orange);
   --accent: #616850;

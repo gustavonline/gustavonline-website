@@ -1,7 +1,9 @@
 import type { ShelfBriefBook } from "./types";
 
-const serif = 'Georgia, "Iowan Old Style", "Times New Roman", serif';
-const mono = 'ui-monospace, "SFMono-Regular", Consolas, monospace';
+export function newsletterFontFamily() {
+  const style = getComputedStyle(document.documentElement);
+  return style.getPropertyValue("--font-sans").trim() || style.fontFamily;
+}
 
 function canvas(width: number, height: number) {
   const element = document.createElement("canvas");
@@ -49,6 +51,7 @@ function drawDither(ctx: CanvasRenderingContext2D, width: number, height: number
 export function createFrontCover(book: ShelfBriefBook) {
   const element = canvas(900, 1120);
   const ctx = context(element);
+  const font = newsletterFontFamily();
   ctx.fillStyle = book.cover;
   ctx.fillRect(0, 0, element.width, element.height);
   drawDither(ctx, element.width, element.height, book.ink);
@@ -61,20 +64,20 @@ export function createFrontCover(book: ShelfBriefBook) {
   ctx.fillRect(element.width - 238, element.height - 60, 190, 12);
 
   ctx.fillStyle = book.titleColor ?? book.ink;
-  ctx.font = `700 28px ${mono}`;
+  ctx.font = `600 28px ${font}`;
   ctx.letterSpacing = "2px";
   ctx.fillText(book.placeholder ? "ARCHIVE BOOKEND" : "GUSTAV ONLINE", 82, 126);
 
-  ctx.font = `600 76px ${serif}`;
+  ctx.font = `600 76px ${font}`;
   const titleLines = wrap(ctx, book.title, element.width - 164, 5);
   titleLines.forEach((line, index) => ctx.fillText(line, 82, 310 + index * 88));
 
-  ctx.font = `500 27px ${mono}`;
+  ctx.font = `500 27px ${font}`;
   ctx.fillStyle = book.accent;
   ctx.fillText(book.placeholder ? "NOT A PUBLISHED ISSUE" : book.date, 82, 920);
 
   if (book.tagline) {
-    ctx.font = `400 30px ${serif}`;
+    ctx.font = `400 30px ${font}`;
     ctx.fillStyle = book.titleColor ?? book.ink;
     wrap(ctx, book.tagline, element.width - 164, 2).forEach((line, index) => {
       ctx.fillText(line, 82, 984 + index * 38);
@@ -86,6 +89,7 @@ export function createFrontCover(book: ShelfBriefBook) {
 export function createSpineCover(book: ShelfBriefBook) {
   const element = canvas(240, 1120);
   const ctx = context(element);
+  const font = newsletterFontFamily();
   ctx.fillStyle = book.cover;
   ctx.fillRect(0, 0, element.width, element.height);
   drawDither(ctx, element.width, element.height, book.ink);
@@ -96,7 +100,7 @@ export function createSpineCover(book: ShelfBriefBook) {
   ctx.translate(element.width / 2 + 17, element.height - 64);
   ctx.rotate(-Math.PI / 2);
   ctx.fillStyle = book.titleColor ?? book.ink;
-  ctx.font = `700 35px ${mono}`;
+  ctx.font = `600 35px ${font}`;
   ctx.letterSpacing = "2px";
   const label = book.placeholder ? "ARCHIVE STARTS HERE · NO ISSUES YET" : book.shortTitle;
   ctx.fillText(label.slice(0, 42).toUpperCase(), 0, 0);
@@ -107,6 +111,7 @@ export function createSpineCover(book: ShelfBriefBook) {
 export function createBackCover(book: ShelfBriefBook) {
   const element = canvas(900, 1120);
   const ctx = context(element);
+  const font = newsletterFontFamily();
   ctx.fillStyle = book.cover;
   ctx.fillRect(0, 0, element.width, element.height);
   drawDither(ctx, element.width, element.height, book.ink);
@@ -114,9 +119,9 @@ export function createBackCover(book: ShelfBriefBook) {
   ctx.lineWidth = 7;
   ctx.strokeRect(48, 48, element.width - 96, element.height - 96);
   ctx.fillStyle = book.titleColor ?? book.ink;
-  ctx.font = `700 30px ${mono}`;
+  ctx.font = `600 30px ${font}`;
   ctx.fillText("GUSTAV ONLINE / NEWSLETTER", 82, 126);
-  ctx.font = `400 42px ${serif}`;
+  ctx.font = `400 42px ${font}`;
   wrap(ctx, book.tagline ?? "Practical notes from the work as it evolves.", element.width - 164, 5)
     .forEach((line, index) => ctx.fillText(line, 82, 290 + index * 54));
   return element;
