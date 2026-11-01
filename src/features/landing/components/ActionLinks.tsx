@@ -15,7 +15,10 @@ export function ActionLinks() {
             rel={external ? "noopener noreferrer" : undefined}
             data-brand={brandForLabel(link.label)}
           >
-            <span className="action-line">{link.label} <span aria-hidden="true">↗</span></span>
+            <span className="action-line">
+              <span className="brand-name-token" data-brand-name={brandForLabel(link.label)}>{link.label}</span>
+              <span aria-hidden="true">↗</span>
+            </span>
             <span className="action-description">{link.description}</span>
           </a>
         );

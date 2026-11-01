@@ -8,6 +8,7 @@ import {
   type ShelfMode,
 } from "./shelf/BriefingShelfEngine";
 import type { ShelfBriefBook } from "./shelf/types";
+import { newsletterFontFamily } from "./shelf/brief-cover-art";
 
 const palettes = [
   { cover: "#d86f35", accent: "#fff4df", ink: "#2e2924", titleColor: "#fffaf1" },
@@ -60,6 +61,8 @@ export function NewsletterShelf({ posts, theme }: { posts: WritingPost[]; theme:
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const engineRef = useRef<BriefingShelfEngine | null>(null);
   const books = useMemo(() => toShelfBooks(posts), [posts]);
+  const bootInputs = useRef({ books, theme, hasPosts: posts.length > 0 });
+  bootInputs.current = { books, theme, hasPosts: posts.length > 0 };
   const structureKey = useMemo(() => books.map((book) => book.id).join("|"), [books]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
@@ -74,23 +77,37 @@ export function NewsletterShelf({ posts, theme }: { posts: WritingPost[]; theme:
     setSelectedIndex(null);
     setMode("browse");
 
-    const engine = new BriefingShelfEngine(
-      canvas,
-      books,
-      {
-        onActiveIndex: setActiveIndex,
-        onMode: (nextMode, nextSelectedIndex) => {
-          setMode(nextMode);
-          setSelectedIndex(nextSelectedIndex);
+    let cancelled = false;
+    let engine: BriefingShelfEngine | null = null;
+    async function prepareShelf() {
+      try {
+        // Canvas textures keep the font used when painted; wait for the site face.
+        await document.fonts.load(`600 16px ${newsletterFontFamily()}`);
+      } catch {
+        // The shelf remains usable with the configured fallback if the font fails.
+      }
+      if (cancelled) return;
+      const latest = bootInputs.current;
+      engine = new BriefingShelfEngine(
+        canvas!,
+        latest.books,
+        {
+          onActiveIndex: setActiveIndex,
+          onMode: (nextMode, nextSelectedIndex) => {
+            setMode(nextMode);
+            setSelectedIndex(nextSelectedIndex);
+          },
+          onReady: () => setReady(true),
         },
-        onReady: () => setReady(true),
-      },
-      { initialIndex: 0, spotlightIndex: posts.length > 0 ? 0 : null, theme },
-    );
-    engineRef.current = engine;
+        { initialIndex: 0, spotlightIndex: latest.hasPosts ? 0 : null, theme: latest.theme },
+      );
+      engineRef.current = engine;
+    }
+    void prepareShelf();
 
     return () => {
-      engine.dispose();
+      cancelled = true;
+      engine?.dispose();
       engineRef.current = null;
     };
   }, [structureKey]);
@@ -134,7 +151,7 @@ export function NewsletterShelf({ posts, theme }: { posts: WritingPost[]; theme:
           className="shelf-arrow shelf-arrow-previous"
           type="button"
           aria-label="Previous newsletter issue"
-          disabled={!hasPosts || activeIndex <= 0 || isReading}
+          disabled={!ready || !hasPosts || activeIndex <= 0 || isReading}
           onClick={() => engineRef.current?.browseBy(-1)}
         >
           <ChevronLeft aria-hidden="true" />
@@ -143,7 +160,7 @@ export function NewsletterShelf({ posts, theme }: { posts: WritingPost[]; theme:
           className="shelf-arrow shelf-arrow-next"
           type="button"
           aria-label="Next newsletter issue"
-          disabled={!hasPosts || activeIndex >= posts.length - 1 || isReading}
+          disabled={!ready || !hasPosts || activeIndex >= posts.length - 1 || isReading}
           onClick={() => engineRef.current?.browseBy(1)}
         >
           <ChevronRight aria-hidden="true" />

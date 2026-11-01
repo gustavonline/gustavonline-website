@@ -66,7 +66,7 @@
 
 .profile-section { text-align:left; }
 .name-row { display:flex; align-items:flex-start; justify-content:flex-start; gap:20px; }
-.name-row h1 { font-family:var(--font-sans); font-size:34px; font-weight:400; line-height:1.2; letter-spacing:-.025em; }
+.name-row h1 { font-family:var(--font-brand); font-synthesis:none; font-size:34px; font-weight:500; line-height:1.2; letter-spacing:-.025em; }
 .name-row img { width:62px; height:70px; border-radius:4px; object-position:50% 34%; }
 .intro-copy { font-size:16px; margin:10px 0 0; line-height:1.4; }
 .social-links { justify-content:flex-start; flex-wrap:wrap; gap:0; margin:12px 0 0 -12px; }
@@ -88,7 +88,7 @@
 @media(max-width:620px) {
  .main-panel:not(.newsletter-main) { width:calc(100% - 2 * var(--page-gutter)); padding:56px 0 64px; }
  .name-row { gap:15px; }
- .name-row h1 { font-size:26px; }
+ .name-row h1 { font-size:28px; }
  .name-row img { width:50px; height:60px; }
  .link-section { margin-top:64px; }
  .selected-work { margin-top:64px; }
@@ -109,10 +109,10 @@
  .pixel-field-top .pixel-field-surface { height:132px; }
 }
 
-.brand-link {font-family:"Geist Pixel",monospace;font-weight:400;font-synthesis:none;letter-spacing:0;}
-.family-newsletter h1 {font-family:var(--font-sans);}
+.brand-link {font-family:var(--font-brand);font-weight:600;font-synthesis:none;letter-spacing:-.035em;}
+.family-newsletter h1 {font-family:var(--font-brand);font-weight:500;font-synthesis:none;}
 
-.brand-link { font-size:18px; }
+.brand-link { font-size:19px; }
 
 /* Phone and tablet. Above 760px the approved desktop header and column are unchanged.
    One gutter token keeps header, content, newsletter and footer edges aligned. */
@@ -165,6 +165,6 @@
  .shelf-reader h3 { padding-right:28px; font-size:24px; overflow-wrap:break-word; }
 }
 @media(max-width:350px) {
- .brand-link { font-size:16px; gap:6px; }
+ .brand-link { font-size:18px; gap:6px; }
  .header-mark { width:22px; height:22px; }
 }

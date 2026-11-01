@@ -1,13 +1,47 @@
 # Portfolio design
 
+## Typography and identity · approved 1 November 2026
+
+This is the current font mapping and supersedes the older dated typography notes.
+
+| Brand | Wordmark | Website text |
+| --- | --- | --- |
+| Gustav Online | Figtree 600 | Figtree 400–500 |
+| onlinesourdough | Original Geist Pixel Square 400 | Geist Sans 400–600 |
+| Arc’IT AI | Switzer 500 | Switzer 400–600 |
+
+Named brands retain their own font across headers, Offers, mobile menus,
+portfolio links, footers and Part of. Pixel labels use weight 400 and no synthetic
+bold. src/family/typography.css owns the font roles; site.css owns optical sizing.
+Font sources and licences are documented in public/assets/fonts/.
+
+The Gustav mark is an outlined Figtree 800 G with the original orange and
+olive-green glow. Its two theme assets share geometry and colours, with a light
+G on dark backgrounds. Cross-site brand links use this mark; personal portraits
+remain photographs. Arc’IT’s symbol and the sourdough bread mark are unchanged.
+SVG wordmarks and marks require no installed fonts. Switzer is fetched unchanged
+from Fontshare at build time with a pinned checksum; its binary is not published
+in Git. Runtime fonts are same-origin.
+
+Keep existing content, artwork, routes and interactions. Verify direct pages,
+mobile navigation, both themes and shared brand labels before each release.
+
+Newsletter canvas covers, spines, backs and shelf labels read the site font token
+and wait for Figtree before painting. Font loading is cancelled on unmount.
+
+The LinkedIn banner master is the 28 October variant B matte: preserve its exact
+three-line copy, 365 contribution tiles, colours, coordinates and crop. Its main
+text uses Figtree 500; the Gustav icon uses the new Figtree 800 G. The Arc’IT and
+sourdough symbols remain unchanged.
+
+
 The portfolio keeps Gustav Online's warm background (`#fbfaf7`), orange accent
-(`#ee7f3c`), Geist typography, portrait and narrow reading column.
+(`#ee7f3c`), Figtree typography, portrait and narrow reading column.
 
 ## Family alignment
 
 The header is 72px tall within the shared 1120px shell. Brand wordmarks use
-18px type: Geist Pixel for gustavonline/onlinesourdough and Inter for Arc’IT,
-all at weight 400. Body text uses Geist Sans. The main column is 648px with
+each brand’s font and weight from the current mapping above. Body text uses Figtree. The main column is 648px with
 16px project copy. The Arc’IT footer mark is the approved solid blue square
 with the white six-piece symbol, also in dark mode.
 
