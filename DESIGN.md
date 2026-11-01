@@ -143,3 +143,10 @@ and when the window grows past 760px. The panel scrolls within
   browsing is a horizontal drag. Its render loop pauses when the shelf is
   offscreen or the tab is hidden. On phones, shelf arrows and the reader close
   button are 44px, and the reader scrolls inside the stage instead of clipping.
+
+
+## Brand touchpoints · 1 November 2026
+
+Public sharing uses the 1200×630 same-origin social-preview.png, with outlined
+brand fonts and the approved marks. Social links use YouTube, LinkedIn, X
+(@_gustavonline) and GitHub; Instagram is removed by the owner’s instruction.

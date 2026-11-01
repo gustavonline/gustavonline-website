@@ -19,7 +19,7 @@ export const siteData = {
     newsletterDescription:
       "Notes and ideas from putting data, AI and software to work. By Gustav Anderson.",
     ogTitle: "gustavonline | Gustav Anderson",
-    ogImage: "/assets/gustav-linkedin-portrait.jpg",
+    ogImage: "/assets/social-preview.png",
   },
   profile: {
     intro: "Founder",
@@ -108,13 +108,13 @@ export const siteData = {
     ],
     social: [
       { label: "YouTube", href: "https://www.youtube.com/@gustavonline", icon: "youtube" },
-      { label: "Instagram", href: "https://www.instagram.com/gustavonline/", icon: "instagram" },
+      { label: "X", href: "https://x.com/_gustavonline", icon: "x" },
       { label: "LinkedIn", href: "https://www.linkedin.com/in/gustavandersonn/", icon: "linkedin" },
       { label: "GitHub", href: "https://github.com/gustavonline", icon: "github" },
     ],
     footerSocial: [
       { label: "YouTube", href: "https://www.youtube.com/@gustavonline", icon: "youtube" },
-      { label: "Instagram", href: "https://www.instagram.com/gustavonline/", icon: "instagram" },
+      { label: "X", href: "https://x.com/_gustavonline", icon: "x" },
       { label: "LinkedIn", href: "https://www.linkedin.com/in/gustavandersonn/", icon: "linkedin" },
       { label: "GitHub", href: "https://github.com/gustavonline", icon: "github" },
     ],
