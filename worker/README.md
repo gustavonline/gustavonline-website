@@ -5,7 +5,7 @@ This Worker is intentionally small.
 It owns:
 
 - `POST /newsletter`: create/update a subscriber in Kit.
-- `GET /posts`: expose published papers from Notion `PapersDB`.
+- `GET /posts`: expose explicitly published website content from the unified Notion `Content` source.
 
 It does not own:
 
@@ -19,8 +19,8 @@ It does not own:
 
 Static vars live in `wrangler.jsonc`:
 
-- `NOTION_PAPERS_DATA_SOURCE_ID`: `23fa9322-f9ee-4ffc-8c5a-a44a88b281e9`
-- `PUBLIC_SITE_URL`
+- `NOTION_PAPERS_DATA_SOURCE_ID`: `ba101532-8866-4388-9597-1d07465e495b`
+- `PUBLIC_SITE_URL` (retained for binding compatibility)
 - `ALLOWED_ORIGINS`
 
 Secrets:
@@ -29,6 +29,20 @@ Secrets:
 npx wrangler secret put KIT_API_KEY
 npx wrangler secret put NOTION_TOKEN
 ```
+
+## Public content boundary
+
+The legacy binding name `NOTION_PAPERS_DATA_SOURCE_ID` now selects Content.
+A public entry must have `Status = Published`, `Type = Content` or `Edition`,
+`Channels` containing `Website`, and an explicit HTTPS `Public URL`. The adapter
+checks these fields again before returning only title, summary, date and URL.
+Sources, drafts and newsletter-only editions are excluded. It never exports page
+bodies or invents an unimplemented `/notes/:slug` destination. A Notion access
+failure returns 502 rather than a misleading empty archive.
+
+After deployment, verify access to this source with the Worker's existing
+Notion connection. An empty successful feed is expected until eligible content
+has actually been published; do not publish a private draft to test the binding.
 
 ## Local Dev
 

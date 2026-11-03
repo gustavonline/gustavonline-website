@@ -16,7 +16,7 @@ Arc'IT AI owns Project Inquiries and future Testimonials. The separate
 
 The intended content flow is:
 
-1. Write papers/notes in Notion `PapersDB`.
+1. Write and prepare content in Notion `Content`.
 2. Let a Cloudflare Worker read published papers from Notion or a synced store.
 3. Expose the public issue archive to the portfolio through `VITE_WRITING_ENDPOINT`.
 4. Send selected papers to the email list through Kit after the editorial workflow is tested.
@@ -101,17 +101,17 @@ cutover verification has passed.
 
 Use the existing Notion databases:
 
-- PapersDB: `collection://23fa9322-f9ee-4ffc-8c5a-a44a88b281e9`
+- Content (formerly PapersDB): `collection://ba101532-8866-4388-9597-1d07465e495b`
 - SubscribersDB: managed by Kit's Notion sync, not by the Worker.
 
-The Worker can filter public archive entries where `Status = Published`.
+The Worker selects only `Status = Published`, `Type = Content` or `Edition`, `Channels` containing `Website`, and a non-empty `Public URL`. The returned destination must use HTTPS. Sources, drafts and email-only editions are private.
 
 Public posts should be returned as:
 
 - `title`: `Title`
 - `summary`: `Summary`
 - `date`: `Publish date`
-- `url`: `Public URL`, or a generated `/notes/:slug` URL
+- `url`: the explicit HTTPS `Public URL`; this feed does not host article bodies or create article routes
 
 Signup handling should:
 

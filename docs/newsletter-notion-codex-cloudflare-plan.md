@@ -1,5 +1,11 @@
 # Newsletter, Notion, Codex and Cloudflare Plan
 
+> Historical design proposal. Its original source IDs, automatic editorial
+> pass and generated article routes are superseded by the unified Content
+> contract in [codex-papers-automation.md](codex-papers-automation.md) and the
+> [Worker boundary](../worker/README.md). This plan is not an active automation
+> policy. Subscriber sync and actual email delivery need separate verification.
+
 ## Goal
 
 The system should feel almost automatic:
