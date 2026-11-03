@@ -1,88 +1,53 @@
-# Codex Papers Automation
+# Content and newsletter workflow
 
-This is the operating instruction for the recurring Codex automation that helps run `gustavonline` notes/newsletter from Notion.
+The original PapersDB is now the unified Content source. This document describes
+editorial routing; it does not create or enable a scheduled editorial job.
+The owner's existing context-maintenance job reads Content and does not author,
+publish, send email or synchronize subscribers.
 
-## Goal
+## Sources and ownership
 
-Gustav should only have to open Notion, create a new page in `PapersDB`, write the title/body, and leave. Codex handles metadata, publishing state, and a short report.
+- Content source: `collection://ba101532-8866-4388-9597-1d07465e495b`.
+- `Type = Source`: own or external reference material; preserve provenance and review status.
+- `Type = Content`: an idea or production, with source relations and production links.
+- `Type = Edition`: an independently edited channel version, related to its parent production.
+- Knowledge owns maintained business context, voice and selected configuration.
+- Kit owns live email sending and unsubscribe operations. A separate Subscribers
+  database may mirror the list; it is not part of Content or this Worker.
 
-## Sources
+The existing newsletter draft retains its original page identity and body.
+`PapersDB` and `NOTION_PAPERS_DATA_SOURCE_ID` are historical/compatibility names,
+not instructions to create another database.
 
-- Notion page: `https://app.notion.com/p/37f2e04d50d180f38957f69858347b95`
-- Papers data source: `collection://23fa9322-f9ee-4ffc-8c5a-a44a88b281e9`
-- Subscribers data source: `collection://871559d8-1ebf-40c0-a951-fdbc00881606`
-- Main writing view: `Write`
+## Authorized editorial work
 
-## PapersDB Schema
+Use the owner's chosen content workflow and current voice/configuration. A quick
+capture can remain incomplete. Prepare metadata or a revised draft only within
+the current task's authority; preserve human originals and source relationships.
+An editorial review can mark a piece Ready, but Ready does not mean Published.
 
-Human-facing field:
+Choose a real channel edition and destination before publishing. Set Publish date
+when the piece is actually published, not when it is captured or summarized.
+Record the actual public URL and connect the edition to its production. Sending
+an email is a separate action; neither Channels = Newsletter nor Send as
+newsletter grants send authority. This task enables no automatic publishing,
+Kit broadcast creation or sending.
 
-- `Title`
+## Website feed
 
-Automation/system fields:
+`GET /posts` returns public metadata only for records with all of:
 
-- `Status`: `Draft`, `Ready`, `Published`, `Archived`
-- `Publish date`
-- `Slug`
-- `Summary`
-- `Tags`: `AI`, `IT architecture`, `client work`, `templates`, `life`
-- `Send as newsletter`
-- `Kit broadcast id`
-- `Public URL`
-- `Last processed`
+- Status = Published;
+- Type = Content or Edition;
+- Channels includes Website;
+- an explicit HTTPS Public URL pointing to the published destination.
 
-## Daily Behavior
+The adapter applies both a Notion query filter and an output eligibility check.
+It excludes sources, drafts and newsletter-only editions and returns only title,
+summary, publication date and public URL. The Worker does not render article
+bodies or manufacture `/notes/:slug` pages. A provider access error is an
+unavailable response, rather than a successful empty collection.
 
-Run once per day.
-
-1. Query `PapersDB` for pages where `Last processed` is empty, or `Status` is empty, or `Status = Draft`.
-2. Read the page title and page body.
-3. Skip empty pages with no meaningful body content.
-4. If `Status` is empty, set `Status = Draft`.
-5. If the page has a meaningful body, fill missing metadata:
-   - `Slug`: lowercase URL-safe slug from title.
-   - `Summary`: one concise sentence.
-   - `Tags`: 1-3 relevant tags from the allowed tag set.
-   - `Publish date`: today, unless the content clearly indicates another intended date.
-6. If the page is coherent enough to publish, set `Status = Ready`.
-7. Do not set `Status = Published` until the publishing flow has been tested.
-8. Do not send email automatically.
-9. Set `Last processed` to the current date/time after changes.
-10. Return a short report:
-    - pages processed
-    - pages moved to `Ready`
-    - pages skipped
-    - anything Gustav should review
-
-## Newsletter Rule
-
-Version one is conservative:
-
-- Codex may set `Send as newsletter = true` only when the note reads like a complete email/newsletter.
-- Codex must not create or send Kit broadcasts automatically yet.
-- When Kit is connected, Codex can prepare a Kit draft only after this repo contains the final Kit workflow instructions.
-
-## Publishing Rule
-
-Cloudflare exposes only notes where:
-
-- `Status = Published`
-
-Later, after the flow is trusted:
-
-- Codex may move `Ready` to `Published` when Gustav explicitly asks for it or when the automation policy is changed.
-
-## Suggested Automation Prompt
-
-```txt
-Use the instructions in docs/codex-papers-automation.md.
-
-Check the gustavonline Notion PapersDB.
-Process new or draft papers conservatively:
-- fill missing metadata
-- set coherent drafts to Ready
-- do not publish
-- do not send email
-- report what changed
-```
-
+Production verification must confirm the selected Notion connection can query
+Content. Do not publish an unfinished issue or send mail to exercise the feed.
+The archive can legitimately be empty until public pieces exist.
