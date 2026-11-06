@@ -1,4 +1,4 @@
-/* Brand identity follows the named brand across all three independent sites. */
+/* Brand references keep their typeface at regular weight; site wordmarks own their logo styles. */
 @font-face {
   font-family: "Geist Sans";
   src: url("/assets/fonts/geist-sans-variable.woff2") format("woff2");
@@ -38,13 +38,13 @@
 .brand-name-token[data-brand-name="arcitai"],
 .offers-menu .brand-arcitai {
   font-family: var(--font-arcit);
-  font-weight: 500;
+  font-weight: 400;
   font-synthesis: none;
   letter-spacing: -0.025em;
 }
 .brand-name-token[data-brand-name="gustavonline"] {
   font-family: var(--font-gustav);
-  font-weight: 600;
+  font-weight: 400;
   font-synthesis: none;
   letter-spacing: -0.035em;
 }
