@@ -73,14 +73,14 @@ in the text colour without a background.
 On narrow screens the tabs form two rows. Keyboard arrows, Home and End switch
 tabs, and inactive panels are inert. Panels share their height to prevent jumps.
 
-The profile repository owns the selection, names and icon references. Factory
+The profile repository owns the selection, names and icon references. Agentic Systems
 and AIOS remain anchors; the third slot follows activity among the curated tools.
 Other projects appear as compact links in the fourth tab. The website does not
 independently rank projects, and it does not display commit-ranking commentary.
 
 ## One source for project text
 
-Factory, AIOS and OpenPaperDesign each own a `Why I built this` README section.
+Agentic Systems, AIOS and OpenPaperDesign each own a `Why I built this` README section.
 The profile updater reads it at a pinned public commit: the first paragraph
 supplies the profile summary, and the whole section supplies the website panel.
 OpenPaperDesign's attribution to paper-rs and Michael Shimeles comes from that

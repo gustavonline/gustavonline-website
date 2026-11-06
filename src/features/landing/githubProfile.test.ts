@@ -11,7 +11,7 @@ type RawProject = { owner: string; repo: string; name: string; url: string; desc
 
 const rawProjects = (): RawProject[] => [
   { owner: "onlinesourdough", repo: "onlinesourdough/OSM-plugin", name: "The Onlinesourdough Method", url: "https://github.com/onlinesourdough/OSM-plugin", description: "Synthetic.", commits: 4, isPublic: true },
-  { owner: "arcitai", repo: "arcitai/factory", name: "Factory", url: "https://github.com/arcitai/factory", description: "Synthetic.", commits: 7, isPublic: true },
+  { owner: "arcitai", repo: "arcitai/agentic-systems", name: "Agentic Systems", url: "https://github.com/arcitai/agentic-systems", description: "Synthetic.", commits: 7, isPublic: true },
   { owner: "gustavonline", repo: "gustavonline/hidden-tool", name: "Hidden", url: "https://github.com/gustavonline/hidden-tool", description: "Synthetic private.", commits: 9, isPublic: false },
   { owner: "gustavonline", repo: "gustavonline/sample-app", name: "Sample App", url: "https://github.com/gustavonline/sample-app", description: "A synthetic public description.", commits: 1, isPublic: true },
 ];
@@ -54,8 +54,8 @@ describe("profile validation", () => {
     const raw = syntheticProfile();
     raw.projects = [
       { ...raw.projects[0], owner: "someone-else", repo: "someone-else/x", url: "https://github.com/someone-else/x" },
-      { ...raw.projects[1], url: "http://github.com/arcitai/factory" },
-      { ...raw.projects[1], url: "https://evil.example/arcitai/factory" },
+      { ...raw.projects[1], url: "http://github.com/arcitai/agentic-systems" },
+      { ...raw.projects[1], url: "https://evil.example/arcitai/agentic-systems" },
       { ...raw.projects[1], commits: -1 },
       raw.projects[3],
     ];
@@ -123,7 +123,7 @@ describe("selected projects", () => {
   it("takes one public project per owner in the fixed owner order", () => {
     const profile = parseGithubProfile(syntheticProfile())!;
     expect(selectedProjects(profile).map((project) => project.repo)).toEqual([
-      "arcitai/factory",
+      "arcitai/agentic-systems",
       "onlinesourdough/OSM-plugin",
       "gustavonline/sample-app",
     ]);
@@ -131,13 +131,13 @@ describe("selected projects", () => {
 
   it("uses the projection for every repository, with one uniform Explore label", () => {
     const work = resolveWork(parseGithubProfile(syntheticProfile()));
-    expect(work.map((item) => item.title)).toEqual(["Factory", "The Onlinesourdough Method", "Sample App"]);
+    expect(work.map((item) => item.title)).toEqual(["Agentic Systems", "The Onlinesourdough Method", "Sample App"]);
     expect(work[0].paragraphs).toEqual(["Synthetic."]);
     expect(work[2].paragraphs).toEqual(["A synthetic public description."]);
     // Commit counts stay internal: no visible activity line for unknown projects.
     expect(JSON.stringify(work[2])).not.toMatch(/commit/i);
     expect(work[2].source?.href).toBe("https://github.com/gustavonline/sample-app");
-    expect(work.map((item) => item.source.label)).toEqual(["Explore Factory", "Explore The Onlinesourdough Method", "Explore Sample App"]);
+    expect(work.map((item) => item.source.label)).toEqual(["Explore Agentic Systems", "Explore The Onlinesourdough Method", "Explore Sample App"]);
     expect(work.map((item) => item.brand)).toEqual(["arcitai", "onlinesourdough", "gustav"]);
   });
 
@@ -176,10 +176,10 @@ const syntheticV2 = () => ({
   ...syntheticProfile(),
   schemaVersion: 2,
   readmeSha256: "synthetic",
-  projects: [project("arcitai/factory"), project("arcitai/agentic-powerbi-system"), project("onlinesourdough/OSM-plugin")],
+  projects: [project("arcitai/agentic-systems"), project("arcitai/agentic-powerbi-system"), project("onlinesourdough/OSM-plugin")],
   moreProjects: [
     project("gustavonline/pi-desktop", { status: "Community handoff", category: "community" }),
-    project("arcitai/factory"),
+    project("arcitai/agentic-systems"),
     project("gustavonline/hidden", { isPublic: false }),
     project("someone/else"),
     project("gustavonline/youtube-content", { category: "resources", status: "Resources", icon: "https://example.com/x.svg" }),
@@ -190,7 +190,7 @@ const syntheticV2 = () => ({
 describe("schema 2", () => {
   it("shows the focus projects exactly in the projection's order, even two from one owner", () => {
     const profile = parseGithubProfile(syntheticV2())!;
-    expect(selectedProjects(profile).map((item) => item.repo)).toEqual(["arcitai/factory", "arcitai/agentic-powerbi-system", "onlinesourdough/OSM-plugin"]);
+    expect(selectedProjects(profile).map((item) => item.repo)).toEqual(["arcitai/agentic-systems", "arcitai/agentic-powerbi-system", "onlinesourdough/OSM-plugin"]);
     expect(resolveWork(profile).map((item) => item.brand)).toEqual(["arcitai", "arcitai", "onlinesourdough"]);
   });
 
@@ -229,16 +229,16 @@ describe("schema 2", () => {
 describe("project README prose (schema 3)", () => {
   const source = () => ({
     section: "Why I built this", revision: "a".repeat(40), sha256: "b".repeat(64),
-    url: `https://github.com/arcitai/factory/blob/${"a".repeat(40)}/README.md#why-i-built-this`,
+    url: `https://github.com/arcitai/agentic-systems/blob/${"a".repeat(40)}/README.md#why-i-built-this`,
     paragraphs: ["My reason for building it.", "The technical approach."],
   });
-  const profile = () => ({ ...syntheticV2(), schemaVersion: 3, projects: [project("arcitai/factory", { readme: source() }), ...syntheticV2().projects.slice(1)] });
+  const profile = () => ({ ...syntheticV2(), schemaVersion: 3, projects: [project("arcitai/agentic-systems", { readme: source() }), ...syntheticV2().projects.slice(1)] });
 
   it("renders README paragraphs in order without status, role or result fields", () => {
     const parsed = parseGithubProfile(profile())!;
     const item = resolveWork(parsed)[0];
     expect(item.paragraphs).toEqual(source().paragraphs);
-    expect(item.source.label).toBe("Explore factory");
+    expect(item.source.label).toBe("Explore agentic-systems");
     expect(Object.keys(item)).not.toContain("status");
     expect(Object.keys(item)).not.toContain("facts");
     expect(selectedProjects(parsed)).toHaveLength(3);
@@ -250,18 +250,18 @@ describe("project README prose (schema 3)", () => {
     for (const patch of [{ url: "https://example.com/README.md" }, { revision: "unknown" }, { paragraphs: [] }, { paragraphs: [null] }, { paragraphs: ["x".repeat(301)] }, { paragraphs: ["A", "B", "C", "D", "E"] }]) {
       const raw = profile();
       raw.projects[0].readme = { ...source(), ...patch };
-      expect(parseGithubProfile(raw)?.projects.some((p) => p.repo === "arcitai/factory")).toBe(false);
+      expect(parseGithubProfile(raw)?.projects.some((p) => p.repo === "arcitai/agentic-systems")).toBe(false);
     }
     const raw = profile();
     raw.projects[0].isPublic = false;
-    expect(resolveWork(parseGithubProfile(raw)).some((p) => p.title === "factory")).toBe(false);
+    expect(resolveWork(parseGithubProfile(raw)).some((p) => p.title === "agentic-system")).toBe(false);
   });
 
   it("accepts an explicitly labelled local preview, without pretending it is an immutable GitHub source", () => {
     const raw = profile();
-    raw.projects[0].readme = { ...source(), revision: "local-preview", url: "https://github.com/arcitai/factory/blob/main/README.md#why-i-built-this" };
+    raw.projects[0].readme = { ...source(), revision: "local-preview", url: "https://github.com/arcitai/agentic-systems/blob/main/README.md#why-i-built-this" };
     expect(parseGithubProfile(raw)?.projects[0].readme?.revision).toBe("local-preview");
     raw.projects[0].readme = { ...source(), revision: "local-preview" };
-    expect(parseGithubProfile(raw)?.projects.some((p) => p.repo === "arcitai/factory")).toBe(false);
+    expect(parseGithubProfile(raw)?.projects.some((p) => p.repo === "arcitai/agentic-systems")).toBe(false);
   });
 });
