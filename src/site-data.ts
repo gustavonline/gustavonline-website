@@ -86,7 +86,7 @@ export const siteData = {
   links: {
     actions: [
       {
-        description: "Resources and ongoing collaboration to make data and AI useful in your business.",
+        description: "Explore my online menu: resources, 1:1 collaboration and custom projects.",
         label: "onlinesourdough",
         href: familyHref("onlinesourdough"),
       },

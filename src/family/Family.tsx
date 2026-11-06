@@ -41,6 +41,11 @@ export function FamilyFooter({ brand }: { brand: FamilyBrand }) {
             <>Part of <a href={familyHref("gustavonline")} target="_blank" rel="noopener noreferrer"><span className="brand-name-token" data-brand-name="gustavonline">gustavonline</span></a></>
           )}
         </p>
+        {brand === "gustavonline" && (
+          <p className="family-footer-credit">
+            My online menu is inspired by <a href="https://frederikpahuus.com/posts/15-done-the-2m-year-plan" target="_blank" rel="noopener noreferrer">Frederik Pahuus</a> and his content.
+          </p>
+        )}
       </div>
     </div>
   );

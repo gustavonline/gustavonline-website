@@ -84,3 +84,7 @@
 @media(max-width:620px) {
   .family-footer-details { align-self:flex-end; }
 }
+
+.family-footer-credit { max-width:38ch; margin:4px 0 0; text-align:right; font-size:12px; line-height:1.6; color:var(--muted); }
+.family-footer-credit a { color:inherit; text-decoration:underline; text-underline-offset:3px; }
+.family-footer-credit a:hover,.family-footer-credit a:focus-visible { color:var(--text); }
