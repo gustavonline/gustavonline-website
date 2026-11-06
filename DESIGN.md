@@ -1,5 +1,18 @@
 # Portfolio design
 
+## Brand references — 6 November 2026
+
+Use each brand’s own typeface at **weight 400** for ordinary mentions and links:
+Offers, mobile menus, portfolio cards, footers and “Part of”. Figtree represents
+Gustav Online, Geist Pixel Square represents onlinesourdough, and Switzer
+represents Arc’IT AI. Keep the surrounding text size and disable synthetic bold.
+
+An actual site wordmark keeps its own identity: Gustav Online’s header remains
+Figtree 600, onlinesourdough’s wordmark remains Pixel Square 400, and Arc’IT AI’s
+logo remains its approved Switzer treatment. Brand symbols and SVG logo assets
+are unchanged. A reference to a brand is not a request to reuse its heavier logo
+weight. The reference selectors live in the site’s brand-typography stylesheet.
+
 ## Typography and identity · approved 1 November 2026
 
 This is the current font mapping and supersedes the older dated typography notes.
@@ -10,9 +23,9 @@ This is the current font mapping and supersedes the older dated typography notes
 | onlinesourdough | Original Geist Pixel Square 400 | Geist Sans 400–600 |
 | Arc’IT AI | Switzer 500 | Switzer 400–600 |
 
-Named brands retain their own font across headers, Offers, mobile menus,
-portfolio links, footers and Part of. Pixel labels use weight 400 and no synthetic
-bold. src/family/typography.css owns the font roles; site.css owns optical sizing.
+Site wordmarks keep the logo weights above. Other named-brand references keep
+their own font at weight 400 across Offers, mobile menus, portfolio links,
+footers and Part of, with no synthetic bold. src/family/typography.css owns the font roles; site.css owns optical sizing.
 Font sources and licences are documented in public/assets/fonts/.
 
 The Gustav mark is an outlined Figtree 800 G with the original orange and
@@ -74,18 +87,19 @@ On narrow screens the tabs form two rows. Keyboard arrows, Home and End switch
 tabs, and inactive panels are inert. Panels share their height to prevent jumps.
 
 The profile repository owns the selection, names and icon references. Agentic Systems
-and AIOS remain anchors; the third slot follows activity among the curated tools.
+and OSM remain anchors; the third slot follows activity among the curated tools.
 Other projects appear as compact links in the fourth tab. The website does not
 independently rank projects, and it does not display commit-ranking commentary.
 
 ## One source for project text
 
-Agentic Systems, AIOS and OpenPaperDesign each own a `Why I built this` README section.
-The profile updater reads it at a pinned public commit: the first paragraph
-supplies the profile summary, and the whole section supplies the website panel.
-OpenPaperDesign's attribution to paper-rs and Michael Shimeles comes from that
-same section. Simple GitHub attribution links render as React nodes; no raw
-HTML or general Markdown renderer is used.
+The profile's `data/projects.json` owns selected repositories, stable GitHub IDs,
+optional short names and editorial status. Its scheduled updater reads each
+project's current README or GitHub description and generates both profile bullets
+and website JSON. A `Why I built this` section contributes longer prose when
+present; otherwise a short README introduction or repository description is used.
+OpenPaperDesign now comes from `gustavonline/openpaperdesign`, not the archived
+Arc’IT fork. The website does not keep a second authored project description.
 
 The schema-3 projection is bundled at `public/data/github-profile.json` for the
 first render and offline use. Production also fetches the public profile JSON.
