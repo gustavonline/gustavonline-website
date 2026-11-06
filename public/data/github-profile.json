@@ -1,35 +1,24 @@
 {
   "schemaVersion": 3,
-  "generatedAt": "2026-10-23T15:13:04.186Z",
+  "generatedAt": "2026-11-06T11:30:16.615Z",
   "sourceReadme": "https://github.com/gustavonline/gustavonline/blob/main/README.md",
-  "sourceRevision": "48b5e22719414015b11fd3a60067c19d7efcb40c",
-  "readmeSha256": "74571d6d5f7588ce360e4db613799e5ec9aed190a3d03c644a574b2c33454066",
+  "sourceRevision": "9825c5c31623dd6ec3f43d275260506f11c6535e",
+  "readmeSha256": "51ee0f241bfddc75b4ce02073e11f653ad7043acf8c53b9ea76cfa67bf0ffbc9",
   "windowDays": 30,
   "projects": [
     {
       "owner": "arcitai",
-      "repo": "arcitai/factory",
-      "name": "Factory",
-      "url": "https://github.com/arcitai/factory",
-      "description": "I’m building Factory to give software work with agents a modular structure, from understanding the problem to reviewing and delivering the result.",
-      "commits": 37,
+      "repo": "arcitai/agentic-systems",
+      "name": "Agentic Systems",
+      "url": "https://github.com/arcitai/agentic-systems",
+      "description": "I’m building an open-source framework that brings agents, context, tools and review together across software development, BI, defence and research.",
+      "commits": 65,
       "isPublic": true,
       "category": "tools",
       "status": "Open source",
-      "icon": "/assets/project-marks/factory.svg",
-      "readme": {
-        "section": "Why I built this",
-        "url": "https://github.com/arcitai/factory/blob/2896c4710e44d86d305fdfa032b84a6feff3f2d1/README.md#why-i-built-this",
-        "revision": "2896c4710e44d86d305fdfa032b84a6feff3f2d1",
-        "sha256": "9bf1481a274e8d86d02e446572d8634c04a5826c6808f1e77154bd611e3a686e",
-        "paragraphs": [
-          "I’m building Factory to give software work with agents a modular structure, from understanding the problem to reviewing and delivering the result.",
-          "I build on established tools and standards: Codex, Claude Code and GitHub, with T3 Code as the workspace. Factory adds methods and reusable skills around them, keeping extra code and maintenance small.",
-          "Foundation prepares the project, AgentOps directs the work, and the Agentic Development Lifecycle (ADLC) covers specification, implementation, review and delivery. I’m developing a Power BI module that also covers the surrounding data and software work, and exploring modules for research and reverse engineering."
-        ]
-      },
+      "icon": "/assets/project-marks/agentic-systems.svg",
       "pinned": true,
-      "stars": 1
+      "stars": 0
     },
     {
       "owner": "onlinesourdough",
@@ -37,7 +26,7 @@
       "name": "The Onlinesourdough Method",
       "url": "https://github.com/onlinesourdough/OSM-plugin",
       "description": "I built The Onlinesourdough Method to carry useful context, decisions and working methods between AI apps, so each conversation can build on the work that came before.",
-      "commits": 63,
+      "commits": 42,
       "isPublic": true,
       "category": "tools",
       "status": "Open source",
@@ -54,28 +43,26 @@
         ]
       },
       "pinned": true,
-      "stars": 1
+      "stars": 0
     },
     {
       "owner": "arcitai",
       "repo": "arcitai/openpaperdesign",
       "name": "OpenPaperDesign",
       "url": "https://github.com/arcitai/openpaperdesign",
-      "description": "I wanted an infinite, editable canvas inside my AI agent’s workspace, where we could work through architecture diagrams, systems and interface designs together without leaving the conversation.",
-      "commits": 81,
+      "description": "I wanted somewhere to sketch systems and design interfaces with an AI agent, without another paid design-tool subscription. Michael's paper-rs gave me a native, editable canvas to build on. I keep that foundation and add the integrations and methods I use in my own work.",
+      "commits": 101,
       "isPublic": true,
       "category": "tools",
       "status": "Open source",
       "icon": "/assets/project-marks/openpaperdesign.svg",
       "readme": {
         "section": "Why I built this",
-        "url": "https://github.com/arcitai/openpaperdesign/blob/1eb11feb2b9b7d8f2ab8100b14eaa267a3b09097/README.md#why-i-built-this",
-        "revision": "1eb11feb2b9b7d8f2ab8100b14eaa267a3b09097",
-        "sha256": "20b783793407f587522fa1a6e98901bc3fff42a789c8b505f46c4894faaf6de0",
+        "url": "https://github.com/arcitai/openpaperdesign/blob/1ceebd4aff9cdefa07174a26cbf24b7d251a6b5f/README.md#why-i-built-this",
+        "revision": "1ceebd4aff9cdefa07174a26cbf24b7d251a6b5f",
+        "sha256": "a41c75a9da786b6fe18d2af74fa667708ce38d9dfda739ddb134a55b16fe1fa0",
         "paragraphs": [
-          "I wanted an infinite, editable canvas inside my AI agent’s workspace, where we could work through architecture diagrams, systems and interface designs together without leaving the conversation.",
-          "OpenPaperDesign is built on paper-rs by [Michael Shimeles](https://github.com/michaelshimeles). I reuse its editor, follow open standards where they exist and add only the integration the agent workspace needs. That keeps the extra code and maintenance small.",
-          "In Codex, I can sketch a system and refine a layout with the agent. Project files stay local and the canvas stays editable. I’m also exploring how AI-generated images can become part of that workflow."
+          "I wanted somewhere to sketch systems and design interfaces with an AI agent, without another paid design-tool subscription. Michael's paper-rs gave me a native, editable canvas to build on. I keep that foundation and add the integrations and methods I use in my own work."
         ]
       },
       "pinned": false,
@@ -116,7 +103,7 @@
       "name": "Local Pi worker",
       "url": "https://github.com/gustavonline/local-ai-pi-worker",
       "description": "A separate local Pi worker for delegating tasks through the command line or native RPC.",
-      "commits": 3,
+      "commits": 2,
       "isPublic": true,
       "category": "tools",
       "status": "Open source",
@@ -126,10 +113,10 @@
     {
       "owner": "arcitai",
       "repo": "arcitai/Agentic-PowerBI-System",
-      "name": "Power BI for Factory",
+      "name": "Agentic BI System",
       "url": "https://github.com/arcitai/Agentic-PowerBI-System",
-      "description": "Power BI foundations, delivery methods and skills. I’m turning it into a module for Factory.",
-      "commits": 2,
+      "description": "Power BI foundations, delivery methods and skills. I’m turning it into a module for Agentic Systems.",
+      "commits": 1,
       "isPublic": true,
       "category": "tools",
       "status": "In development",
@@ -148,7 +135,7 @@
       "status": "Community handoff",
       "icon": "/assets/project-marks/pi-desktop.svg",
       "pinned": true,
-      "stars": 153
+      "stars": 152
     },
     {
       "owner": "gustavonline",
@@ -156,7 +143,7 @@
       "name": "YouTube content",
       "url": "https://github.com/gustavonline/youtube-content",
       "description": "Lessons, notes and useful files from my videos.",
-      "commits": 3,
+      "commits": 0,
       "isPublic": true,
       "category": "resources",
       "status": "Resources",
@@ -169,7 +156,7 @@
       "name": "Portfolio",
       "url": "https://github.com/gustavonline/gustavonline-website",
       "description": "My website, with current projects and ways to get in touch.",
-      "commits": 35,
+      "commits": 36,
       "isPublic": true,
       "category": "resources",
       "status": "Open source",
@@ -179,104 +166,12 @@
     }
   ],
   "contributions": {
-    "from": "2025-10-24",
-    "to": "2026-10-23",
-    "total": 43784,
+    "from": "2025-11-07",
+    "to": "2026-11-06",
+    "total": 44063,
     "weeks": [
       {
         "days": [
-          {
-            "date": "2025-10-24",
-            "weekday": 5,
-            "count": 0,
-            "level": 0
-          },
-          {
-            "date": "2025-10-25",
-            "weekday": 6,
-            "count": 0,
-            "level": 0
-          }
-        ]
-      },
-      {
-        "days": [
-          {
-            "date": "2025-10-26",
-            "weekday": 0,
-            "count": 0,
-            "level": 0
-          },
-          {
-            "date": "2025-10-27",
-            "weekday": 1,
-            "count": 0,
-            "level": 0
-          },
-          {
-            "date": "2025-10-28",
-            "weekday": 2,
-            "count": 0,
-            "level": 0
-          },
-          {
-            "date": "2025-10-29",
-            "weekday": 3,
-            "count": 0,
-            "level": 0
-          },
-          {
-            "date": "2025-10-30",
-            "weekday": 4,
-            "count": 0,
-            "level": 0
-          },
-          {
-            "date": "2025-10-31",
-            "weekday": 5,
-            "count": 0,
-            "level": 0
-          },
-          {
-            "date": "2025-11-01",
-            "weekday": 6,
-            "count": 0,
-            "level": 0
-          }
-        ]
-      },
-      {
-        "days": [
-          {
-            "date": "2025-11-02",
-            "weekday": 0,
-            "count": 0,
-            "level": 0
-          },
-          {
-            "date": "2025-11-03",
-            "weekday": 1,
-            "count": 0,
-            "level": 0
-          },
-          {
-            "date": "2025-11-04",
-            "weekday": 2,
-            "count": 0,
-            "level": 0
-          },
-          {
-            "date": "2025-11-05",
-            "weekday": 3,
-            "count": 0,
-            "level": 0
-          },
-          {
-            "date": "2025-11-06",
-            "weekday": 4,
-            "count": 0,
-            "level": 0
-          },
           {
             "date": "2025-11-07",
             "weekday": 5,
@@ -2200,7 +2095,7 @@
           {
             "date": "2026-08-26",
             "weekday": 3,
-            "count": 232,
+            "count": 231,
             "level": 2
           },
           {
@@ -2534,7 +2429,7 @@
           {
             "date": "2026-10-16",
             "weekday": 5,
-            "count": 44,
+            "count": 19,
             "level": 1
           },
           {
@@ -2568,19 +2463,111 @@
           {
             "date": "2026-10-21",
             "weekday": 3,
-            "count": 15,
+            "count": 16,
             "level": 1
           },
           {
             "date": "2026-10-22",
             "weekday": 4,
-            "count": 20,
+            "count": 21,
             "level": 1
           },
           {
             "date": "2026-10-23",
             "weekday": 5,
-            "count": 47,
+            "count": 72,
+            "level": 1
+          },
+          {
+            "date": "2026-10-24",
+            "weekday": 6,
+            "count": 0,
+            "level": 0
+          }
+        ]
+      },
+      {
+        "days": [
+          {
+            "date": "2026-10-25",
+            "weekday": 0,
+            "count": 14,
+            "level": 1
+          },
+          {
+            "date": "2026-10-26",
+            "weekday": 1,
+            "count": 49,
+            "level": 1
+          },
+          {
+            "date": "2026-10-27",
+            "weekday": 2,
+            "count": 28,
+            "level": 1
+          },
+          {
+            "date": "2026-10-28",
+            "weekday": 3,
+            "count": 17,
+            "level": 1
+          },
+          {
+            "date": "2026-10-29",
+            "weekday": 4,
+            "count": 12,
+            "level": 1
+          },
+          {
+            "date": "2026-10-30",
+            "weekday": 5,
+            "count": 16,
+            "level": 1
+          },
+          {
+            "date": "2026-10-31",
+            "weekday": 6,
+            "count": 6,
+            "level": 1
+          }
+        ]
+      },
+      {
+        "days": [
+          {
+            "date": "2026-11-01",
+            "weekday": 0,
+            "count": 55,
+            "level": 1
+          },
+          {
+            "date": "2026-11-02",
+            "weekday": 1,
+            "count": 11,
+            "level": 1
+          },
+          {
+            "date": "2026-11-03",
+            "weekday": 2,
+            "count": 23,
+            "level": 1
+          },
+          {
+            "date": "2026-11-04",
+            "weekday": 3,
+            "count": 6,
+            "level": 1
+          },
+          {
+            "date": "2026-11-05",
+            "weekday": 4,
+            "count": 26,
+            "level": 1
+          },
+          {
+            "date": "2026-11-06",
+            "weekday": 5,
+            "count": 15,
             "level": 1
           }
         ]
