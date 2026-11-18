@@ -22,7 +22,10 @@ export const siteData = {
     ogImage: "/assets/social-preview.png",
   },
   profile: {
-    intro: "Founder",
+    role: "Founder",
+    headline: "See what I’m building. Take what’s useful.",
+    intro:
+      "I work with data, AI and software and share what I learn along the way.",
   },
   selectedWork: {
     title: "Current work",
@@ -30,7 +33,7 @@ export const siteData = {
   },
   newsletter: {
     label: "Notes from the work",
-    support: "Notes and ideas from putting data, AI and software to work.",
+    support: "Get ideas and lessons from my projects with data, AI and software. Take what fits the work you’re doing.",
     submitLabel: "Join free",
     placeholder: "Email address",
     loading: "Submitting...",
@@ -86,22 +89,22 @@ export const siteData = {
   links: {
     actions: [
       {
-        description: "Explore my online menu: resources, 1:1 collaboration and custom projects.",
+        description: "My online menu for building tools and workflows with AI in your business.",
         label: "onlinesourdough",
         href: familyHref("onlinesourdough"),
       },
       {
-        description: "Data and AI consultancy shaped around your business.",
+        description: "Get a data or AI solution built for your team.",
         label: "Arc’IT AI",
         href: familyHref("arcitai"),
       },
       {
-        description: "Notes and ideas from putting data, AI and software to work.",
+        description: "Get ideas and lessons from my projects by email.",
         label: "Newsletter",
         href: "/newsletter",
       },
       {
-        description: "A retro music café with Elvis playlists and changing scenes.",
+        description: "Put on an Elvis playlist in a little retro music café.",
         label: "Elvis Presley Café",
         href: "https://gustavonline.github.io/elvispresley.cafe/",
       },

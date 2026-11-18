@@ -14,11 +14,8 @@ const MORE_ID = "more";
  * "Current work": the focus projects as tabs (real project icons and names),
  * plus a fourth "More projects" tab holding a quiet directory of the remaining
  * projects. Both follow the GitHub profile projection, including its bundled snapshot.
- * All panels overlap in one grid, so switching never changes the section height.
- * Focus panels share two aligned rows (subgrid); the More panel
- * spans a final flexible row, so a longer list adds space only below, never inside a
- * focus case. Inactive panels are invisible and inert. `data-brand` is internal: it
- * opens the related mark in the hero field.
+ * Only the active panel contributes to the page height. Its source link follows
+ * the copy. `data-brand` opens the related mark in the hero field.
  */
 export function SelectedWork({ profile }: { profile: GithubProfile | null }) {
   const { title, moreTitle } = siteData.selectedWork;
