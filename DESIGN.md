@@ -58,7 +58,8 @@ The portfolio uses a light neutral-grey background (`#f0f1f0`) with white panels
 (`#ffffff`), near-black text (`#1f1f1f`), neutral dividers (`#dddfdd`) and the
 orange accent (`#ee7f3c`). This palette supports the restrained, professional
 gustavonline identity alongside Figtree typography, the portrait and the narrow
-reading column. The light newsletter shelf uses the same background as the page.
+reading column. The light newsletter shelf uses the same background as the page
+and a neutral-grey ground (`#e3e5e3`).
 
 The companion Danish and English AI operating model playbooks and their editable
 OpenPaperDesign masters use `#f0f1f0` for their light page backgrounds. Their
