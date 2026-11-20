@@ -52,8 +52,20 @@ text uses Figtree 500; the Gustav icon uses the new Figtree 800 G. The Arc’IT 
 sourdough symbols remain unchanged.
 
 
-The portfolio keeps Gustav Online's warm background (`#fbfaf7`), orange accent
-(`#ee7f3c`), Figtree typography, portrait and narrow reading column.
+## Light palette · 20 November 2026
+
+The portfolio uses a light neutral-grey background (`#f0f1f0`) with white panels
+(`#ffffff`), near-black text (`#1f1f1f`), neutral dividers (`#dddfdd`) and the
+orange accent (`#ee7f3c`). This palette supports the restrained, professional
+gustavonline identity alongside Figtree typography, the portrait and the narrow
+reading column. The light newsletter shelf uses the same background as the page.
+
+The companion Danish and English AI operating model playbooks and their editable
+OpenPaperDesign masters use `#f0f1f0` for their light page backgrounds. Their
+orange/grey data and context tiles keep the existing illustration colours.
+
+The dark palette is `#20201d` for the background, `#262622` for panels and
+`#f3f0ea` for text. Its theme-specific tokens remain the reference for dark views.
 
 ## Family alignment
 
