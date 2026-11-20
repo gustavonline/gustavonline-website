@@ -154,8 +154,8 @@ type ShelfScenePalette = {
 
 const scenePalettes: Record<Theme, ShelfScenePalette> = {
   light: {
-    background: "#fbfaf7",
-    ground: "#e7dfd0",
+    background: "#f0f1f0",
+    ground: "#e3e5e3",
     hemisphereSky: "#fffaf2",
     hemisphereGround: "#6f675c",
     key: "#fff6e7",
