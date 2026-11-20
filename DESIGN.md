@@ -54,15 +54,15 @@ sourdough symbols remain unchanged.
 
 ## Light palette · 20 November 2026
 
-The portfolio uses a light neutral-grey background (`#f0f1f0`) with white panels
+The portfolio uses a light neutral-grey background (`#f5f6f5`) with white panels
 (`#ffffff`), near-black text (`#1f1f1f`), neutral dividers (`#dddfdd`) and the
 orange accent (`#ee7f3c`). This palette supports the restrained, professional
 gustavonline identity alongside Figtree typography, the portrait and the narrow
 reading column. The light newsletter shelf uses the same background as the page
-and a neutral-grey ground (`#e3e5e3`).
+and a neutral-grey ground (`#ebedeb`).
 
 The companion Danish and English AI operating model playbooks and their editable
-OpenPaperDesign masters use `#f0f1f0` for their light page backgrounds. Their
+OpenPaperDesign masters use `#f5f6f5` for their light page backgrounds. Their
 orange/grey data and context tiles keep the existing illustration colours.
 
 The dark palette is `#20201d` for the background, `#262622` for panels and
