@@ -10,11 +10,11 @@
 
 :root {
   color-scheme: light;
-  --bg: #fbfaf7;
+  --bg: #f0f1f0;
   --panel: #ffffff;
   --text: #1f1f1f;
   --muted: #717171;
-  --faint: #e9e5de;
+  --faint: #dddfdd;
   /* Original orange retained in the Figtree G identity mark. */
   --brand-orange: #ee7f3c;
   --link: var(--brand-orange);
