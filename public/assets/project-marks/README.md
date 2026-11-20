@@ -7,8 +7,8 @@ They are distinct from the organisation marks in `../brand-marks/`.
 | --- | --- | --- | --- |
 | `agentic system.svg` | Agentic Systems | Original, drawn for this website: three connected modules in Arc’IT blue `#4265A0` with off-white `#FFFAF0`. | Portfolio illustration approved with this website; the Agentic Systems repository owns its official identity. |
 | `aios.svg` | The Onlinesourdough Method | Copied from the former AIOS plugin package `assets/branding/aios-icon.svg` (version 0.29.0, the hub with four nodes on a cream ground). | Existing project icon, unchanged. |
-| `codex-bridge.svg` | Codex Bridge | Published orange/olive double arch from `gustavonline/codex-claude-bridge`, PR 17. | Existing project icon; public source preview. |
-| `openpaperdesign.svg` | OpenPaperDesign | Installed plugin 0.1.0 `assets/icon.svg`; its geometry is unchanged inside a cream tile for light/dark contrast. | Existing project mark, framed for the portfolio. |
+| `codex-bridge.svg` | Codex Model Bridge | Original Gustav Online connector mark: two linked ports with an orange connection, on neutral light gray. Drawn 20 November 2026. | Current portfolio mark; also supplied to the product's next update. |
+| `openpaperdesign.svg` | OpenPaperDesign | Current `gustavonline/openpaperdesign` `assets/icon.svg`; its geometry is unchanged inside the same neutral light-gray tile as Codex Model Bridge. | Upstream project mark, framed for the portfolio. |
 | `pi-desktop.svg` | Pi Desktop | `gustavonline/pi-desktop`, `assets/branding/pi-desktop-icon.svg`. | Existing project icon, unchanged. |
 | `portfolio.svg` | Portfolio | Original browser-window symbol in Gustav's orange and olive. | Project icon; the personal G remains the identity mark. |
 
