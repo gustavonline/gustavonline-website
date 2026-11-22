@@ -4,11 +4,19 @@
 
 Gustav Online is the public home for his writing, projects and experiments.
 
-- Home: https://gustavonline.com/
-- Newsletter: https://gustavonline.com/newsletter/
-- onlinesourdough (resources, 1:1 and custom work): https://onlinesourdough.com/
-- Arc'IT AI (custom data and AI delivery): https://arcitai.com/
-- YouTube: https://www.youtube.com/@gustavonline
-- LinkedIn: https://www.linkedin.com/in/gustavandersonn/
-- X: https://x.com/_gustavonline
-- GitHub: https://github.com/gustavonline
+## Pages
+
+- [Home](https://gustavonline.com/): Gustav Anderson’s projects and writing.
+- [Newsletter](https://gustavonline.com/newsletter/): Notes and ideas from the work.
+
+## Projects
+
+- [onlinesourdough](https://onlinesourdough.com/): Resources, 1:1 work and the method.
+- [Arc’IT AI](https://arcitai.com/): Custom data and AI delivery.
+
+## Profiles
+
+- [YouTube](https://www.youtube.com/@gustavonline)
+- [LinkedIn](https://www.linkedin.com/in/gustavandersonn/)
+- [X](https://x.com/_gustavonline)
+- [GitHub](https://github.com/gustavonline)
