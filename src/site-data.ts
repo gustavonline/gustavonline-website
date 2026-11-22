@@ -15,7 +15,7 @@ export const siteData = {
     homeTitle: "gustavonline | Gustav Anderson",
     newsletterTitle: "Newsletter | gustavonline",
     description:
-      "Work, ideas and experiments with data, AI and software. By Gustav Anderson.",
+      "I help you organize your data and context so AI can do useful work. Projects, notes and experiments by Gustav Anderson.",
     newsletterDescription:
       "Notes and ideas from putting data, AI and software to work. By Gustav Anderson.",
     ogTitle: "gustavonline | Gustav Anderson",
