@@ -1,0 +1,22 @@
+# Gustav Anderson — gustavonline
+
+> Personal site of Gustav Anderson, founder working with data, context and AI.
+
+Gustav Online is the public home for his writing, projects and experiments.
+
+## Pages
+
+- [Home](https://gustavonline.com/): Gustav Anderson’s projects and writing.
+- [Newsletter](https://gustavonline.com/newsletter/): Notes and ideas from the work.
+
+## Projects
+
+- [onlinesourdough](https://onlinesourdough.com/): Resources, 1:1 work and the method.
+- [Arc’IT AI](https://arcitai.com/): Custom data and AI delivery.
+
+## Profiles
+
+- [YouTube](https://www.youtube.com/@gustavonline)
+- [LinkedIn](https://www.linkedin.com/in/gustavandersonn/)
+- [X](https://x.com/_gustavonline)
+- [GitHub](https://github.com/gustavonline)
