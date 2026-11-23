@@ -82,6 +82,18 @@ test("a failed acknowledgement retains the email and shows no success", async ({
   await expect(page.getByText("You’re on the list.", { exact: false })).toHaveCount(0);
 });
 
+test("a failed second signup keeps its error in view", async ({ page }) => {
+  await page.goto("/newsletter");
+  await page.getByRole("textbox", { name: "Email address" }).fill("reader@example.com");
+  await page.getByRole("button", { name: "Subscribe", exact: true }).click();
+  await expect(page.getByRole("status").filter({ hasText: "You’re on the list" })).toBeInViewport();
+  await page.route(`${api}/newsletter`, (route) => route.fulfill({ status: 502, json: { error: "Unavailable" } }));
+  await page.getByRole("textbox", { name: "Email address" }).fill("reader@example.com");
+  await page.getByRole("button", { name: "Subscribe", exact: true }).click();
+  await expect(page.getByRole("status").filter({ hasText: "could not be completed" })).toBeInViewport();
+  await expect(page.getByRole("textbox", { name: "Email address" })).toHaveValue("reader@example.com");
+});
+
 test("the old thank-you URL returns to the shelf without inventing a receipt", async ({ page }) => {
   await page.goto("/newsletter/thank-you/");
   await expect(page).toHaveURL("https://gustavonline.com/newsletter#bookshelf");

@@ -53,6 +53,7 @@ describe("published newsletter route", () => {
     vi.mocked(fetch).mockResolvedValue(reply({ error: "private failure" }, 403));
     const response = await worker.fetch(new Request("https://api.example/notes/a-useful-note"), env);
     expect(response.status).toBe(502); expect(await response.text()).not.toContain("private failure");
+    expect(response.headers.get("Cache-Control")).toBe("no-store");
   });
   it.each(["/posts?format=newsletter", "/posts"])("excludes duplicate-slug editions from %s as well as the issue route", async (path) => {
     vi.spyOn(globalThis, "fetch").mockImplementation(async () => reply({ results: [edition(), edition()] }));
@@ -79,6 +80,16 @@ describe("published newsletter route", () => {
     expect(await response.json()).toEqual({ posts: [{ title: "A useful note", summary: "From the work", date: "2026-11-22", url: "https://gustavonline.com/notes/a-useful-note" }] });
     expect(JSON.parse(String(fetcher.mock.calls[1][1]?.body)).start_cursor).toBe("next");
     expect(fetcher.mock.calls.every(([url]) => String(url).startsWith("https://api.notion.com/"))).toBe(true);
+  });
+  it("preserves ordinary Website content with Newsletter format in the general feed", async () => {
+    const page = edition(); page.properties.Type.select.name = "Content";
+    page.properties.Channels.multi_select = [{ name: "Website" }];
+    page.properties["Public URL"].url = "https://example.com/published-article";
+    vi.spyOn(globalThis, "fetch").mockImplementation(async () => reply({ results: [page] }));
+    expect(await (await worker.fetch(new Request("https://api.example/posts"), env)).json()).toEqual({ posts: [
+      { title: "A useful note", summary: "From the work", date: "2026-11-22", url: "https://example.com/published-article" },
+    ] });
+    expect(await (await worker.fetch(new Request("https://api.example/posts?format=newsletter"), env)).json()).toEqual({ posts: [] });
   });
   it("keeps unsafe links inert and refuses unsupported content instead of sending half an issue", () => {
     expect(renderBlocks([{ type: "paragraph", paragraph: { rich_text: [{ plain_text: "click", href: "javascript:alert(1)" }] } }])).not.toContain("javascript:");

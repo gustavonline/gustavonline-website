@@ -47,7 +47,8 @@ export async function listPublishedPosts(env: Env, newslettersOnly = false): Pro
   }
   return pages
     .filter((page) => (isPublicNewsletter(page, env) && slugCounts.get(newsletterSlug(page)) === 1)
-      || (!newslettersOnly && page.properties?.Format?.select?.name !== "Newsletter" && isPublishedWebsiteContent(page)))
+      || (!newslettersOnly && !(page.properties?.Type?.select?.name === "Edition"
+        && page.properties?.Format?.select?.name === "Newsletter") && isPublishedWebsiteContent(page)))
     .map(toPublicPost)
     .filter((post): post is WritingPost => post !== null);
 }

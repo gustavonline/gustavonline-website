@@ -20,13 +20,16 @@ export default {
     const url = new URL(request.url);
 
     if ((request.method === "GET" || request.method === "HEAD") && url.pathname.startsWith("/notes/")) {
+      const unavailable = (message: string, status: number) => new Response(request.method === "HEAD" ? null : message, {
+        status, headers: { ...issueResponseHeaders, "Content-Type": "text/plain; charset=utf-8" },
+      });
       try {
         const slug = url.pathname.slice(7).replace(/\/$/, "");
         const issue = await getPublicIssue(slug, env);
-        if (!issue) return new Response("Issue not found", { status: 404 });
+        if (!issue) return unavailable("Issue not found", 404);
         const html = renderIssue(issue, env.PUBLIC_SITE_URL);
         return new Response(request.method === "HEAD" ? null : html, { headers: issueResponseHeaders });
-      } catch { return new Response("This issue is temporarily unavailable. Please try again.", { status: 502 }); }
+      } catch { return unavailable("This issue is temporarily unavailable. Please try again.", 502); }
     }
 
     if (url.pathname === "/newsletter" && request.method === "POST") {

@@ -56,9 +56,9 @@ export function NewsletterContent({ brand, children }: { brand: FamilyBrand; chi
     if (brand === "gustavonline" && thanks) window.location.replace("/newsletter#bookshelf");
   }, [brand, thanks]);
   useEffect(() => {
-    if (brand === "gustavonline" && subscribed && !pending && window.location.hash === "#bookshelf")
+    if (brand === "gustavonline" && subscribed && !pending && !error && window.location.hash === "#bookshelf")
       document.getElementById("bookshelf")?.scrollIntoView({ block: "start" });
-  }, [brand, subscribed, pending]);
+  }, [brand, subscribed, pending, error]);
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (pending) return;
