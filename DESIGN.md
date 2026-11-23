@@ -1,5 +1,14 @@
 # Portfolio design
 
+## Newsletter shelf · 23 November 2026
+
+The Bookshelf uses the page's neutral background in both themes, neutral shelf
+furniture and restrained lighting. Orange `#ee7f3c` identifies the heading and
+first issue cover. The wall uses an unlit material without tone mapping so
+lighting does not change its background grey. Successful signups return to
+`/newsletter#bookshelf`; a real, recent acknowledgement shows the confirmation
+above the archive. Existing motion and reading controls remain.
+
 ## Brand references — 6 November 2026
 
 Use each brand’s own typeface at **weight 400** for ordinary mentions and links:

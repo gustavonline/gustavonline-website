@@ -156,27 +156,27 @@ const scenePalettes: Record<Theme, ShelfScenePalette> = {
   light: {
     background: "#f5f6f5",
     ground: "#ebedeb",
-    hemisphereSky: "#fffaf2",
-    hemisphereGround: "#6f675c",
-    key: "#fff6e7",
-    keyIntensity: 4.6,
-    rim: "#d8d2c6",
-    rimIntensity: 2.1,
-    bounce: "#ec9255",
-    bounceIntensity: 1.2,
-    spotlight: "#ffe6bc",
+    hemisphereSky: "#ffffff",
+    hemisphereGround: "#929690",
+    key: "#ffffff",
+    keyIntensity: 3.2,
+    rim: "#dddfdd",
+    rimIntensity: 1.3,
+    bounce: "#ee7f3c",
+    bounceIntensity: 0.35,
+    spotlight: "#ffffff",
   },
   dark: {
     background: "#20201d",
-    ground: "#2b2a25",
-    hemisphereSky: "#c8c0b2",
+    ground: "#262622",
+    hemisphereSky: "#dddfdd",
     hemisphereGround: "#151512",
-    key: "#e7ceb0",
+    key: "#f3f0ea",
     keyIntensity: 3.4,
     rim: "#777268",
     rimIntensity: 1.45,
-    bounce: "#b9653d",
-    bounceIntensity: 0.95,
+    bounce: "#ee7f3c",
+    bounceIntensity: 0.35,
     spotlight: "#dca56d",
   },
 };
@@ -186,7 +186,7 @@ const shelfRowPitch = 2.55;
 const browseCamera = new Vector3(0, 1.42, 6.65);
 const browseTarget = new Vector3(0, 1.28, 0.15);
 const pageColor = new Color("#e9dfca");
-const shelfColor = new Color("#6f6253");
+const shelfColor = new Color("#858982");
 const clamp = MathUtils.clamp;
 /** Mint uses 0.46 / 0.34; slightly longer here for cover-spread + reader overlay. */
 const focusInDuration = 0.58;
@@ -467,10 +467,10 @@ export class BriefingShelfEngine {
 
     const wall = new Mesh(
       new PlaneGeometry(40, 40),
-      new MeshStandardMaterial({
+      new MeshBasicMaterial({
         color: palette.background,
-        roughness: 1,
-        metalness: 0,
+        toneMapped: false,
+        fog: false,
       }),
     );
     wall.position.set(0, 0, -3.2);
@@ -512,7 +512,7 @@ export class BriefingShelfEngine {
     this.canvas.style.backgroundColor = palette.background;
 
     if (this.backWall) {
-      (this.backWall.material as InstanceType<typeof MeshStandardMaterial>).color.set(
+      (this.backWall.material as InstanceType<typeof MeshBasicMaterial>).color.set(
         palette.background,
       );
     }
@@ -616,7 +616,7 @@ export class BriefingShelfEngine {
       const shelfEdge = new Mesh(
         new RoundedBoxGeometry(shelfWidth, 0.1, 0.14, 3, 0.022),
         new MeshPhysicalMaterial({
-          color: "#4b3429",
+          color: "#70756d",
           roughness: 0.46,
           clearcoat: 0.14,
           clearcoatRoughness: 0.5,

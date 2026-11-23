@@ -5,6 +5,15 @@
   "compatibility_date": "2026-06-14",
   "workers_dev": true,
   "preview_urls": false,
+  "routes": [
+    { "pattern": "gustavonline.com/notes/*", "zone_name": "gustavonline.com" },
+    { "pattern": "www.gustavonline.com/notes/*", "zone_name": "gustavonline.com" }
+  ],
+  "triggers": { "crons": ["*/15 * * * *"] },
+  "durable_objects": {
+    "bindings": [{ "name": "NEWSLETTER_DRAFTS", "class_name": "NewsletterDrafts" }]
+  },
+  "migrations": [{ "tag": "newsletter-drafts-v1", "new_sqlite_classes": ["NewsletterDrafts"] }],
   "observability": {
     "enabled": true
   },

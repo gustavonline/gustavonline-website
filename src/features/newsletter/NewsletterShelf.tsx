@@ -12,7 +12,7 @@ import type { ShelfBriefBook } from "./shelf/types";
 import { newsletterFontFamily } from "./shelf/brief-cover-art";
 
 const palettes = [
-  { cover: "#d86f35", accent: "#fff4df", ink: "#2e2924", titleColor: "#fffaf1" },
+  { cover: "#ee7f3c", accent: "#f5f6f5", ink: "#1f1f1f", titleColor: "#1f1f1f" },
   { cover: "#747b55", accent: "#f1c58e", ink: "#20231b", titleColor: "#fffaf1" },
   { cover: "#e7d6bd", accent: "#dc7138", ink: "#312b26", titleColor: "#312b26" },
   { cover: "#4a4742", accent: "#ef9258", ink: "#171614", titleColor: "#fffaf1" },
@@ -30,8 +30,8 @@ function toShelfBooks(posts: WritingPost[]): ShelfBriefBook[] {
       coverPlaneWidth: 1.62,
       thickness: 0.19,
       height: 1.82,
-      cover: "#e4d6c2",
-      accent: "#d86f35",
+      cover: "#dddfdd",
+      accent: "#ee7f3c",
       ink: "#34302b",
       titleColor: "#34302b",
       placeholder: true,

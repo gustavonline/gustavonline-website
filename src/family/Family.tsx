@@ -1,5 +1,5 @@
 import { ArrowIcon } from "./ArrowIcon";
-import { useState, type FormEvent, type ReactNode } from "react";
+import { useEffect, useState, type FormEvent, type ReactNode } from "react";
 import { BrandIcon } from "./BrandIcon";
 import { FamilyMark } from "./FamilyMark";
 import { familyHref, localReview, type FamilyBrand } from "./preview";
@@ -51,7 +51,10 @@ export function NewsletterContent({ brand, children }: { brand: FamilyBrand; chi
   const [pending, setPending] = useState(false);
   const [error, setError] = useState("");
   const thanks = window.location.pathname.replace(/\/$/, "").endsWith("/thank-you");
-  const subscribed = thanks && newsletterReceipt();
+  const subscribed = newsletterReceipt();
+  useEffect(() => {
+    if (brand === "gustavonline" && thanks) window.location.replace("/newsletter#bookshelf");
+  }, [brand, thanks]);
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (pending) return;
@@ -60,13 +63,13 @@ export function NewsletterContent({ brand, children }: { brand: FamilyBrand; chi
     try {
       const email = String(new FormData(event.currentTarget).get("email") ?? "");
       await submitNewsletter(email, brand);
-      window.location.assign("/newsletter/thank-you/");
+      window.location.assign(brand === "gustavonline" ? "/newsletter#bookshelf" : "/newsletter/thank-you/");
     } catch {
       setError("The signup could not be completed. Your email is still here — please try again.");
       setPending(false);
     }
   };
-  if (thanks) return <section className="family-newsletter family-thanks">
+  if (thanks && brand !== "gustavonline") return <section className="family-newsletter family-thanks">
     <h1>{subscribed ? "You’re on the list" : "Notes from the work"}</h1>
     <p>{subscribed ? "You’ll hear from Gustav when the next note is ready." : "Sign up to receive the next note from Gustav."}</p>
     <a className="family-button" href={subscribed ? "/" : "/newsletter"}>
@@ -79,6 +82,7 @@ export function NewsletterContent({ brand, children }: { brand: FamilyBrand; chi
       <h1 id="newsletter-title">Notes from<br />the work</h1>
       <p className="newsletter-byline">A newsletter by Gustav Anderson.</p>
       <p>{siteData.newsletter.support}</p>
+      {subscribed && <p className="newsletter-confirmation" role="status">You’re on the list. You’ll hear from Gustav when the next note is ready.</p>}
       <form className="family-signup" onSubmit={submit} aria-busy={pending}>
         <label htmlFor="newsletter-email">Email address</label>
         <div className="family-form-row">
