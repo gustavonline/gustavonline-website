@@ -119,7 +119,7 @@ test("the rendered issue is readable and links back to the Bookshelf", async ({ 
 
 const shelfPosts = [
   post,
-  { ...post, title: "Notes from the work", date: "2026-11-15", url: "https://gustavonline.com/notes/notes-from-the-work" },
+  { ...post, title: "Notes from the work", date: "2026-11-15T09:00:00Z", url: "https://gustavonline.com/notes/notes-from-the-work" },
   { ...post, title: "Keep the cards open", date: "2026-11-08", url: "https://gustavonline.com/notes/keep-the-cards-open" },
   { ...post, title: "Small teams, large models", date: "2026-11-01", url: "https://gustavonline.com/notes/small-teams" },
   { ...post, title: "The operating model", date: "2026-10-25", url: "https://gustavonline.com/notes/the-operating-model" },
@@ -191,6 +191,8 @@ test("issue detail traps focus, closes with Escape and restores the selected boo
   await expect(detail).toBeVisible();
   await expect(detail.getByRole("heading")).toHaveText("Notes from the work");
   await expect(detail).toContainText("2026-11-15");
+  await expect(detail.locator("time")).toHaveText("2026-11-15");
+  await expect(detail.locator("time")).toHaveAttribute("datetime", shelfPosts[1].date);
   await expect(detail).toContainText(post.summary);
   await expect(detail.getByRole("link", { name: "Open the full note" })).toHaveAttribute("href", shelfPosts[1].url);
   const close = detail.getByRole("button", { name: "Close newsletter issue" });
@@ -223,7 +225,13 @@ test("keyboard browses the whole shelf and custom Open cursor is fine-pointer on
   await expect(page.getByRole("button", { name: "Previous newsletter issue" })).toBeDisabled();
   // Wait for the presentation to settle before moving the pointer onto the cover.
   await expect.poll(() => selected.locator(".newsletter-volume-solid").evaluate((el) => new DOMMatrixReadOnly(getComputedStyle(el).transform).m11)).toBeGreaterThan(.85);
-  await selected.hover();
+  async function hoverCover() {
+    await selected.scrollIntoViewIfNeeded();
+    // Deliver native scroll events before testing a fresh mouse hover.
+    await page.evaluate(() => new Promise<void>((resolve) => requestAnimationFrame(() => resolve())));
+    await selected.hover();
+  }
+  await hoverCover();
   const fine = await page.evaluate(() => matchMedia("(hover: hover) and (pointer: fine)").matches);
   const cursor = page.locator(".newsletter-open-cursor");
   if (fine) {
@@ -232,8 +240,49 @@ test("keyboard browses the whole shelf and custom Open cursor is fine-pointer on
     await page.screenshot({ path: `output/playwright/css-shelf-cursor-${testInfo.project.name}.png` });
     await page.mouse.move(10, 10);
     await expect(cursor).not.toBeVisible();
+    expect(await selected.evaluate((el) => getComputedStyle(el).cursor)).not.toBe("none");
+    await hoverCover();
+    await expect(cursor).toBeVisible();
+    await page.mouse.wheel(0, 120);
+    await expect(cursor).not.toBeVisible();
+    expect(await selected.evaluate((el) => getComputedStyle(el).cursor)).not.toBe("none");
+    await hoverCover();
+    await expect(cursor).toBeVisible();
+    await page.evaluate(() => window.dispatchEvent(new Event("blur")));
+    await expect(cursor).not.toBeVisible();
+    await selected.click();
+    await expect(page.getByRole("dialog")).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(page.getByRole("dialog")).not.toBeVisible();
+    await expect(cursor).not.toBeVisible();
+    expect(await selected.evaluate((el) => getComputedStyle(el).cursor)).not.toBe("none");
   } else {
     await expect(cursor).not.toBeVisible();
     expect(await selected.evaluate((el) => getComputedStyle(el).cursor)).not.toBe("none");
   }
+});
+
+test("a deliberate pointer press on a distant edge spine opens it without scrolling the shelf", async ({ page }) => {
+  await page.route(`${api}/posts?*`, (route) => route.fulfill({ json: { posts: shelfPosts } }));
+  await page.goto("/newsletter#bookshelf");
+  await page.locator("#bookshelf").evaluate((element) => element.scrollIntoView({ block: "start" }));
+  const book = page.getByRole("button", { name: "Open issue 03: Keep the cards open", exact: true });
+  const box = await book.boundingBox();
+  const view = await page.locator(".newsletter-shelf-window").boundingBox();
+  if (!box || !view) throw new Error("Shelf book is missing");
+  // On phones this uses the small visible part of the third spine at the edge.
+  const x = Math.min(box.x + box.width, view.x + view.width) - 2;
+  const y = box.y + 100;
+  await page.mouse.move(x, y);
+  await page.mouse.down();
+  // A human press lasts longer than Playwright's default down/up pair.
+  await page.waitForTimeout(120);
+  await page.mouse.up();
+  await expect(page.getByRole("dialog").getByRole("heading")).toHaveText("Keep the cards open");
+  expect(await page.locator(".newsletter-shelf-window").evaluate((el) => el.scrollLeft)).toBe(0);
+  await page.mouse.click(5, 5);
+  await expect(page.getByRole("dialog")).not.toBeVisible();
+  await expect(book).toBeFocused();
+  await expect(book).toHaveAttribute("aria-pressed", "true");
+  expect(await page.locator(".newsletter-shelf-window").evaluate((el) => el.scrollLeft)).toBe(0);
 });

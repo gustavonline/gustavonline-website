@@ -14,14 +14,26 @@ export function NewsletterShelf({ posts }: { posts: WritingPost[] }) {
   const opener = useRef<HTMLButtonElement | null>(null);
   const dialog = useRef<HTMLDialogElement>(null);
   const cursor = useRef<HTMLSpanElement>(null);
+  const shelf = useRef<HTMLElement>(null);
   const titleId = useId();
   const detailId = useId();
 
   function hideCursor() {
     if (cursor.current) cursor.current.dataset.visible = "false";
+    if (shelf.current) shelf.current.dataset.cursorActive = "false";
   }
 
   useEffect(hideCursor, [activePost?.url, detailUrl]);
+  useEffect(() => {
+    window.addEventListener("scroll", hideCursor, { passive: true, capture: true });
+    window.addEventListener("blur", hideCursor);
+    document.addEventListener("visibilitychange", hideCursor);
+    return () => {
+      window.removeEventListener("scroll", hideCursor, true);
+      window.removeEventListener("blur", hideCursor);
+      document.removeEventListener("visibilitychange", hideCursor);
+    };
+  }, []);
 
   useEffect(() => {
     const element = dialog.current;
@@ -67,9 +79,10 @@ export function NewsletterShelf({ posts }: { posts: WritingPost[] }) {
     cursor.current.style.left = `${event.clientX}px`;
     cursor.current.style.top = `${event.clientY}px`;
     cursor.current.dataset.visible = "true";
+    if (shelf.current) shelf.current.dataset.cursorActive = "true";
   }
 
-  return <section className="newsletter-shelf" aria-labelledby={titleId}>
+  return <section className="newsletter-shelf" ref={shelf} data-cursor-active="false" aria-labelledby={titleId}>
     <h3 className="sr-only" id={titleId}>Newsletter issue shelf</h3>
     {activePost ? <>
       <div className="newsletter-shelf-window">
@@ -85,7 +98,7 @@ export function NewsletterShelf({ posts }: { posts: WritingPost[] }) {
               <button className="newsletter-volume-button" ref={(element) => { buttons.current[index] = element; }}
                 type="button" tabIndex={selected ? 0 : -1} aria-pressed={selected}
                 aria-label={`Open issue ${number}: ${post.title}`}
-                aria-haspopup="dialog" onKeyDown={onBookKey} onFocus={() => select(index)}
+                aria-haspopup="dialog" onKeyDown={onBookKey}
                 onClick={(event) => { select(index); open(post, event.currentTarget); }}
                 onPointerMove={selected ? moveCursor : undefined} onPointerEnter={selected ? moveCursor : undefined}
                 onPointerLeave={hideCursor}>
@@ -108,7 +121,7 @@ export function NewsletterShelf({ posts }: { posts: WritingPost[] }) {
         </ol>
       </div>
       <div className="newsletter-shelf-caption" aria-live="polite">
-        <p>{activePost.title}</p><time>{activePost.date}</time>
+        <p>{activePost.title}</p><time dateTime={activePost.date}>{activePost.date.slice(0, 10)}</time>
       </div>
     </> : <div className="newsletter-shelf-empty">
       <div className="newsletter-empty-volume" aria-hidden="true"><span>Notes from the work</span><strong>Archive<br />starts here.</strong><span>Gustav Anderson</span></div>
@@ -116,7 +129,7 @@ export function NewsletterShelf({ posts }: { posts: WritingPost[] }) {
     </div>}
     <div className="newsletter-shelf-controls">
       <p>{activePost ? "Select a spine. Open a note." : "The next chapter is on its way."}</p>
-      <div className="newsletter-shelf-navigation" aria-label="Browse newsletter issues">
+      <div className="newsletter-shelf-navigation" role="group" aria-label="Browse newsletter issues">
         <button type="button" aria-label="Previous newsletter issue" disabled={!activePost || activeIndex === 0} onClick={() => select(activeIndex - 1)}><ChevronLeft aria-hidden="true" /></button>
         {activePost && <button className="newsletter-shelf-open" type="button" onClick={(event) => open(activePost, event.currentTarget)}>Open issue</button>}
         <button type="button" aria-label="Next newsletter issue" disabled={!activePost || activeIndex >= posts.length - 1} onClick={() => select(activeIndex + 1)}><ChevronRight aria-hidden="true" /></button>
@@ -144,7 +157,7 @@ export function NewsletterShelf({ posts }: { posts: WritingPost[] }) {
       }}>
       <button className="newsletter-issue-close" type="button" autoFocus aria-label="Close newsletter issue" onClick={() => dialog.current?.close()}><X aria-hidden="true" /></button>
       {detailPost && <article>
-        <p className="newsletter-issue-byline">Notes from the work · <time>{detailPost.date}</time></p>
+        <p className="newsletter-issue-byline">Notes from the work · <time dateTime={detailPost.date}>{detailPost.date.slice(0, 10)}</time></p>
         <h2 id={detailId}>{detailPost.title}</h2>
         <p className="newsletter-issue-summary">{detailPost.summary}</p>
         <a className="newsletter-issue-link" href={detailPost.url}>Open the full note <ArrowIcon /></a>

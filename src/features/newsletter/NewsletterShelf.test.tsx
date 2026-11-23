@@ -25,4 +25,9 @@ describe("newsletter shelf presentation", () => {
     const html = renderToStaticMarkup(<NewsletterShelf posts={[{ ...issue, title: '<img src=x onerror="alert(1)">' }]} />);
     expect(html).not.toContain("<img"); expect(html).toContain("&lt;img");
   });
+  it("shows calendar dates while retaining the machine-readable publication time", () => {
+    const html = renderToStaticMarkup(<NewsletterShelf posts={[issue]} />);
+    expect(html).toMatch(/<time[^>]*>2026-11-22<\/time>/);
+    expect(html).toContain(issue.date);
+  });
 });

@@ -8,7 +8,7 @@
   font-family: var(--font-sans);
 }
 
-.newsletter-shelf-window { position: relative; height: 450px; overflow: hidden; }
+.newsletter-shelf-window { position: relative; height: 450px; overflow: clip; }
 .newsletter-shelf-row { position: absolute; inset: 0; margin: 0; padding: 0; list-style: none; perspective: 1400px; perspective-origin: 50% 45%; transform-style: preserve-3d; }
 .newsletter-volume-slot {
   --volume-paper: #dddfdd;
@@ -56,7 +56,7 @@
 .newsletter-shelf button:focus-visible, .newsletter-issue-link:focus-visible { outline: 2px solid #ee7f3c; outline-offset: 4px; }
 .newsletter-open-cursor { display: none; }
 @media (hover: hover) and (pointer: fine) {
-  .is-selected .newsletter-volume-button { cursor: none; }
+  .newsletter-shelf[data-cursor-active="true"] .is-selected .newsletter-volume-button { cursor: none; }
   .newsletter-open-cursor[data-visible="true"] { display: grid; place-items: center; position: fixed; width: 76px; height: 76px; border-radius: 50%; background: #ee7f3c; color: #1f1f1f; font-size: 14px; font-weight: 500; transform: translate(-50%,-50%); pointer-events: none; z-index: 50; box-shadow: 0 4px 18px rgb(0 0 0 / 12%); }
 }
 .newsletter-shelf-empty { min-height: 360px; display: flex; justify-content: center; align-items: center; gap: 48px; padding: 40px 24px; }
