@@ -7,24 +7,30 @@ of the [Layoffs & Hires Engineering shelf](https://layoffsandhires.com/engineeri
 Its code, class names, cover art and assets are not reused. There are no invented
 categories: the newsletter feed supplies the complete ordered row.
 
-Each real issue has a cover and spine face. The selected book slides forward
+Each published newsletter has a cover and spine face. The selected book slides forward
 and turns to its cover while neighbours remain numbered spines. A vertical title
 and a separate vertical date identify each spine. Previous/next controls and
-Arrow keys, Home and End browse the row; a book click or Open issue opens a
-native dialog with title, date, summary and the full issue link. Escape, Close
+Arrow keys, Home and End browse the row; a book click or Open newsletter opens a
+native dialog with title, date, summary and the full note link. Escape, Close
 and the backdrop return to the shelf, restore focus and unlock page scrolling.
 
 Figtree, the orange heading dot, neutral page background and `#ee7f3c` latest
-issue treatment remain. The Open cursor is orange and limited to fine mouse
+newsletter treatment remain. The Open cursor is orange and limited to fine mouse
 pointers over the selected book; phones use ordinary native input. CSS dimensions
 keep the active cover and adjacent spines usable at 390px without document-wide
 horizontal overflow. No dotted wall, canvas, WebGL render loop or Three.js
 dependency remains in the newsletter implementation.
 
 An empty archive has a decorative, noninteractive bookend, a clear “Archive
-starts here / no issues published yet” message, 0 issues and disabled browse
-controls. It has no issue target or Open control. Successful signups still
+starts here / no newsletters published yet” message, 0 newsletters and disabled browse
+controls. It has no newsletter target or Open control. Successful signups still
 return to `/newsletter#bookshelf`, showing a real confirmation beside the archive.
+Shelf controls use the site's small corner radius, 50px targets and the same
+text/background inverse treatment as Subscribe. Captions and dialog copy follow
+the site’s Figtree type scale; panels, borders, neutral book covers and hover fills
+use theme tokens in both light and dark mode. The dialog shares the 10px card
+radius and a 44px full-note link target. Narrow screens stack the hint, controls
+and count so “Open newsletter” stays readable even at 320px.
 Publishing, feeds, Kit draft preparation and `/notes/:slug` are unchanged.
 
 ## Brand references — 6 November 2026

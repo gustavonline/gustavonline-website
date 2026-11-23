@@ -7,17 +7,22 @@ const issue = { title: "A useful note", date: "2026-11-22T09:00:00Z", summary: "
 describe("newsletter shelf presentation", () => {
   it("renders no fake issue or canvas for an empty archive", () => {
     const html = renderToStaticMarkup(<NewsletterShelf posts={[]} />);
-    expect(html).toContain("Archive starts here."); expect(html).toContain("0 issues");
+    expect(html).toContain("Archive starts here."); expect(html).toContain("0 newsletters");
+    expect(html).toContain("No newsletters published yet.");
     expect(html).not.toContain("<canvas"); expect(html).not.toContain("newsletter-volume-button");
     expect(html).not.toContain('aria-haspopup="dialog"');
-    expect(html).not.toContain(">Open issue</button>");
+    expect(html).not.toContain(">Open newsletter</button>");
   });
   it("exposes one selected issue and numbers every real spine", () => {
     const html = renderToStaticMarkup(<NewsletterShelf posts={[issue, { ...issue, title: "Next note", url: "https://gustavonline.com/notes/next-note" }]} />);
     expect(html.match(/aria-pressed="true"/g)).toHaveLength(1);
     expect(html.match(/aria-pressed="false"/g)).toHaveLength(1);
-    expect(html).toContain('aria-label="Open issue 01: A useful note"');
-    expect(html).toContain('aria-label="Open issue 02: Next note"');
+    expect(html).toContain('aria-label="Open newsletter 01: A useful note"');
+    expect(html).toContain('aria-label="Open newsletter 02: Next note"');
+    expect(html).toContain('aria-label="Previous newsletter"');
+    expect(html).toContain('aria-label="Next newsletter"');
+    expect(html).toContain('aria-label="Close newsletter"');
+    expect(html).not.toMatch(/(?:aria-label|id)="[^"]*\bissues?\b/i);
     expect(html).toContain('class="newsletter-volume-spine-date">2026-11-22</span>');
     expect(html).not.toContain("<canvas");
   });

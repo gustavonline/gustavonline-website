@@ -83,10 +83,10 @@ export function NewsletterShelf({ posts }: { posts: WritingPost[] }) {
   }
 
   return <section className="newsletter-shelf" ref={shelf} data-cursor-active="false" aria-labelledby={titleId}>
-    <h3 className="sr-only" id={titleId}>Newsletter issue shelf</h3>
+    <h3 className="sr-only" id={titleId}>Newsletter shelf</h3>
     {activePost ? <>
       <div className="newsletter-shelf-window">
-        <ol className="newsletter-shelf-row" aria-label="Published newsletter issues">
+        <ol className="newsletter-shelf-row" aria-label="Published newsletters">
           {posts.map((post, index) => {
             const selected = index === activeIndex;
             const distance = index - activeIndex;
@@ -97,7 +97,7 @@ export function NewsletterShelf({ posts }: { posts: WritingPost[] }) {
               style={{ "--volume-offset": offset } as CSSProperties}>
               <button className="newsletter-volume-button" ref={(element) => { buttons.current[index] = element; }}
                 type="button" tabIndex={selected ? 0 : -1} aria-pressed={selected}
-                aria-label={`Open issue ${number}: ${post.title}`}
+                aria-label={`Open newsletter ${number}: ${post.title}`}
                 aria-haspopup="dialog" onKeyDown={onBookKey}
                 onClick={(event) => { select(index); open(post, event.currentTarget); }}
                 onPointerMove={selected ? moveCursor : undefined} onPointerEnter={selected ? moveCursor : undefined}
@@ -125,16 +125,16 @@ export function NewsletterShelf({ posts }: { posts: WritingPost[] }) {
       </div>
     </> : <div className="newsletter-shelf-empty">
       <div className="newsletter-empty-volume" aria-hidden="true"><span>Notes from the work</span><strong>Archive<br />starts here.</strong><span>Gustav Anderson</span></div>
-      <p role="status"><strong>Archive starts here.</strong><span>No issues published yet. The first note will appear here.</span></p>
+      <p role="status"><strong>Archive starts here.</strong><span>No newsletters published yet. The first note will appear here.</span></p>
     </div>}
     <div className="newsletter-shelf-controls">
       <p>{activePost ? "Select a spine. Open a note." : "The next chapter is on its way."}</p>
-      <div className="newsletter-shelf-navigation" role="group" aria-label="Browse newsletter issues">
-        <button type="button" aria-label="Previous newsletter issue" disabled={!activePost || activeIndex === 0} onClick={() => select(activeIndex - 1)}><ChevronLeft aria-hidden="true" /></button>
-        {activePost && <button className="newsletter-shelf-open" type="button" onClick={(event) => open(activePost, event.currentTarget)}>Open issue</button>}
-        <button type="button" aria-label="Next newsletter issue" disabled={!activePost || activeIndex >= posts.length - 1} onClick={() => select(activeIndex + 1)}><ChevronRight aria-hidden="true" /></button>
+      <div className="newsletter-shelf-navigation" role="group" aria-label="Browse newsletters">
+        <button type="button" aria-label="Previous newsletter" disabled={!activePost || activeIndex === 0} onClick={() => select(activeIndex - 1)}><ChevronLeft aria-hidden="true" /></button>
+        {activePost && <button className="newsletter-shelf-open" type="button" onClick={(event) => open(activePost, event.currentTarget)}>Open newsletter</button>}
+        <button type="button" aria-label="Next newsletter" disabled={!activePost || activeIndex >= posts.length - 1} onClick={() => select(activeIndex + 1)}><ChevronRight aria-hidden="true" /></button>
       </div>
-      <output aria-live="polite">{activePost ? `${activeIndex + 1} / ${posts.length}` : "0 issues"}</output>
+      <output aria-live="polite">{activePost ? `${activeIndex + 1} / ${posts.length}` : "0 newsletters"}</output>
     </div>
     <span className="newsletter-open-cursor" ref={cursor} aria-hidden="true" data-visible="false">Open</span>
     <dialog className="newsletter-issue-dialog" ref={dialog} aria-labelledby={detailId}
@@ -155,7 +155,7 @@ export function NewsletterShelf({ posts }: { posts: WritingPost[] }) {
         const box = event.currentTarget.getBoundingClientRect();
         if (event.target === event.currentTarget && (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom)) event.currentTarget.close();
       }}>
-      <button className="newsletter-issue-close" type="button" autoFocus aria-label="Close newsletter issue" onClick={() => dialog.current?.close()}><X aria-hidden="true" /></button>
+      <button className="newsletter-issue-close" type="button" autoFocus aria-label="Close newsletter" onClick={() => dialog.current?.close()}><X aria-hidden="true" /></button>
       {detailPost && <article>
         <p className="newsletter-issue-byline">Notes from the work · <time dateTime={detailPost.date}>{detailPost.date.slice(0, 10)}</time></p>
         <h2 id={detailId}>{detailPost.title}</h2>
