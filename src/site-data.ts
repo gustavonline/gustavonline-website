@@ -6,7 +6,7 @@ export const siteData = {
   brand: "gustavonline" as const,
   navBrand: "gustavonline",
   name: "Gustav Anderson",
-  portrait: "/assets/gustav-linkedin-portrait.jpg",
+  portrait: "/assets/gustav-orange-portrait-192.webp",
   identityMark: "/assets/gustav-g.svg",
   identityMarkDark: "/assets/gustav-g-dark.svg",
   email: "hello@gustavonline.com",
