@@ -29,11 +29,25 @@ export async function listPublishedPosts(env: Env, newslettersOnly = false): Pro
         { property: "Type", select: { equals: "Content" } },
         { property: "Type", select: { equals: "Edition" } },
       ] },
-      { property: "Public URL", url: { is_not_empty: true } },
+      { or: [
+        { property: "Channels", multi_select: { contains: "Website" } },
+        { property: "Format", select: { equals: "Newsletter" } },
+      ] },
     ],
   });
+  // Match /notes/:slug, whose identity query also sees other Published editions
+  // with this slug even if their public URL or publication date is not eligible.
+  const slugCounts = new Map<string, number>();
+  for (const page of pages) {
+    if (!page.archived && !page.in_trash && page.properties?.Status?.select?.name === "Published"
+        && page.properties.Type?.select?.name === "Edition" && page.properties.Format?.select?.name === "Newsletter") {
+      const slug = newsletterSlug(page);
+      slugCounts.set(slug, (slugCounts.get(slug) ?? 0) + 1);
+    }
+  }
   return pages
-    .filter((page) => isPublicNewsletter(page, env) || (!newslettersOnly && page.properties?.Format?.select?.name !== "Newsletter" && isPublishedWebsiteContent(page)))
+    .filter((page) => (isPublicNewsletter(page, env) && slugCounts.get(newsletterSlug(page)) === 1)
+      || (!newslettersOnly && page.properties?.Format?.select?.name !== "Newsletter" && isPublishedWebsiteContent(page)))
     .map(toPublicPost)
     .filter((post): post is WritingPost => post !== null);
 }

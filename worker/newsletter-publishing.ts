@@ -7,6 +7,7 @@ import { escapeHtml, renderBlocks } from "./newsletter-renderer";
 import type { Env } from "./types";
 
 export type DraftLedger = {
+  isClaimed(): boolean;
   claim(): boolean;
   getId(): number | undefined;
   saveId(id: number): void;
@@ -24,18 +25,24 @@ export async function prepareNewsletter(pageId: string, env: Env, ledger: DraftL
   const marker = `gustavonline:newsletter:${pageId}`;
   let id = ledger.getId();
   if (!id) {
-    const post = await getPublicIssue(slug, env);
-    if (!post || post.pageId !== pageId) throw new Error("Published issue identity is ambiguous");
-    const content = renderBlocks(post.body);
-    if (!content.replace(/<[^>]*>/g, "").trim()) throw new Error("Newsletter body is empty");
-    if (ledger.claim()) {
-      // Persist the claim BEFORE calling Kit. A timeout can mean Kit accepted the POST.
-      await ledger.flush();
-      id = await createKitDraft(post.title, `<p><a href="${escapeHtml(post.url)}">Read on gustavonline</a></p>${content}`, post.summary, marker, env);
-    } else {
+    if (ledger.isClaimed()) {
+      // Kit may already have accepted the original content; later edits must
+      // not block recording its identity or cause another create request.
       id = await findKitBroadcast(marker, env);
-      if (!id) throw new Error("Draft reconciliation required; no new create request was made");
+    } else {
+      const post = await getPublicIssue(slug, env);
+      if (!post || post.pageId !== pageId) throw new Error("Published issue identity is ambiguous");
+      const content = renderBlocks(post.body);
+      if (!content.replace(/<[^>]*>/g, "").trim()) throw new Error("Newsletter body is empty");
+      if (ledger.claim()) {
+        // Persist the claim BEFORE calling Kit. A timeout can mean Kit accepted the POST.
+        await ledger.flush();
+        id = await createKitDraft(post.title, `<p><a href="${escapeHtml(post.url)}">Read on gustavonline</a></p>${content}`, post.summary, marker, env);
+      } else {
+        id = await findKitBroadcast(marker, env);
+      }
     }
+    if (!id) throw new Error("Draft reconciliation required; no new create request was made");
     ledger.saveId(id);
     await ledger.flush();
   }

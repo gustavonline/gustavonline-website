@@ -13,7 +13,8 @@ export async function createKitDraft(subject: string, content: string, summary: 
   if (!response.ok) throw new Error("Kit draft creation failed; reconciliation required");
   const data = await response.json() as { broadcast?: KitBroadcast };
   const broadcast = data.broadcast;
-  if (!broadcast || !Number.isSafeInteger(broadcast.id) || broadcast.id <= 0 || broadcast.status !== "draft" || broadcast.send_at !== null || broadcast.public !== false)
+  if (!broadcast || !Number.isSafeInteger(broadcast.id) || broadcast.id <= 0
+      || (broadcast.status !== undefined && broadcast.status !== "draft") || broadcast.send_at !== null || broadcast.public !== false)
     throw new Error("Kit draft acknowledgement invalid; reconciliation required");
   return broadcast.id;
 }
@@ -22,7 +23,7 @@ export async function findKitBroadcast(marker: string, env: Env): Promise<number
   let cursor: string | undefined;
   let found: number | undefined;
   for (let page = 0; page < 20; page++) {
-    const params = new URLSearchParams({ per_page: "100", ...(cursor ? { after: cursor } : {}) });
+    const params = new URLSearchParams({ per_page: "100", slim: "true", ...(cursor ? { after: cursor } : {}) });
     const response = await fetch(`https://api.kit.com/v4/broadcasts?${params}`, {
       headers: { "X-Kit-Api-Key": env.KIT_API_KEY }, signal: AbortSignal.timeout(10_000),
     });

@@ -112,7 +112,7 @@
 .family-bookshelf .bookshelf-stage { border-top:0; }
 .family-bookshelf > h2::before { content:""; display:inline-block; width:8px; height:8px; margin-right:12px; background:#ee7f3c; border-radius:50%; vertical-align:middle; }
 .family-bookshelf .bookshelf-stage::after { content:none; }
-.family-newsletter .newsletter-confirmation { border-left:3px solid #ee7f3c; padding-left:16px; color:var(--text); }
+.newsletter-confirmation { border-left:3px solid #ee7f3c; padding-left:16px; margin:0 0 24px; color:var(--text); font-size:16px; line-height:1.6; }
 .family-bookshelf .bookshelf-controls::before { content:none; }
 .family-bookshelf .bookshelf-controls { grid-template-columns:1fr auto; font-size:12px; text-transform:none; letter-spacing:0; }
 .family-bookshelf .bookshelf-controls p { justify-self:start; }

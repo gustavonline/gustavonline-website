@@ -102,7 +102,10 @@ describe("Worker public routes", () => {
         { property: "Type", select: { equals: "Content" } },
         { property: "Type", select: { equals: "Edition" } },
       ] },
-      { property: "Public URL", url: { is_not_empty: true } },
+      { or: [
+        { property: "Channels", multi_select: { contains: "Website" } },
+        { property: "Format", select: { equals: "Newsletter" } },
+      ] },
     ] });
   });
 

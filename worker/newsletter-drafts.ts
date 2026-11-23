@@ -12,6 +12,7 @@ export class NewsletterDrafts {
   async fetch(request: Request): Promise<Response> {
     const pageId = new URL(request.url).pathname.slice(1);
     const ledger: DraftLedger = {
+      isClaimed: () => this.ctx.storage.sql.exec("SELECT singleton FROM draft WHERE singleton = 1").toArray().length > 0,
       claim: () => this.ctx.storage.sql.exec("INSERT OR IGNORE INTO draft (singleton) VALUES (1)").rowsWritten === 1,
       getId: () => this.ctx.storage.sql.exec<{ broadcast_id: number | null }>("SELECT broadcast_id FROM draft WHERE singleton = 1").toArray()[0]?.broadcast_id ?? undefined,
       saveId: (id) => { this.ctx.storage.sql.exec("UPDATE draft SET broadcast_id = ? WHERE singleton = 1", id); },
@@ -20,8 +21,13 @@ export class NewsletterDrafts {
     try {
       await prepareNewsletter(pageId, this.env, ledger);
       return new Response(null, { status: 204 });
-    } catch {
-      console.error("newsletter_draft_failed", { pageId });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "";
+      // Record a fixed category, never an arbitrary exception/provider payload.
+      const reason = /Kit|reconciliation/.test(message) ? "kit_draft"
+        : /Notion/.test(message) ? "notion_request"
+        : /[Ii]ssue|[Nn]ewsletter|image|content/.test(message) ? "content_validation" : "runtime";
+      console.error("newsletter_draft_failed", { pageId, reason });
       return new Response("Draft preparation needs attention", { status: 502 });
     }
   }

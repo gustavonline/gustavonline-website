@@ -24,7 +24,7 @@ const paragraph = { id: "p", type: "paragraph", paragraph: { rich_text: text("He
 const reply = (body: unknown, status = 200) => new Response(JSON.stringify(body), { status });
 function ledger(): DraftLedger {
   let claimed = false; let id: number | undefined;
-  return { claim: () => claimed ? false : (claimed = true), getId: () => id, saveId: (value) => { id = value; }, flush: async () => {} };
+  return { isClaimed: () => claimed, claim: () => claimed ? false : (claimed = true), getId: () => id, saveId: (value) => { id = value; }, flush: async () => {} };
 }
 afterEach(() => vi.restoreAllMocks());
 
@@ -54,6 +54,11 @@ describe("published newsletter route", () => {
     const response = await worker.fetch(new Request("https://api.example/notes/a-useful-note"), env);
     expect(response.status).toBe(502); expect(await response.text()).not.toContain("private failure");
   });
+  it.each(["/posts?format=newsletter", "/posts"])("excludes duplicate-slug editions from %s as well as the issue route", async (path) => {
+    vi.spyOn(globalThis, "fetch").mockImplementation(async () => reply({ results: [edition(), edition()] }));
+    expect(await (await worker.fetch(new Request(`https://api.example${path}`), env)).json()).toEqual({ posts: [] });
+    expect((await worker.fetch(new Request("https://api.example/notes/a-useful-note"), env)).status).toBe(404);
+  });
   it.each(["wrong-format", "wrong-url", "future-date", "trashed", "source"])("keeps %s out of the public issue and newsletter feed", async (reason) => {
     const page = edition();
     if (reason === "wrong-format") page.properties.Format.select.name = "Article";
@@ -79,6 +84,14 @@ describe("published newsletter route", () => {
     expect(renderBlocks([{ type: "paragraph", paragraph: { rich_text: [{ plain_text: "click", href: "javascript:alert(1)" }] } }])).not.toContain("javascript:");
     expect(() => renderBlocks([{ type: "child_page", child_page: { title: "Private" } }])).toThrow();
   });
+  it("serves HEAD with the same policy headers and no body", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValueOnce(reply({ results: [edition()] }))
+      .mockResolvedValueOnce(reply({ results: [paragraph] }));
+    const response = await worker.fetch(new Request("https://api.example/notes/a-useful-note", { method: "HEAD" }), env);
+    expect(response.status).toBe(200); expect(await response.text()).toBe("");
+    expect(response.headers.get("Content-Security-Policy")).toContain("default-src 'none'");
+    expect(response.headers.get("Cache-Control")).toBe("no-store");
+  });
 });
 
 describe("draft preparation", () => {
@@ -87,7 +100,7 @@ describe("draft preparation", () => {
       .mockResolvedValueOnce(reply(edition()))
       .mockResolvedValueOnce(reply({ results: [edition()] }))
       .mockResolvedValueOnce(reply({ results: [paragraph], has_more: false }))
-      .mockResolvedValueOnce(reply({ broadcast: { id: 42, status: "draft", send_at: null, public: false } }))
+      .mockResolvedValueOnce(reply({ broadcast: { id: 42, send_at: null, public: false } }))
       .mockResolvedValueOnce(reply({}));
     await prepareNewsletter("edition-id", env, ledger());
     const [url, options] = fetcher.mock.calls[3];
@@ -116,13 +129,25 @@ describe("draft preparation", () => {
     await expect(prepareNewsletter("edition-id", env, store)).rejects.toThrow();
     expect(claim).not.toHaveBeenCalled();
   });
+  it.each([
+    { status: "scheduled", send_at: null, public: false },
+    { status: "draft", send_at: "2099-01-01", public: false },
+    { send_at: null, public: true },
+  ])("rejects unsafe Kit acknowledgement %j and never records a draft ID", async (broadcast) => {
+    const store = ledger();
+    vi.spyOn(globalThis, "fetch").mockResolvedValueOnce(reply(edition()))
+      .mockResolvedValueOnce(reply({ results: [edition()] })).mockResolvedValueOnce(reply({ results: [paragraph] }))
+      .mockResolvedValueOnce(reply({ broadcast: { id: 42, ...broadcast } }));
+    await expect(prepareNewsletter("edition-id", env, store)).rejects.toThrow(/acknowledgement/);
+    expect(store.getId()).toBeUndefined(); expect(store.claim()).toBe(false);
+  });
   it("never repeats an uncertain create request, even when Kit has no visible match yet", async () => {
     const store = ledger();
     const fetcher = vi.spyOn(globalThis, "fetch")
       .mockResolvedValueOnce(reply(edition())).mockResolvedValueOnce(reply({ results: [edition()] })).mockResolvedValueOnce(reply({ results: [paragraph] }))
       .mockRejectedValueOnce(new Error("timeout after Kit may have created the draft"));
     await expect(prepareNewsletter("edition-id", env, store)).rejects.toThrow();
-    fetcher.mockResolvedValueOnce(reply(edition())).mockResolvedValueOnce(reply({ results: [edition()] })).mockResolvedValueOnce(reply({ results: [paragraph] }))
+    fetcher.mockResolvedValueOnce(reply(edition()))
       .mockResolvedValueOnce(reply({ broadcasts: [], pagination: { has_next_page: false } }));
     await expect(prepareNewsletter("edition-id", env, store)).rejects.toThrow(/reconciliation/i);
     expect(fetcher.mock.calls.filter(([url, init]) => String(url).includes("api.kit.com") && init?.method === "POST")).toHaveLength(1);
@@ -141,14 +166,40 @@ describe("draft preparation", () => {
   it("recovers an uncertain create from the exact Kit marker on a later page, even if already sent", async () => {
     const store = ledger(); store.claim();
     const fetcher = vi.spyOn(globalThis, "fetch")
-      .mockResolvedValueOnce(reply(edition())).mockResolvedValueOnce(reply({ results: [edition()] }))
-      .mockResolvedValueOnce(reply({ results: [paragraph] }))
+      .mockResolvedValueOnce(reply(edition()))
       .mockResolvedValueOnce(reply({ broadcasts: [], pagination: { has_next_page: true, end_cursor: "next" } }))
       .mockResolvedValueOnce(reply({ broadcasts: [{ id: 42, description: "gustavonline:newsletter:edition-id", status: "completed" }], pagination: { has_next_page: false } }))
       .mockResolvedValueOnce(reply({}));
     await prepareNewsletter("edition-id", env, store);
-    expect(String(fetcher.mock.calls[4][0])).toContain("after=next");
+    expect(String(fetcher.mock.calls[2][0])).toContain("after=next");
     expect(store.getId()).toBe(42);
     expect(fetcher.mock.calls.filter(([url, init]) => String(url).includes("api.kit.com") && init?.method === "POST")).toHaveLength(0);
+  });
+});
+
+describe("newsletter cron dispatch", () => {
+  it("continues after a transport error, skips drafts and reports aggregate failure", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    const query = vi.spyOn(globalThis, "fetch").mockResolvedValue(reply({ results: [
+      edition(), { ...edition(), id: "second-edition" }, edition("Draft"),
+    ] }));
+    const dispatch = vi.fn().mockRejectedValueOnce(new Error("transport failed"))
+      .mockResolvedValueOnce(new Response(null, { status: 204 }));
+    const id: DurableObjectId = { toString: () => "synthetic-id", equals: () => true };
+    const namespace: NonNullable<Env["NEWSLETTER_DRAFTS"]> = {
+      newUniqueId: () => id, idFromName: () => id, idFromString: () => id,
+      get: vi.fn().mockReturnValue({ id, fetch: dispatch }),
+      getByName: vi.fn(), jurisdiction: vi.fn(),
+    };
+    await expect(worker.scheduled({} as ScheduledController, { ...env, NEWSLETTER_DRAFTS: namespace })).rejects.toThrow(/needs attention/);
+    expect(dispatch).toHaveBeenCalledTimes(2);
+    expect(String(dispatch.mock.calls[1][0])).toBe("https://draft.internal/second-edition");
+    expect(JSON.parse(String(query.mock.calls[0][1]?.body)).filter.and).toEqual([
+      { property: "Status", select: { equals: "Published" } },
+      { property: "Type", select: { equals: "Edition" } },
+      { property: "Format", select: { equals: "Newsletter" } },
+      { property: "Send as newsletter", checkbox: { equals: true } },
+      { property: "Kit broadcast id", rich_text: { is_empty: true } },
+    ]);
   });
 });

@@ -1,6 +1,12 @@
 import type { NotionBlock, RichText } from "./adapters/notion";
 import type { WritingPost } from "../shared/contracts/content";
 
+export const issueResponseHeaders = {
+  "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store",
+  "Content-Security-Policy": "default-src 'none'; style-src 'unsafe-inline'; img-src https:; font-src https://gustavonline.com; base-uri 'none'; frame-ancestors 'none'; form-action 'none'",
+  "X-Content-Type-Options": "nosniff", "Referrer-Policy": "strict-origin-when-cross-origin",
+};
+
 export function escapeHtml(value: string): string {
   return value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#39;");
 }

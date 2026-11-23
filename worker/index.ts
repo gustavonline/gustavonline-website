@@ -5,7 +5,7 @@ import {
   type NewsletterSignupResponse,
 } from "../shared/contracts/content";
 import { getPublicIssue, isPublicNewsletter, listPublishedPosts, newsletterFilter, queryContent } from "./adapters/notion";
-import { renderIssue } from "./newsletter-renderer";
+import { issueResponseHeaders, renderIssue } from "./newsletter-renderer";
 import { upsertKitSubscriber } from "./adapters/kit";
 import { corsHeaders, json } from "./http";
 import type { Env } from "./types";
@@ -19,16 +19,13 @@ export default {
 
     const url = new URL(request.url);
 
-    if (request.method === "GET" && url.pathname.startsWith("/notes/")) {
+    if ((request.method === "GET" || request.method === "HEAD") && url.pathname.startsWith("/notes/")) {
       try {
         const slug = url.pathname.slice(7).replace(/\/$/, "");
         const issue = await getPublicIssue(slug, env);
         if (!issue) return new Response("Issue not found", { status: 404 });
-        return new Response(renderIssue(issue, env.PUBLIC_SITE_URL), { headers: {
-          "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store",
-          "Content-Security-Policy": "default-src 'none'; style-src 'unsafe-inline'; img-src https:; font-src https://gustavonline.com; base-uri 'none'; frame-ancestors 'none'; form-action 'none'",
-          "X-Content-Type-Options": "nosniff", "Referrer-Policy": "strict-origin-when-cross-origin",
-        } });
+        const html = renderIssue(issue, env.PUBLIC_SITE_URL);
+        return new Response(request.method === "HEAD" ? null : html, { headers: issueResponseHeaders });
       } catch { return new Response("This issue is temporarily unavailable. Please try again.", { status: 502 }); }
     }
 
@@ -53,9 +50,14 @@ export default {
     let failed = false;
     for (const page of pages) {
       if (!page.id || !isPublicNewsletter(page, env)) continue;
-      const stub = env.NEWSLETTER_DRAFTS.get(env.NEWSLETTER_DRAFTS.idFromName(page.id));
-      const response = await stub.fetch(`https://draft.internal/${page.id}`, { method: "POST" });
-      if (!response.ok) failed = true;
+      try {
+        const stub = env.NEWSLETTER_DRAFTS.get(env.NEWSLETTER_DRAFTS.idFromName(page.id));
+        const response = await stub.fetch(`https://draft.internal/${page.id}`, { method: "POST" });
+        if (!response.ok) failed = true;
+      } catch {
+        console.error("newsletter_draft_transport_failed", { pageId: page.id });
+        failed = true;
+      }
     }
     if (failed) throw new Error("Newsletter draft preparation needs attention");
   },
