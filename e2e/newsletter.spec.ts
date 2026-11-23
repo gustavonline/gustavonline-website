@@ -31,6 +31,12 @@ test.beforeEach(async ({ page }) => {
   });
 });
 
+test.afterEach(async ({ page }) => {
+  // The legacy redirect can leave asset handlers running after the assertions.
+  // Drain them before Playwright disposes their API responses and page context.
+  await page.unrouteAll({ behavior: "wait" });
+});
+
 for (const entry of ["/newsletter/", "/newsletter", "/newsletter#bookshelf"]) {
 test(`signup from ${entry} confirms beside the visible bookshelf`, async ({ page }, testInfo) => {
   await page.goto(entry);
