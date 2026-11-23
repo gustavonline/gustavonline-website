@@ -1,10 +1,18 @@
 # Third-party notices
 
-## Bookshelf Animation
+## Newsletter shelf
 
-The newsletter bookshelf adapts geometry, motion, and interaction code from
+The current newsletter shelf is original CSS 3D and React code. Layoffs & Hires'
+Engineering shelf informed its interaction direction; no source code, CSS class
+names, cover images or assets from that site are included.
+
+## Retired Bookshelf Animation
+
+The former canvas newsletter bookshelf adapted geometry, motion, and interaction code from
 [`adhyaay-karnwal/bookshelf-animation`](https://github.com/adhyaay-karnwal/bookshelf-animation)
 at commit `d3ec2abcbe2606aacc466c356d1557f7d100198a`.
+That engine and its helpers were removed on 23 November 2026. This notice is
+retained for historical copies and provenance.
 
 MIT License
 

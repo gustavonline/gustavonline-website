@@ -49,12 +49,13 @@ test(`signup from ${entry} confirms beside the visible bookshelf`, async ({ page
   await expect(page.locator(".family-signup")).toHaveAttribute("aria-busy", "false");
   await expect(page.getByRole("heading", { name: "The Bookshelf", exact: true })).toBeInViewport();
   await expect(page.getByRole("status").filter({ hasText: "1 / 1" })).toBeVisible();
-  const canvas = page.locator(".bookshelf-canvas");
-  await expect(page.locator(".bookshelf-stage")).toHaveClass(/is-ready/);
-  await canvas.focus(); await page.keyboard.press("Enter");
-  await expect(page.getByRole("link", { name: "Open the full note" })).toHaveAttribute("href", post.url);
+  const book = page.getByRole("button", { name: "Open issue 01: A useful note", exact: true });
+  await book.focus(); await page.keyboard.press("Enter");
+  await expect(page.getByRole("dialog")).toBeVisible();
+  await expect(page.getByRole("dialog").getByRole("link", { name: "Open the full note" })).toHaveAttribute("href", post.url);
   await page.getByRole("button", { name: "Close newsletter issue" }).click();
-  await expect(page.locator(".bookshelf-stage")).not.toHaveClass(/is-reading/);
+  await expect(page.getByRole("dialog")).not.toBeVisible();
+  await expect(book).toBeFocused();
   await page.screenshot({ path: `output/playwright/signup-${testInfo.project.name}.png` });
   await page.getByRole("button", { name: /Switch to dark/ }).click();
   await page.screenshot({ path: `output/playwright/signup-${testInfo.project.name}-dark.png` });
@@ -114,4 +115,125 @@ test("the rendered issue is readable and links back to the Bookshelf", async ({ 
   expect(await page.evaluate(() => document.fonts.check("400 18px Figtree"))).toBe(true);
   expect(cspErrors).toEqual([]);
   await page.screenshot({ path: `output/playwright/issue-${testInfo.project.name}.png` });
+});
+
+const shelfPosts = [
+  post,
+  { ...post, title: "Notes from the work", date: "2026-11-15", url: "https://gustavonline.com/notes/notes-from-the-work" },
+  { ...post, title: "Keep the cards open", date: "2026-11-08", url: "https://gustavonline.com/notes/keep-the-cards-open" },
+  { ...post, title: "Small teams, large models", date: "2026-11-01", url: "https://gustavonline.com/notes/small-teams" },
+  { ...post, title: "The operating model", date: "2026-10-25", url: "https://gustavonline.com/notes/the-operating-model" },
+  { ...post, title: "Orange and the shelf", date: "2026-10-18", url: "https://gustavonline.com/notes/orange-and-the-shelf" },
+  { ...post, title: "A longer title about building software with context that still fits on a narrow book spine", date: "2026-10-11", url: "https://gustavonline.com/notes/longer-title" },
+];
+
+test("empty shelf has an honest noninteractive bookend and no canvas", async ({ page }, testInfo) => {
+  await page.route(`${api}/posts?*`, (route) => route.fulfill({ json: { posts: [] } }));
+  await page.goto("/newsletter#bookshelf");
+  await expect(page.getByRole("status").filter({ hasText: "No issues published yet" })).toBeVisible();
+  await expect(page.locator(".newsletter-volume-button")).toHaveCount(0);
+  await expect(page.locator("canvas")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Previous newsletter issue" })).toBeDisabled();
+  await expect(page.getByRole("button", { name: "Next newsletter issue" })).toBeDisabled();
+  await expect(page.getByRole("button", { name: "Open issue", exact: true })).toHaveCount(0);
+  await expect(page.getByRole("status").filter({ hasText: "0 issues" })).toBeVisible();
+  await expect(page.locator(".newsletter-open-cursor")).not.toBeVisible();
+  await page.locator("#bookshelf").evaluate((element) => element.scrollIntoView({ block: "start" }));
+  await page.screenshot({ path: `output/playwright/css-shelf-empty-${testInfo.project.name}.png` });
+});
+
+test("row selection turns one cover forward and keeps neighbours as numbered spines", async ({ page }, testInfo) => {
+  await page.route(`${api}/posts?*`, (route) => route.fulfill({ json: { posts: shelfPosts } }));
+  await page.goto("/newsletter#bookshelf");
+  await expect(page.locator(".newsletter-volume-button")).toHaveCount(7);
+  await expect(page.locator("canvas")).toHaveCount(0);
+  const selected = page.locator(".newsletter-volume-slot.is-selected");
+  await expect(selected).toHaveCount(1);
+  await expect(selected.locator(".newsletter-volume-number")).toHaveText("01");
+  await expect.poll(() => selected.locator(".newsletter-volume-solid").evaluate((el) => new DOMMatrixReadOnly(getComputedStyle(el).transform).m11)).toBeGreaterThan(.85);
+  await expect.poll(() => selected.locator(".newsletter-volume-solid").evaluate((el) => new DOMMatrixReadOnly(getComputedStyle(el).transform).m43)).toBeGreaterThan(20);
+  const second = page.locator(".newsletter-volume-slot").nth(1);
+  await expect(second.locator(".newsletter-volume-number")).toHaveText("02");
+  await expect(second.locator(".newsletter-volume-spine-title")).toHaveText("Notes from the work");
+  await expect(second.locator(".newsletter-volume-spine-date")).toHaveText("2026-11-15");
+  expect(Math.abs(await second.locator(".newsletter-volume-solid").evaluate((el) => new DOMMatrixReadOnly(getComputedStyle(el).transform).m11))).toBeLessThan(.02);
+  await page.getByRole("button", { name: "Next newsletter issue" }).click();
+  await expect(second.getByRole("button")).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByRole("status").filter({ hasText: "2 / 7" })).toBeVisible();
+  await expect.poll(() => second.locator(".newsletter-volume-solid").evaluate((el) => new DOMMatrixReadOnly(getComputedStyle(el).transform).m11)).toBeGreaterThan(.85);
+  await expect.poll(() => page.locator(".newsletter-volume-slot").first().locator(".newsletter-volume-solid").evaluate((el) => Math.abs(new DOMMatrixReadOnly(getComputedStyle(el).transform).m11))).toBeLessThan(.02);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  await page.locator("#bookshelf").evaluate((element) => element.scrollIntoView({ block: "start" }));
+  await expect.poll(() => second.getByRole("button").evaluate((el) => el.getAnimations({ subtree: true }).filter((a) => a.playState === "running").length)).toBe(0);
+  await page.screenshot({ path: `output/playwright/css-shelf-row-${testInfo.project.name}.png` });
+  await page.getByRole("button", { name: /Switch to dark/ }).click();
+  await page.locator("#bookshelf").evaluate((element) => element.scrollIntoView({ block: "start" }));
+  await page.screenshot({ path: `output/playwright/css-shelf-row-${testInfo.project.name}-dark.png` });
+});
+
+test("a neighbouring spine opens its own issue and Close keeps it selected", async ({ page }) => {
+  await page.route(`${api}/posts?*`, (route) => route.fulfill({ json: { posts: shelfPosts } }));
+  await page.goto("/newsletter#bookshelf");
+  await page.getByRole("button", { name: "Open issue 02: Notes from the work", exact: true }).click();
+  await expect(page.getByRole("dialog").getByRole("heading")).toHaveText("Notes from the work");
+  await page.getByRole("button", { name: "Close newsletter issue" }).click();
+  await expect(page.getByRole("dialog")).not.toBeVisible();
+  await expect(page.getByRole("button", { name: "Open issue 02: Notes from the work", exact: true })).toHaveAttribute("aria-pressed", "true");
+});
+
+test("issue detail traps focus, closes with Escape and restores the selected book", async ({ page }, testInfo) => {
+  await page.route(`${api}/posts?*`, (route) => route.fulfill({ json: { posts: shelfPosts } }));
+  await page.goto("/newsletter#bookshelf");
+  await page.getByRole("button", { name: "Next newsletter issue" }).click();
+  const book = page.getByRole("button", { name: "Open issue 02: Notes from the work", exact: true });
+  await book.click();
+  const detail = page.getByRole("dialog");
+  await expect(detail).toBeVisible();
+  await expect(detail.getByRole("heading")).toHaveText("Notes from the work");
+  await expect(detail).toContainText("2026-11-15");
+  await expect(detail).toContainText(post.summary);
+  await expect(detail.getByRole("link", { name: "Open the full note" })).toHaveAttribute("href", shelfPosts[1].url);
+  const close = detail.getByRole("button", { name: "Close newsletter issue" });
+  await expect(close).toBeFocused();
+  await page.keyboard.press("Shift+Tab");
+  await expect(detail.getByRole("link")).toBeFocused();
+  await page.keyboard.press("Tab");
+  await expect(close).toBeFocused();
+  await page.screenshot({ path: `output/playwright/css-shelf-detail-${testInfo.project.name}.png` });
+  await page.keyboard.press("Escape");
+  await expect(detail).not.toBeVisible();
+  await expect(book).toBeFocused();
+  await expect(book).toHaveAttribute("aria-pressed", "true");
+  await expect.poll(() => page.evaluate(() => document.documentElement.style.overflow)).not.toBe("hidden");
+});
+
+test("keyboard browses the whole shelf and custom Open cursor is fine-pointer only", async ({ page }, testInfo) => {
+  await page.route(`${api}/posts?*`, (route) => route.fulfill({ json: { posts: shelfPosts } }));
+  await page.goto("/newsletter#bookshelf");
+  const selected = page.locator(".newsletter-volume-button[aria-pressed=true]");
+  await selected.focus();
+  await page.keyboard.press("End");
+  await expect(selected).toHaveAttribute("aria-label", /Open issue 07/);
+  await expect(selected).toBeFocused();
+  await expect(page.getByRole("button", { name: "Next newsletter issue" })).toBeDisabled();
+  await page.keyboard.press("ArrowLeft");
+  await expect(selected).toHaveAttribute("aria-label", /Open issue 06/);
+  await page.keyboard.press("Home");
+  await expect(selected).toHaveAttribute("aria-label", /Open issue 01/);
+  await expect(page.getByRole("button", { name: "Previous newsletter issue" })).toBeDisabled();
+  // Wait for the presentation to settle before moving the pointer onto the cover.
+  await expect.poll(() => selected.locator(".newsletter-volume-solid").evaluate((el) => new DOMMatrixReadOnly(getComputedStyle(el).transform).m11)).toBeGreaterThan(.85);
+  await selected.hover();
+  const fine = await page.evaluate(() => matchMedia("(hover: hover) and (pointer: fine)").matches);
+  const cursor = page.locator(".newsletter-open-cursor");
+  if (fine) {
+    await expect(cursor).toBeVisible();
+    expect(await selected.evaluate((el) => getComputedStyle(el).cursor)).toBe("none");
+    await page.screenshot({ path: `output/playwright/css-shelf-cursor-${testInfo.project.name}.png` });
+    await page.mouse.move(10, 10);
+    await expect(cursor).not.toBeVisible();
+  } else {
+    await expect(cursor).not.toBeVisible();
+    expect(await selected.evaluate((el) => getComputedStyle(el).cursor)).not.toBe("none");
+  }
 });
