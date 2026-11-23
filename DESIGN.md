@@ -1,5 +1,39 @@
 # Portfolio design
 
+## Newsletter shelf · 23 November 2026
+
+The Bookshelf is an original CSS 3D implementation inspired by the interaction
+of the [Layoffs & Hires Engineering shelf](https://layoffsandhires.com/engineering).
+Its code, class names, cover art and assets are not reused. There are no invented
+categories: the newsletter feed supplies the complete ordered row.
+
+Each published newsletter has a cover and spine face. The selected book slides forward
+and turns to its cover while neighbours remain numbered spines. A vertical title
+and a separate vertical date identify each spine. Previous/next controls and
+Arrow keys, Home and End browse the row; a book click or Open newsletter opens a
+native dialog with title, date, summary and the full note link. Escape, Close
+and the backdrop return to the shelf, restore focus and unlock page scrolling.
+
+Figtree, the orange heading dot, neutral page background and `#ee7f3c` latest
+newsletter treatment remain. The Open cursor is orange and limited to fine mouse
+pointers over the selected book; phones use ordinary native input. CSS dimensions
+keep the active cover and adjacent spines usable at 390px without document-wide
+horizontal overflow. No dotted wall, canvas, WebGL render loop or Three.js
+dependency remains in the newsletter implementation.
+
+An empty archive has a decorative, noninteractive bookend, a clear “Archive
+starts here / no newsletters published yet” message, 0 newsletters and disabled browse
+controls. It has no newsletter target or Open control. Successful signups still
+return to `/newsletter#bookshelf`, showing a real confirmation beside the archive.
+Shelf controls use the site's small corner radius, 50px targets and the same
+text/background inverse treatment as Subscribe. Captions and dialog copy follow
+the site’s Figtree type scale; panels, borders, neutral book covers and hover fills
+use theme tokens in both light and dark mode. Primary-action hover and translucent
+spine-number bands maintain at least 4.5:1 text contrast in both themes. The dialog
+shares the 10px card radius and a 44px full-note link target. Narrow screens stack the hint, controls
+and count so “Open newsletter” stays readable even at 320px.
+Publishing, feeds, Kit draft preparation and `/notes/:slug` are unchanged.
+
 ## Brand references — 6 November 2026
 
 Use each brand’s own typeface at **weight 400** for ordinary mentions and links:
@@ -43,8 +77,8 @@ Keep arrows out of copy strings: platform text fonts can render them as emoji.
 Keep existing content, artwork, routes and interactions. Verify direct pages,
 mobile navigation, both themes and shared brand labels before each release.
 
-Newsletter canvas covers, spines, backs and shelf labels read the site font token
-and wait for Figtree before painting. Font loading is cancelled on unmount.
+Newsletter covers and spines are DOM text using the site's Figtree font token;
+they no longer paint text into canvas textures.
 
 The LinkedIn banner master is the 28 October variant B matte: preserve its exact
 three-line copy, 365 contribution tiles, colours, coordinates and crop. Its main
@@ -58,8 +92,8 @@ The portfolio uses a light neutral-grey background (`#f5f6f5`) with white panels
 (`#ffffff`), near-black text (`#1f1f1f`), neutral dividers (`#dddfdd`) and the
 orange accent (`#ee7f3c`). This palette supports the restrained, professional
 gustavonline identity alongside Figtree typography, the portrait and the narrow
-reading column. The light newsletter shelf uses the same background as the page
-and a neutral-grey ground (`#ebedeb`).
+reading column. The light newsletter shelf uses the page background; CSS shadows
+give the books depth without a separate ground or wall palette.
 
 The companion Danish and English AI operating model playbooks and their editable
 OpenPaperDesign masters use `#f5f6f5` for their light page backgrounds. Their
@@ -166,10 +200,9 @@ and when the window grows past 760px. The panel scrolls within
   replaces the window `click` listener, which mobile Safari does not reliably
   deliver for non-interactive content. Reduced motion **or data saving**
   shows the complete settled frame.
-- The newsletter shelf no longer blocks vertical page scrolling on touch;
-  browsing is a horizontal drag. Its render loop pauses when the shelf is
-  offscreen or the tab is hidden. On phones, shelf arrows and the reader close
-  button are 44px, and the reader scrolls inside the stage instead of clipping.
+- This pass's canvas newsletter shelf is superseded by the 23 November CSS 3D
+  shelf above. Its previous/next and dialog close targets remain at least 44px;
+  normal vertical scrolling and pinch zoom remain available.
 
 
 ## Brand touchpoints · 1 November 2026

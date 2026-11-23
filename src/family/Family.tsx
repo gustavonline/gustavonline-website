@@ -1,5 +1,5 @@
 import { ArrowIcon } from "./ArrowIcon";
-import { useState, type FormEvent, type ReactNode } from "react";
+import { useEffect, useState, type FormEvent, type ReactNode } from "react";
 import { BrandIcon } from "./BrandIcon";
 import { FamilyMark } from "./FamilyMark";
 import { familyHref, localReview, type FamilyBrand } from "./preview";
@@ -47,26 +47,40 @@ export function FamilyFooter({ brand }: { brand: FamilyBrand }) {
   );
 }
 
-export function NewsletterContent({ brand, children }: { brand: FamilyBrand; children?: ReactNode }) {
+export function NewsletterContent({ brand, children }: { brand: FamilyBrand; children?: ReactNode | ((subscribed: boolean) => ReactNode) }) {
   const [pending, setPending] = useState(false);
   const [error, setError] = useState("");
   const thanks = window.location.pathname.replace(/\/$/, "").endsWith("/thank-you");
-  const subscribed = thanks && newsletterReceipt();
+  const [subscribed, setSubscribed] = useState(() => newsletterReceipt());
+  useEffect(() => {
+    if (brand === "gustavonline" && thanks) window.location.replace("/newsletter#bookshelf");
+  }, [brand, thanks]);
+  useEffect(() => {
+    if (brand === "gustavonline" && subscribed && !pending && !error && window.location.hash === "#bookshelf")
+      document.getElementById("bookshelf")?.scrollIntoView({ block: "start" });
+  }, [brand, subscribed, pending, error]);
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (pending) return;
     setPending(true);
     setError("");
+    const form = event.currentTarget;
     try {
-      const email = String(new FormData(event.currentTarget).get("email") ?? "");
+      const email = String(new FormData(form).get("email") ?? "");
       await submitNewsletter(email, brand);
-      window.location.assign("/newsletter/thank-you/");
+      if (brand === "gustavonline") {
+        form.reset();
+        window.history.replaceState(null, "", "/newsletter#bookshelf");
+        setSubscribed(true);
+        setPending(false);
+      } else window.location.assign("/newsletter/thank-you/");
     } catch {
       setError("The signup could not be completed. Your email is still here — please try again.");
       setPending(false);
     }
   };
-  if (thanks) return <section className="family-newsletter family-thanks">
+  if (thanks && brand === "gustavonline") return null;
+  if (thanks && brand !== "gustavonline") return <section className="family-newsletter family-thanks">
     <h1>{subscribed ? "You’re on the list" : "Notes from the work"}</h1>
     <p>{subscribed ? "You’ll hear from Gustav when the next note is ready." : "Sign up to receive the next note from Gustav."}</p>
     <a className="family-button" href={subscribed ? "/" : "/newsletter"}>
@@ -90,6 +104,6 @@ export function NewsletterContent({ brand, children }: { brand: FamilyBrand; chi
         {localReview && <p className="review-notice">Local preview — this form does not send your email.</p>}
       </form>
     </section>
-    {children}
+    {typeof children === "function" ? children(subscribed) : children}
   </>;
 }

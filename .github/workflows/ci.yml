@@ -45,3 +45,9 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      - name: Install browser test runtime
+        run: npx playwright install --with-deps chromium
+
+      - name: Test newsletter in desktop and phone browsers
+        run: npm run test:browser

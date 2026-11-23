@@ -1,5 +1,11 @@
 # Cloudflare Backend Notes
 
+The current newsletter implementation and release procedure are documented in
+[worker/README.md](../worker/README.md). It adds `/notes/:slug`, newsletter-only
+metadata and a draft-only Kit cron. Its newsletter edition contract supersedes
+the older feed-only description below; ordinary website metadata and subscriber
+ownership remain as described.
+
 This portfolio is built to deploy as a static GitHub Pages app. Dynamic features should be added through Cloudflare Workers or Cloudflare Pages Functions instead of Vercel or Next.js.
 
 ## Responsibility model
