@@ -317,6 +317,42 @@ test("shelf finish matches site controls in both themes and fits a 320px phone",
     expect(styles.radius).toBe(styles.siteRadius);
     expect(styles.font).toContain("Figtree");
     expect(styles.height).toBeGreaterThanOrEqual(44);
+    // Measure the actual CSS colors, including the translucent numbered band.
+    // Canvas normalises color-mix() and composites the band over its book paper.
+    async function contrast(target: ".newsletter-volume-number" | ".newsletter-shelf-open") {
+      return page.locator(target).evaluateAll((elements) => {
+        const canvas = document.createElement("canvas");
+        canvas.width = canvas.height = 1;
+        const context = canvas.getContext("2d")!;
+        function luminance(color: number[]) {
+          const linear = color.slice(0, 3).map((c) => c / 255).map((c) => c <= .04045 ? c / 12.92 : ((c + .055) / 1.055) ** 2.4);
+          return linear[0] * .2126 + linear[1] * .7152 + linear[2] * .0722;
+        }
+        return elements.map((el) => {
+          const style = getComputedStyle(el);
+          context.clearRect(0, 0, 1, 1);
+          context.fillStyle = getComputedStyle(el.parentElement!).backgroundColor;
+          context.fillRect(0, 0, 1, 1);
+          context.fillStyle = style.backgroundColor;
+          context.fillRect(0, 0, 1, 1);
+          const background = luminance(Array.from(context.getImageData(0, 0, 1, 1).data));
+          context.clearRect(0, 0, 1, 1);
+          context.fillStyle = style.color;
+          context.fillRect(0, 0, 1, 1);
+          const ink = luminance(Array.from(context.getImageData(0, 0, 1, 1).data));
+          return (Math.max(ink, background) + .05) / (Math.min(ink, background) + .05);
+        });
+      });
+    }
+    if (await page.evaluate(() => matchMedia("(hover: hover)").matches)) {
+      await open.hover();
+      await expect.poll(() => open.evaluate((el) => el.getAnimations().filter((a) => a.playState === "running").length)).toBe(0);
+      expect((await contrast(".newsletter-shelf-open"))[0]).toBeGreaterThanOrEqual(4.5);
+      await page.mouse.move(0, 0);
+      await expect(open).toHaveCSS("background-color", siteBackground);
+    }
+    const badgeRatios = await contrast(".newsletter-volume-number");
+    expect(Math.min(...badgeRatios)).toBeGreaterThanOrEqual(4.5);
     const controls = await page.getByRole("group", { name: "Browse newsletters" }).boundingBox();
     expect(controls!.x).toBeGreaterThanOrEqual(0);
     expect(controls!.x + controls!.width).toBeLessThanOrEqual(page.viewportSize()!.width);

@@ -28,8 +28,9 @@ return to `/newsletter#bookshelf`, showing a real confirmation beside the archiv
 Shelf controls use the site's small corner radius, 50px targets and the same
 text/background inverse treatment as Subscribe. Captions and dialog copy follow
 the site’s Figtree type scale; panels, borders, neutral book covers and hover fills
-use theme tokens in both light and dark mode. The dialog shares the 10px card
-radius and a 44px full-note link target. Narrow screens stack the hint, controls
+use theme tokens in both light and dark mode. Primary-action hover and translucent
+spine-number bands maintain at least 4.5:1 text contrast in both themes. The dialog
+shares the 10px card radius and a 44px full-note link target. Narrow screens stack the hint, controls
 and count so “Open newsletter” stays readable even at 320px.
 Publishing, feeds, Kit draft preparation and `/notes/:slug` are unchanged.
 
