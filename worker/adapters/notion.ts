@@ -24,7 +24,7 @@ export type NotionContent = {
 export async function listPublishedPosts(env: Env, newslettersOnly = false): Promise<WritingPost[]> {
   const pages = await queryContent(env, newslettersOnly ? newsletterFilter : {
     and: [
-      { property: "Status", select: { equals: "Published" } },
+      publishedNewsletterStatusFilter,
       { or: [
         { property: "Type", select: { equals: "Content" } },
         { property: "Type", select: { equals: "Edition" } },
@@ -35,12 +35,12 @@ export async function listPublishedPosts(env: Env, newslettersOnly = false): Pro
       ] },
     ],
   });
-  // Match /notes/:slug, whose identity query also sees other Published editions
+  // Match /notes/:slug, whose identity query also sees other published editions
   // with this slug even if their public URL or publication date is not eligible.
   const slugCounts = new Map<string, number>();
   for (const page of pages) {
-    if (!page.archived && !page.in_trash && page.properties?.Status?.select?.name === "Published"
-        && page.properties.Type?.select?.name === "Edition" && page.properties.Format?.select?.name === "Newsletter") {
+    if (!page.archived && !page.in_trash && isPublishedNewsletterStatus(page.properties?.Status?.select?.name)
+        && page.properties?.Type?.select?.name === "Edition" && page.properties.Format?.select?.name === "Newsletter") {
       const slug = newsletterSlug(page);
       slugCounts.set(slug, (slugCounts.get(slug) ?? 0) + 1);
     }
@@ -84,10 +84,23 @@ function isHttpsUrl(value: string): boolean {
   }
 }
 
-export const newsletterFilter = { and: [
-  { property: "Status", select: { equals: "Published" } },
+function isPublishedNewsletterStatus(status: string | undefined): boolean {
+  return status === "Published" || status === "Publiceret";
+}
+
+const publishedNewsletterStatusFilter = { or: [
+    { property: "Status", select: { equals: "Published" } },
+    { property: "Status", select: { equals: "Publiceret" } },
+  ] };
+
+export const newsletterTypeFilters = [
   { property: "Type", select: { equals: "Edition" } },
   { property: "Format", select: { equals: "Newsletter" } },
+];
+
+export const newsletterFilter = { and: [
+  publishedNewsletterStatusFilter,
+  ...newsletterTypeFilters,
 ] };
 
 export function newsletterSlug(page: NotionContent) {
@@ -108,7 +121,7 @@ export function isPublicNewsletter(page: NotionContent, env: Env): boolean {
   const date = Date.parse(p?.["Publish date"]?.date?.start ?? "");
   return !page.archived && !page.in_trash
     && p?.Type?.select?.name === "Edition" && p.Format?.select?.name === "Newsletter"
-    && p.Status?.select?.name === "Published" && validSlug(slug)
+    && isPublishedNewsletterStatus(p.Status?.select?.name) && validSlug(slug)
     && p["Public URL"]?.url === issueUrl(slug, env)
     && Number.isFinite(date) && date <= Date.now() && toPublicPost(page) !== null;
 }
@@ -133,7 +146,7 @@ export async function queryContent(env: Env, filter: unknown): Promise<NotionCon
 
 export async function getPublicIssue(slug: string, env: Env) {
   if (!validSlug(slug)) return null;
-  const pages = await queryContent(env, { and: [newsletterFilter, { property: "Slug", rich_text: { equals: slug } }] });
+  const pages = await queryContent(env, { and: [...newsletterFilter.and, { property: "Slug", rich_text: { equals: slug } }] });
   // Duplicate identities are an editorial error, never choose an arbitrary body.
   if (pages.length !== 1 || !isPublicNewsletter(pages[0], env) || !pages[0].id || newsletterSlug(pages[0]) !== slug) return null;
   const page = pages[0];
@@ -150,6 +163,10 @@ export type NotionBlock = {
   [key: string]: unknown;
 };
 
+// An explicit public container keeps editorial notes, old drafts and uploads
+// on the same Notion page out of both the website and Kit draft rendering.
+export const publicNewsletterLabel = "Public newsletter";
+
 export async function readIssueBody(id: string, env: Env): Promise<NotionBlock[]> {
   let count = 0;
   async function children(blockId: string, depth: number): Promise<NotionBlock[]> {
@@ -162,16 +179,31 @@ export async function readIssueBody(id: string, env: Env): Promise<NotionBlock[]
       if (!Array.isArray(data.results)) throw new Error("Invalid Notion blocks");
       count += data.results.length;
       if (count > 500) throw new Error("Issue exceeds supported size");
-      for (const block of data.results) {
-        if (block.has_children) {
-          if (!block.id || ["child_page", "child_database", "synced_block"].includes(block.type)) throw new Error("Unsupported nested content");
-          block.children = await children(block.id, depth + 1);
-        }
-        blocks.push(block);
-      }
+      blocks.push(...data.results);
       if (data.has_more && (!data.next_cursor || data.next_cursor === cursor)) throw new Error("Invalid block pagination");
       cursor = data.has_more ? data.next_cursor : undefined;
     } while (cursor);
+    if (depth === 0) {
+      const publicBlocks = blocks.filter((block) =>
+        (block[block.type] as { rich_text?: RichText[] } | undefined)?.rich_text
+          ?.map((part) => part.plain_text ?? part.text?.content ?? "").join("").trim().toLowerCase()
+          === publicNewsletterLabel.toLowerCase());
+      if (publicBlocks.length > 1) throw new Error("Ambiguous public newsletter body");
+      if (publicBlocks.length === 1) {
+        const block = publicBlocks[0];
+        if (block.type !== "toggle") throw new Error("Public newsletter container must be a top-level toggle");
+        if (!block.id || !block.has_children) throw new Error("Public newsletter body is empty");
+        const body = await children(block.id, depth + 1);
+        if (!body.length) throw new Error("Public newsletter body is empty");
+        return body;
+      }
+    }
+    for (const block of blocks) {
+      if (block.has_children) {
+        if (!block.id || ["child_page", "child_database", "synced_block"].includes(block.type)) throw new Error("Unsupported nested content");
+        block.children = await children(block.id, depth + 1);
+      }
+    }
     return blocks;
   }
   return children(id, 0);

@@ -4,7 +4,7 @@ import {
   normalizeNewsletterSignupPayload,
   type NewsletterSignupResponse,
 } from "../shared/contracts/content";
-import { getPublicIssue, isPublicNewsletter, listPublishedPosts, newsletterFilter, queryContent } from "./adapters/notion";
+import { getPublicIssue, isPublicNewsletter, listPublishedPosts, newsletterTypeFilters, queryContent } from "./adapters/notion";
 import { issueResponseHeaders, renderIssue } from "./newsletter-renderer";
 import { upsertKitSubscriber } from "./adapters/kit";
 import { corsHeaders, json } from "./http";
@@ -46,13 +46,16 @@ export default {
   async scheduled(_event: ScheduledController, env: Env): Promise<void> {
     if (!env.NEWSLETTER_DRAFTS) throw new Error("Newsletter draft ledger is not configured");
     const pages = await queryContent(env, { and: [
-      ...newsletterFilter.and,
+      // Publiceret is a public archive alias only. Preserve the existing
+      // mail job selection rather than enrolling more editions in Kit.
+      { property: "Status", select: { equals: "Published" } },
+      ...newsletterTypeFilters,
       { property: "Send as newsletter", checkbox: { equals: true } },
       { property: "Kit broadcast id", rich_text: { is_empty: true } },
     ] });
     let failed = false;
     for (const page of pages) {
-      if (!page.id || !isPublicNewsletter(page, env)) continue;
+      if (!page.id || page.properties?.Status?.select?.name !== "Published" || !isPublicNewsletter(page, env)) continue;
       try {
         const stub = env.NEWSLETTER_DRAFTS.get(env.NEWSLETTER_DRAFTS.idFromName(page.id));
         const response = await stub.fetch(`https://draft.internal/${page.id}`, { method: "POST" });

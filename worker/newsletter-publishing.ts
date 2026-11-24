@@ -18,6 +18,7 @@ export async function prepareNewsletter(pageId: string, env: Env, ledger: DraftL
   // Re-read the page, rather than trusting the earlier cron listing.
   const page = await notionRequest<NotionContent>(`pages/${pageId}`, env);
   if (page.id !== pageId || page.parent?.data_source_id !== env.NOTION_PAPERS_DATA_SOURCE_ID
+      || page.properties?.Status?.select?.name !== "Published"
       || !isPublicNewsletter(page, env) || !page.properties?.["Send as newsletter"]?.checkbox) return;
   const recordedId = page.properties["Kit broadcast id"]?.rich_text?.map((p) => p.plain_text ?? "").join("");
   if (recordedId) return;

@@ -97,7 +97,10 @@ describe("Worker public routes", () => {
     );
     const query = JSON.parse(String(fetchMock.mock.calls[0][1]?.body));
     expect(query.filter).toEqual({ and: [
-      { property: "Status", select: { equals: "Published" } },
+      { or: [
+        { property: "Status", select: { equals: "Published" } },
+        { property: "Status", select: { equals: "Publiceret" } },
+      ] },
       { or: [
         { property: "Type", select: { equals: "Content" } },
         { property: "Type", select: { equals: "Edition" } },
