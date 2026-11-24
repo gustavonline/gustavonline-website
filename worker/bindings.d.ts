@@ -5,11 +5,12 @@ interface __BaseEnv_CloudflareBindings {
 	NOTION_PAPERS_DATA_SOURCE_ID: "ba101532-8866-4388-9597-1d07465e495b";
 	PUBLIC_SITE_URL: "https://gustavonline.com";
 	NEWSLETTER_DRAFTS: DurableObjectNamespace<import("./index").NewsletterDrafts>;
+	CONTENT_DASHBOARD: DurableObjectNamespace<import("./index").ContentDashboard>;
 }
 declare namespace Cloudflare {
 	interface GlobalProps {
 		mainModule: typeof import("./index");
-		durableNamespaces: "NewsletterDrafts";
+		durableNamespaces: "NewsletterDrafts" | "ContentDashboard";
 	}
 	interface Env extends __BaseEnv_CloudflareBindings {}
 }

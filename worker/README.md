@@ -6,6 +6,8 @@ The frontend remains on GitHub Pages. This Worker owns:
 - `GET /posts`: public metadata; `?format=newsletter` selects the Bookshelf.
 - `GET /notes/:slug`: render a public newsletter edition from Notion.
 - A 15-minute cron: prepare **Kit drafts only** for published editions.
+- `GET` and `POST /dashboard`: private content KPI page and Monday log. `404` without Cloudflare Access or `DASHBOARD_TOKEN`.
+- `GET` and `POST /content-kpis`: the same private document for the assistant. `POST /dashboard/metrics` is the same write.
 
 Kit owns delivery, unsubscribe links and subscriber sync. Gustav reviews and
 sends each draft in Kit. There is no broadcast send, schedule or update endpoint.
@@ -70,11 +72,47 @@ id` in Notion. If Kit definitively created nothing, an operator can manually
 create a draft and record its ID. Keep the durable claim: clearing fields or
 losing a response must not create a second broadcast.
 
+## Content dashboard
+
+`/dashboard` is a private KPI page for Gustav. It is not a GitHub Pages route, not in the sitemap, and not in the site nav. The Worker returns the same `404` as any unknown path unless the request has a valid Cloudflare Access JWT or `Authorization: Bearer $DASHBOARD_TOKEN`.
+
+The page renders `content/dashboard/content-kpis.json` until the `ContentDashboard` Durable Object has saved a document. After the first Monday save or assistant update, the Durable Object wins. The seed file stays the starting point for a new store. Do not put measured numbers in the seed unless they were actually counted.
+
+Monday form, `POST /dashboard` (JSON or a normal form post), accepts only:
+
+```json
+{ "year": 2026, "week": 48, "xFollowers": 60 }
+```
+
+Omit a number to leave it unchanged. `0` is a real zero. At least one of the four counts is required. Those four are the goal metrics: X followers, LinkedIn followers, newsletter subscribers, YouTube subscribers. The form does not accept impressions, likes, replies, bookmarks, opens, clicks, or watch time.
+
+Assistant updates use the same document. Prefer `POST /content-kpis` once Access is limited to `/dashboard`, so the login wall does not sit in front of the token. `POST /dashboard/metrics` is the same write. `GET /content-kpis` returns the current document. Send only keys you are changing. `null` clears a metric. Unknown keys are rejected. `openRatePercent` is `0`–`100`. `watchTimeHours` is hours. Example, which changes nothing measured:
+
+```json
+{ "year": 2026, "week": 48, "linkedin": { "impressions": null }, "goals": { "xFollowers": null } }
+```
+
+Replace `null` with a counted value. Do not send a guessed number.
+
+Local preview (token stays in gitignored `.dev.vars`):
+
+```sh
+printf 'DASHBOARD_TOKEN=%s\n' "$(openssl rand -hex 32)" > .dev.vars
+npm run worker:dev
+curl -H "Authorization: Bearer $DASHBOARD_TOKEN" http://127.0.0.1:8787/dashboard
+```
+
+Without the header, that URL is `404`. Light and dark follow the site: `prefers-color-scheme`, `localStorage` key `gustavonline-theme`, `?theme=light|dark`, and the same theme button.
+
+Access setup for production is in the pull request. Do not attach Access to the whole `workers.dev` hostname: `/newsletter`, `/posts`, and `/notes` must stay public.
+
 ## Configuration and release
 
 Vars: `ALLOWED_ORIGINS`, `NOTION_PAPERS_DATA_SOURCE_ID`, `PUBLIC_SITE_URL`.
 Secrets stay in Cloudflare: `KIT_API_KEY` (Kit v4) and `NOTION_TOKEN` (read Content
-and blocks, update page properties). No new GitHub secrets or public admin route.
+and blocks, update page properties). Newsletter still has no public admin route.
+Dashboard secrets are also Worker secrets, never GitHub secrets: `DASHBOARD_TOKEN`,
+`CF_ACCESS_TEAM_DOMAIN`, `CF_ACCESS_AUD`, and optional `DASHBOARD_ACCESS_EMAIL`.
 
 This PR does not deploy or publish. After merge approval, release requires:
 

@@ -10,9 +10,15 @@
   "routes": [],
   "triggers": { "crons": ["*/15 * * * *"] },
   "durable_objects": {
-    "bindings": [{ "name": "NEWSLETTER_DRAFTS", "class_name": "NewsletterDrafts" }]
+    "bindings": [
+      { "name": "NEWSLETTER_DRAFTS", "class_name": "NewsletterDrafts" },
+      { "name": "CONTENT_DASHBOARD", "class_name": "ContentDashboard" }
+    ]
   },
-  "migrations": [{ "tag": "newsletter-drafts-v1", "new_sqlite_classes": ["NewsletterDrafts"] }],
+  "migrations": [
+    { "tag": "newsletter-drafts-v1", "new_sqlite_classes": ["NewsletterDrafts"] },
+    { "tag": "content-dashboard-v1", "new_sqlite_classes": ["ContentDashboard"] }
+  ],
   "observability": {
     "enabled": true
   },

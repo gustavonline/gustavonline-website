@@ -7,9 +7,11 @@ import {
 import { getPublicIssue, isPublicNewsletter, listPublishedPosts, newsletterTypeFilters, queryContent } from "./adapters/notion";
 import { issueResponseHeaders, renderIssue } from "./newsletter-renderer";
 import { upsertKitSubscriber } from "./adapters/kit";
+import { handleDashboardRequest } from "./dashboard/handler";
 import { corsHeaders, json } from "./http";
 import type { Env } from "./types";
 export { NewsletterDrafts } from "./newsletter-drafts";
+export { ContentDashboard } from "./dashboard/object";
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
@@ -38,6 +40,10 @@ export default {
 
     if (url.pathname === "/posts" && request.method === "GET") {
       return handlePosts(request, env);
+    }
+
+    if (url.pathname === "/dashboard" || url.pathname === "/dashboard/" || url.pathname === "/dashboard/metrics" || url.pathname === "/content-kpis") {
+      return handleDashboardRequest(request, env);
     }
 
     return json({ error: "Not found" }, 404, request, env);
