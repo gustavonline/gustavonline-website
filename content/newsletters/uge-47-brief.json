@@ -1,0 +1,379 @@
+{
+  "title": "Newsletter · uge 47 (16-22. nov. 2026)",
+  "summary": "Everything from my week in Denmark, the work and the rest.",
+  "date": "2026-11-23T21:58:00.000Z",
+  "url": "https://gustavonline.com/notes/uge-47-brief",
+  "body": [
+    {
+      "type": "paragraph",
+      "paragraph": {
+        "rich_text": [
+          {
+            "type": "text",
+            "plain_text": "Monday evening in Denmark.",
+            "text": {
+              "content": "Monday evening in Denmark."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "paragraph",
+      "paragraph": {
+        "rich_text": [
+          {
+            "type": "text",
+            "plain_text": "This is the first of these letters, so here's what it is. Every Monday I write down everything from the week before, what I built, what I learned and what happened at home. The posts on X and LinkedIn are small slices of it. This is the whole thing.",
+            "text": {
+              "content": "This is the first of these letters, so here's what it is. Every Monday I write down everything from the week before, what I built, what I learned and what happened at home. The posts on X and LinkedIn are small slices of it. This is the whole thing."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "image",
+      "image": {
+        "type": "external",
+        "external": {
+          "url": "https://gustavonline.com/assets/notes/uge-47-brief/cinema-display-car-trunk.jpg"
+        },
+        "caption": [
+          {
+            "type": "text",
+            "text": {
+              "content": "The old 30-inch Cinema Display, on its way home."
+            },
+            "plain_text": "The old 30-inch Cinema Display, on its way home."
+          }
+        ]
+      }
+    },
+    {
+      "type": "paragraph",
+      "paragraph": {
+        "rich_text": [
+          {
+            "type": "text",
+            "plain_text": "I bought an old 30-inch Apple Cinema Display this week. The really old kind. Bought it used for 300 DKK, around $45. Drove 2 hours, got it home in the trunk and tested it on my desk. It makes no sense in 2026, and I love it. It's actually 2K, but a very old panel and very heavy.",
+            "text": {
+              "content": "I bought an old 30-inch Apple Cinema Display this week. The really old kind. Bought it used for 300 DKK, around $45. Drove 2 hours, got it home in the trunk and tested it on my desk. It makes no sense in 2026, and I love it. It's actually 2K, but a very old panel and very heavy."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "paragraph",
+      "paragraph": {
+        "rich_text": [
+          {
+            "type": "text",
+            "plain_text": "Every time I sit down in front of it, I get the same feeling I had at twelve, digging around in our router settings to get a Minecraft server running. That same curiosity still drives me. It amazes me that a monitor almost older than me is still so good to this day. Very good engineering from Apple. Something I'm trying to pursue in my own build and in most of my work this week.",
+            "text": {
+              "content": "Every time I sit down in front of it, I get the same feeling I had at twelve, digging around in our router settings to get a Minecraft server running. That same curiosity still drives me. It amazes me that a monitor almost older than me is still so good to this day. Very good engineering from Apple. Something I'm trying to pursue in my own build and in most of my work this week."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "image",
+      "image": {
+        "type": "external",
+        "external": {
+          "url": "https://gustavonline.com/assets/notes/uge-47-brief/home-desk.jpg"
+        },
+        "caption": [
+          {
+            "type": "text",
+            "text": {
+              "content": "The desk at home."
+            },
+            "plain_text": "The desk at home."
+          }
+        ]
+      }
+    },
+    {
+      "type": "paragraph",
+      "paragraph": {
+        "rich_text": [
+          {
+            "type": "text",
+            "plain_text": "Most of the week went into getting my own setup running.",
+            "text": {
+              "content": "Most of the week went into getting my own setup running."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "paragraph",
+      "paragraph": {
+        "rich_text": [
+          {
+            "type": "text",
+            "plain_text": "For about six months I've been building and studying a data and context foundation, something actually useful for AI. Databricks has taught me a lot, and I've also done a lot of data work with Power BI. For businesses, I think it should stay in Notion. One place where notes, projects, clients and content live, and where agents can read and write on the same level as humans. I call it The Onlinesourdough Method. It's a plugin for the AI app you already use, like Grok Bot, Codex, Claude Code and so on. It gives your agents a shared Notion home, and you start with one useful task. The code is at ",
+            "text": {
+              "content": "For about six months I've been building and studying a data and context foundation, something actually useful for AI. Databricks has taught me a lot, and I've also done a lot of data work with Power BI. For businesses, I think it should stay in Notion. One place where notes, projects, clients and content live, and where agents can read and write on the same level as humans. I call it The Onlinesourdough Method. It's a plugin for the AI app you already use, like Grok Bot, Codex, Claude Code and so on. It gives your agents a shared Notion home, and you start with one useful task. The code is at "
+            }
+          },
+          {
+            "type": "text",
+            "plain_text": "github.com/onlinesourdough/OSM-plugin",
+            "text": {
+              "content": "github.com/onlinesourdough/OSM-plugin",
+              "link": {
+                "url": "https://github.com/onlinesourdough/OSM-plugin"
+              }
+            },
+            "href": "https://github.com/onlinesourdough/OSM-plugin"
+          },
+          {
+            "type": "text",
+            "plain_text": ".",
+            "text": {
+              "content": "."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "paragraph",
+      "paragraph": {
+        "rich_text": [
+          {
+            "type": "text",
+            "plain_text": "I've been a big fan of Codex. This week I tested something new with the setup. Lumi, my Grok Bot, now runs on that same foundation. It takes my ideas, writes first drafts, keeps the post plan, picks the times and asks me for approval days ahead. Nothing goes out without my ok, which is why I'm comfortable handing more over to it. It works because it reads the same notes and post plan I do.",
+            "text": {
+              "content": "I've been a big fan of Codex. This week I tested something new with the setup. Lumi, my Grok Bot, now runs on that same foundation. It takes my ideas, writes first drafts, keeps the post plan, picks the times and asks me for approval days ahead. Nothing goes out without my ok, which is why I'm comfortable handing more over to it. It works because it reads the same notes and post plan I do."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "paragraph",
+      "paragraph": {
+        "rich_text": [
+          {
+            "type": "text",
+            "plain_text": "I also had an agent test the plugin as a made-up client, inside an isolated virtual machine on my other laptop. Its own Notion, its own tools, nothing touching my real setup. If you build with agents, give them a sandbox. It saves a lot of time and cleanup.",
+            "text": {
+              "content": "I also had an agent test the plugin as a made-up client, inside an isolated virtual machine on my other laptop. Its own Notion, its own tools, nothing touching my real setup. If you build with agents, give them a sandbox. It saves a lot of time and cleanup."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "paragraph",
+      "paragraph": {
+        "rich_text": [
+          {
+            "type": "text",
+            "plain_text": "And I finally have a content rhythm I can stick to. Every Monday I write this full letter first, then pull shorter posts from it during the week, each with one angle. When I wrote the posts first, they started to sound the same. I also write my analog to-do list in my notebook for the coming week.",
+            "text": {
+              "content": "And I finally have a content rhythm I can stick to. Every Monday I write this full letter first, then pull shorter posts from it during the week, each with one angle. When I wrote the posts first, they started to sound the same. I also write my analog to-do list in my notebook for the coming week."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "paragraph",
+      "paragraph": {
+        "rich_text": [
+          {
+            "type": "text",
+            "plain_text": "Then Notion published \"A new shape for work\". It describes AI as multiplayer: a shared source of truth for people and agents, instead of a private chat. And I just thought to myself, wow you're on the right track, it's not just you haha.. That's the direction I've been building in for months, and it was good to see it written down by the people who make the tool. ",
+            "text": {
+              "content": "Then Notion published \"A new shape for work\". It describes AI as multiplayer: a shared source of truth for people and agents, instead of a private chat. And I just thought to myself, wow you're on the right track, it's not just you haha.. That's the direction I've been building in for months, and it was good to see it written down by the people who make the tool. "
+            }
+          },
+          {
+            "type": "text",
+            "plain_text": "You can read it here.",
+            "text": {
+              "content": "You can read it here.",
+              "link": {
+                "url": "https://www.notion.com/a-new-shape-for-work"
+              }
+            },
+            "href": "https://www.notion.com/a-new-shape-for-work"
+          }
+        ]
+      }
+    },
+    {
+      "type": "image",
+      "image": {
+        "type": "external",
+        "external": {
+          "url": "https://gustavonline.com/assets/notes/uge-47-brief/office-with-victor.jpg"
+        },
+        "caption": [
+          {
+            "type": "text",
+            "text": {
+              "content": "The office I share with my friend Victor."
+            },
+            "plain_text": "The office I share with my friend Victor."
+          }
+        ]
+      }
+    },
+    {
+      "type": "paragraph",
+      "paragraph": {
+        "rich_text": [
+          {
+            "type": "text",
+            "plain_text": "My son asks questions the whole drive. I was exactly like that. Most of us lose it as adults, and AI rewards it again. I'll probably write more on that soon.",
+            "text": {
+              "content": "My son asks questions the whole drive. I was exactly like that. Most of us lose it as adults, and AI rewards it again. I'll probably write more on that soon."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "paragraph",
+      "paragraph": {
+        "rich_text": [
+          {
+            "type": "text",
+            "plain_text": "I've also used Gemini Neon to review my work this week, and it's very good. If you're a student, Google's AI Pro offer is worth a look. Check out my X for a promo link (no affiliate).",
+            "text": {
+              "content": "I've also used Gemini Neon to review my work this week, and it's very good. If you're a student, Google's AI Pro offer is worth a look. Check out my X for a promo link (no affiliate)."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "paragraph",
+      "paragraph": {
+        "rich_text": [
+          {
+            "type": "text",
+            "plain_text": "On X, the numbers went up a lot this week: 15.8k impressions, up 362%. Almost all of the 55 bookmarks came from one post, the one where I explained how I use Notion.",
+            "text": {
+              "content": "On X, the numbers went up a lot this week: 15.8k impressions, up 362%. Almost all of the 55 bookmarks came from one post, the one where I explained how I use Notion."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "paragraph",
+      "paragraph": {
+        "rich_text": [
+          {
+            "type": "text",
+            "plain_text": "This weekend we went to a Christmas market in a big old barn. Those are the weekends I want more of, especially as a dad of two running my own business and finishing my IT architecture degree in January.",
+            "text": {
+              "content": "This weekend we went to a Christmas market in a big old barn. Those are the weekends I want more of, especially as a dad of two running my own business and finishing my IT architecture degree in January."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "image",
+      "image": {
+        "type": "external",
+        "external": {
+          "url": "https://gustavonline.com/assets/notes/uge-47-brief/christmas-market.jpg"
+        },
+        "caption": [
+          {
+            "type": "text",
+            "text": {
+              "content": "Christmas market in a big old barn."
+            },
+            "plain_text": "Christmas market in a big old barn."
+          }
+        ]
+      }
+    },
+    {
+      "type": "paragraph",
+      "paragraph": {
+        "rich_text": [
+          {
+            "type": "text",
+            "plain_text": "Starting next week I'm doing one YouTube video a week, in English. YouTube is something I really want to start posting on, so I'm trying to schedule more content in.",
+            "text": {
+              "content": "Starting next week I'm doing one YouTube video a week, in English. YouTube is something I really want to start posting on, so I'm trying to schedule more content in."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "paragraph",
+      "paragraph": {
+        "rich_text": [
+          {
+            "type": "text",
+            "plain_text": "The first one is about how to build an agentic system, a place where people and agents share the same data and context. I'll draw it out first, then show the same task at three levels. We start with a design task because you can see the difference straight away.",
+            "text": {
+              "content": "The first one is about how to build an agentic system, a place where people and agents share the same data and context. I'll draw it out first, then show the same task at three levels. We start with a design task because you can see the difference straight away."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "paragraph",
+      "paragraph": {
+        "rich_text": [
+          {
+            "type": "text",
+            "plain_text": "If you're trying to get AI working in your own business, hit reply and tell me where you're stuck. I read every email. And if you want to see the setup I use, it's all at ",
+            "text": {
+              "content": "If you're trying to get AI working in your own business, hit reply and tell me where you're stuck. I read every email. And if you want to see the setup I use, it's all at "
+            }
+          },
+          {
+            "type": "text",
+            "plain_text": "onlinesourdough.com",
+            "text": {
+              "content": "onlinesourdough.com",
+              "link": {
+                "url": "https://onlinesourdough.com/"
+              }
+            },
+            "href": "https://onlinesourdough.com/"
+          },
+          {
+            "type": "text",
+            "plain_text": ", plug and play on Notion.",
+            "text": {
+              "content": ", plug and play on Notion."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "paragraph",
+      "paragraph": {
+        "rich_text": [
+          {
+            "type": "text",
+            "plain_text": "/Gustav, Denmark, 21:00",
+            "text": {
+              "content": "/Gustav, Denmark, 21:00"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

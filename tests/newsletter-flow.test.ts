@@ -29,9 +29,9 @@ function ledger(): DraftLedger {
 afterEach(() => vi.restoreAllMocks());
 
 describe("published newsletter route", () => {
-  it("renders a complete escaped issue from Notion, including subsequent block pages", async () => {
+  it.each(["Published", "Publiceret"])("renders a complete escaped %s issue from Notion, including subsequent block pages", async (status) => {
     const fetcher = vi.spyOn(globalThis, "fetch")
-      .mockResolvedValueOnce(reply({ results: [edition()] }))
+      .mockResolvedValueOnce(reply({ results: [edition(status)] }))
       .mockResolvedValueOnce(reply({ results: [paragraph], has_more: true, next_cursor: "next" }))
       .mockResolvedValueOnce(reply({ results: [{ type: "heading_2", heading_2: { rich_text: text("More") } }], has_more: false }));
     const response = await worker.fetch(new Request("https://api.example/notes/a-useful-note"), env);
@@ -41,6 +41,40 @@ describe("published newsletter route", () => {
     expect(html).toContain("Hello &lt;reader&gt;"); expect(html).toContain("<h2>More</h2>");
     expect(html).toContain('href="https://gustavonline.com/newsletter#bookshelf"');
     expect(String(fetcher.mock.calls[2][0])).toContain("start_cursor=next");
+    expect(JSON.parse(String(fetcher.mock.calls[0][1]?.body)).filter.and[0]).toEqual({ or: [
+      { property: "Status", select: { equals: "Published" } },
+      { property: "Status", select: { equals: "Publiceret" } },
+    ] });
+  });
+  it("reads only the explicit public container, even when it is on a later root page", async () => {
+    const fetcher = vi.spyOn(globalThis, "fetch")
+      .mockResolvedValueOnce(reply({ results: [edition("Publiceret")] }))
+      .mockResolvedValueOnce(reply({ results: [
+        { id: "private", type: "synced_block", has_children: true },
+        { type: "embed", embed: { url: "https://private.example/draft" } },
+      ], has_more: true, next_cursor: "public-page" }))
+      .mockResolvedValueOnce(reply({ results: [
+        { id: "public", type: "toggle", has_children: true, toggle: { rich_text: text("Public newsletter") } },
+      ] }))
+      .mockResolvedValueOnce(reply({ results: [paragraph, { type: "image", image: {
+        type: "external", external: { url: "https://gustavonline.com/assets/notes/photo.jpg" }, caption: text("Photo"),
+      } }] }));
+    const response = await worker.fetch(new Request("https://api.example/notes/a-useful-note"), env);
+    expect(response.status).toBe(200);
+    const html = await response.text();
+    expect(html).toContain("Hello &lt;reader&gt;");
+    expect(html).toContain('src="https://gustavonline.com/assets/notes/photo.jpg"');
+    expect(html).not.toContain("private.example");
+    expect(String(fetcher.mock.calls[3][0])).toContain("blocks/public/children");
+    expect(fetcher).toHaveBeenCalledTimes(4);
+  });
+  it.each(["empty", "duplicate"])("fails closed for an %s public container", async (reason) => {
+    const block = { id: "public", type: "toggle", has_children: false, toggle: { rich_text: text("Public newsletter") } };
+    vi.spyOn(globalThis, "fetch")
+      .mockResolvedValueOnce(reply({ results: [edition()] }))
+      .mockResolvedValueOnce(reply({ results: [paragraph, block, ...(reason === "duplicate" ? [block] : [])] }));
+    const response = await worker.fetch(new Request("https://api.example/notes/a-useful-note"), env);
+    expect(response.status).toBe(502); expect(await response.text()).not.toContain("Hello");
   });
   it.each(["Draft", "Ready", "Archived"])("never reads the body of a %s edition", async (status) => {
     const fetcher = vi.spyOn(globalThis, "fetch").mockResolvedValue(reply({ results: [edition(status)] }));
@@ -56,7 +90,7 @@ describe("published newsletter route", () => {
     expect(response.headers.get("Cache-Control")).toBe("no-store");
   });
   it.each(["/posts?format=newsletter", "/posts"])("excludes duplicate-slug editions from %s as well as the issue route", async (path) => {
-    vi.spyOn(globalThis, "fetch").mockImplementation(async () => reply({ results: [edition(), edition()] }));
+    vi.spyOn(globalThis, "fetch").mockImplementation(async () => reply({ results: [edition(), edition("Publiceret")] }));
     expect(await (await worker.fetch(new Request(`https://api.example${path}`), env)).json()).toEqual({ posts: [] });
     expect((await worker.fetch(new Request("https://api.example/notes/a-useful-note"), env)).status).toBe(404);
   });
@@ -72,10 +106,10 @@ describe("published newsletter route", () => {
     expect(response.status).toBe(404); expect(fetcher).toHaveBeenCalledTimes(1);
     expect(await (await worker.fetch(new Request("https://api.example/posts?format=newsletter"), env)).json()).toEqual({ posts: [] });
   });
-  it("includes a newsletter-channel edition, paginates the archive, and never creates a broadcast on reads", async () => {
+  it.each(["Published", "Publiceret"])("includes a %s newsletter-channel edition, paginates the archive, and never creates a broadcast on reads", async (status) => {
     const fetcher = vi.spyOn(globalThis, "fetch")
       .mockResolvedValueOnce(reply({ results: [], has_more: true, next_cursor: "next" }))
-      .mockResolvedValueOnce(reply({ results: [edition()], has_more: false }));
+      .mockResolvedValueOnce(reply({ results: [edition(status)], has_more: false }));
     const response = await worker.fetch(new Request("https://api.example/posts?format=newsletter"), env);
     expect(await response.json()).toEqual({ posts: [{ title: "A useful note", summary: "From the work", date: "2026-11-22", url: "https://gustavonline.com/notes/a-useful-note" }] });
     expect(JSON.parse(String(fetcher.mock.calls[1][1]?.body)).start_cursor).toBe("next");
@@ -125,7 +159,7 @@ describe("draft preparation", () => {
     await prepareNewsletter("edition-id", env, ledger()); expect(fetcher).toHaveBeenCalledTimes(1);
   });
   it.each(["already-created", "unchecked", "wrong-source"])("skips %s before reading any body or calling Kit", async (reason) => {
-    const page = edition();
+    const page = edition("Publiceret");
     if (reason === "already-created") page.properties["Kit broadcast id"].rich_text = text("42");
     if (reason === "unchecked") page.properties["Send as newsletter"].checkbox = false;
     if (reason === "wrong-source") page.parent.data_source_id = "another-source";
@@ -206,7 +240,10 @@ describe("newsletter cron dispatch", () => {
     expect(dispatch).toHaveBeenCalledTimes(2);
     expect(String(dispatch.mock.calls[1][0])).toBe("https://draft.internal/second-edition");
     expect(JSON.parse(String(query.mock.calls[0][1]?.body)).filter.and).toEqual([
-      { property: "Status", select: { equals: "Published" } },
+      { or: [
+        { property: "Status", select: { equals: "Published" } },
+        { property: "Status", select: { equals: "Publiceret" } },
+      ] },
       { property: "Type", select: { equals: "Edition" } },
       { property: "Format", select: { equals: "Newsletter" } },
       { property: "Send as newsletter", checkbox: { equals: true } },

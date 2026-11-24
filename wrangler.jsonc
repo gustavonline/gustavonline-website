@@ -5,10 +5,9 @@
   "compatibility_date": "2026-06-14",
   "workers_dev": true,
   "preview_urls": false,
-  "routes": [
-    { "pattern": "gustavonline.com/notes/*", "zone_name": "gustavonline.com" },
-    { "pattern": "www.gustavonline.com/notes/*", "zone_name": "gustavonline.com" }
-  ],
+  // DNS stays at Simply.com; GitHub Pages serves the exported /notes/ pages.
+  // This Worker supplies the live feed and its workers.dev issue endpoint.
+  "routes": [],
   "triggers": { "crons": ["*/15 * * * *"] },
   "durable_objects": {
     "bindings": [{ "name": "NEWSLETTER_DRAFTS", "class_name": "NewsletterDrafts" }]

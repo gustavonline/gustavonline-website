@@ -37,6 +37,22 @@ test.afterEach(async ({ page }) => {
   await page.unrouteAll({ behavior: "wait" });
 });
 
+test("the exported week 47 letter has its real body and four working photos", async ({ page }, testInfo) => {
+  const response = await page.goto("/notes/uge-47-brief/");
+  expect(response?.status()).toBe(200);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Newsletter · uge 47 (16-22. nov. 2026)");
+  await expect(page.locator("article")).toContainText("Monday evening in Denmark.");
+  await expect(page.locator("article")).toContainText("/Gustav, Denmark, 21:00");
+  await expect(page.locator("article img")).toHaveCount(4);
+  await expect.poll(() => page.locator("article img").evaluateAll((images) => images.every((image) =>
+    image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0))).toBe(true);
+  await expect(page.locator("body")).not.toContainText("Dine noter");
+  await expect(page.locator("body")).not.toContainText("Not for posting as-is");
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://gustavonline.com/notes/uge-47-brief");
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  await page.screenshot({ path: `output/playwright/week47-${testInfo.project.name}.png`, fullPage: true });
+});
+
 for (const entry of ["/newsletter/", "/newsletter", "/newsletter#bookshelf"]) {
 test(`signup from ${entry} confirms beside the visible bookshelf`, async ({ page }, testInfo) => {
   await page.goto(entry);
