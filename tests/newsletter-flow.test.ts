@@ -76,6 +76,17 @@ describe("published newsletter route", () => {
     const response = await worker.fetch(new Request("https://api.example/notes/a-useful-note"), env);
     expect(response.status).toBe(502); expect(await response.text()).not.toContain("Hello");
   });
+  it.each(["heading_1", "heading_2", "heading_3", "paragraph"])("refuses a public marker on a %s rather than publishing editorial notes", async (type) => {
+    const fetcher = vi.spyOn(globalThis, "fetch")
+      .mockResolvedValueOnce(reply({ results: [edition()] }))
+      .mockResolvedValueOnce(reply({ results: [paragraph, {
+        id: "wrong-container", type, has_children: true,
+        [type]: { rich_text: text("  PUBLIC newsletter  "), is_toggleable: true },
+      }] }));
+    const response = await worker.fetch(new Request("https://api.example/notes/a-useful-note"), env);
+    expect(response.status).toBe(502); expect(await response.text()).not.toContain("Hello");
+    expect(fetcher).toHaveBeenCalledTimes(2);
+  });
   it.each(["Draft", "Ready", "Archived"])("never reads the body of a %s edition", async (status) => {
     const fetcher = vi.spyOn(globalThis, "fetch").mockResolvedValue(reply({ results: [edition(status)] }));
     const response = await worker.fetch(new Request("https://api.example/notes/a-useful-note"), env);
@@ -154,12 +165,12 @@ describe("draft preparation", () => {
     expect(JSON.parse(String(options?.body)).content).toContain("Hello &lt;reader&gt;");
     expect(JSON.parse(String(fetcher.mock.calls[4][1]?.body)).properties["Kit broadcast id"].rich_text[0].text.content).toBe("42");
   });
-  it("does nothing for a draft even when Send as newsletter is checked", async () => {
-    const fetcher = vi.spyOn(globalThis, "fetch").mockResolvedValue(reply(edition("Draft")));
+  it.each(["Draft", "Publiceret"])("does nothing for %s even when Send as newsletter is checked", async (status) => {
+    const fetcher = vi.spyOn(globalThis, "fetch").mockResolvedValue(reply(edition(status)));
     await prepareNewsletter("edition-id", env, ledger()); expect(fetcher).toHaveBeenCalledTimes(1);
   });
   it.each(["already-created", "unchecked", "wrong-source"])("skips %s before reading any body or calling Kit", async (reason) => {
-    const page = edition("Publiceret");
+    const page = edition();
     if (reason === "already-created") page.properties["Kit broadcast id"].rich_text = text("42");
     if (reason === "unchecked") page.properties["Send as newsletter"].checkbox = false;
     if (reason === "wrong-source") page.parent.data_source_id = "another-source";
@@ -226,7 +237,7 @@ describe("newsletter cron dispatch", () => {
   it("continues after a transport error, skips drafts and reports aggregate failure", async () => {
     vi.spyOn(console, "error").mockImplementation(() => {});
     const query = vi.spyOn(globalThis, "fetch").mockResolvedValue(reply({ results: [
-      edition(), { ...edition(), id: "second-edition" }, edition("Draft"),
+      edition(), { ...edition(), id: "second-edition" }, edition("Draft"), edition("Publiceret"),
     ] }));
     const dispatch = vi.fn().mockRejectedValueOnce(new Error("transport failed"))
       .mockResolvedValueOnce(new Response(null, { status: 204 }));

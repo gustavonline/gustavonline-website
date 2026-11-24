@@ -24,7 +24,7 @@ export type NotionContent = {
 export async function listPublishedPosts(env: Env, newslettersOnly = false): Promise<WritingPost[]> {
   const pages = await queryContent(env, newslettersOnly ? newsletterFilter : {
     and: [
-      newsletterFilter.and[0],
+      publishedNewsletterStatusFilter,
       { or: [
         { property: "Type", select: { equals: "Content" } },
         { property: "Type", select: { equals: "Edition" } },
@@ -88,13 +88,19 @@ function isPublishedNewsletterStatus(status: string | undefined): boolean {
   return status === "Published" || status === "Publiceret";
 }
 
-export const newsletterFilter = { and: [
-  { or: [
+const publishedNewsletterStatusFilter = { or: [
     { property: "Status", select: { equals: "Published" } },
     { property: "Status", select: { equals: "Publiceret" } },
-  ] },
+  ] };
+
+export const newsletterTypeFilters = [
   { property: "Type", select: { equals: "Edition" } },
   { property: "Format", select: { equals: "Newsletter" } },
+];
+
+export const newsletterFilter = { and: [
+  publishedNewsletterStatusFilter,
+  ...newsletterTypeFilters,
 ] };
 
 export function newsletterSlug(page: NotionContent) {
@@ -178,12 +184,14 @@ export async function readIssueBody(id: string, env: Env): Promise<NotionBlock[]
       cursor = data.has_more ? data.next_cursor : undefined;
     } while (cursor);
     if (depth === 0) {
-      const publicBlocks = blocks.filter((block) => block.type === "toggle"
-        && (block.toggle as { rich_text?: RichText[] } | undefined)?.rich_text
-          ?.map((part) => part.plain_text ?? part.text?.content ?? "").join("") === publicNewsletterLabel);
+      const publicBlocks = blocks.filter((block) =>
+        (block[block.type] as { rich_text?: RichText[] } | undefined)?.rich_text
+          ?.map((part) => part.plain_text ?? part.text?.content ?? "").join("").trim().toLowerCase()
+          === publicNewsletterLabel.toLowerCase());
       if (publicBlocks.length > 1) throw new Error("Ambiguous public newsletter body");
       if (publicBlocks.length === 1) {
         const block = publicBlocks[0];
+        if (block.type !== "toggle") throw new Error("Public newsletter container must be a top-level toggle");
         if (!block.id || !block.has_children) throw new Error("Public newsletter body is empty");
         const body = await children(block.id, depth + 1);
         if (!body.length) throw new Error("Public newsletter body is empty");
