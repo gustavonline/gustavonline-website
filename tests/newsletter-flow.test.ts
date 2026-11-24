@@ -240,10 +240,7 @@ describe("newsletter cron dispatch", () => {
     expect(dispatch).toHaveBeenCalledTimes(2);
     expect(String(dispatch.mock.calls[1][0])).toBe("https://draft.internal/second-edition");
     expect(JSON.parse(String(query.mock.calls[0][1]?.body)).filter.and).toEqual([
-      { or: [
-        { property: "Status", select: { equals: "Published" } },
-        { property: "Status", select: { equals: "Publiceret" } },
-      ] },
+      { property: "Status", select: { equals: "Published" } },
       { property: "Type", select: { equals: "Edition" } },
       { property: "Format", select: { equals: "Newsletter" } },
       { property: "Send as newsletter", checkbox: { equals: true } },

@@ -10,6 +10,8 @@ The `gustavonline-api` Worker serves the live newsletter feed at
 and dynamic issues at its `/notes/:slug` endpoint. Public editions accept
 either `Published` or `Publiceret`, still requiring Edition + Newsletter,
 a past publish date, unique slug, and the exact public URL.
+The existing mail cron still queries only `Published`; adding the Danish
+archive alias does not enroll additional editions in draft preparation.
 
 ## Public body in Notion
 

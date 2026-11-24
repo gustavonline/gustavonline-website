@@ -46,7 +46,10 @@ export default {
   async scheduled(_event: ScheduledController, env: Env): Promise<void> {
     if (!env.NEWSLETTER_DRAFTS) throw new Error("Newsletter draft ledger is not configured");
     const pages = await queryContent(env, { and: [
-      ...newsletterFilter.and,
+      // Publiceret is a public archive alias only. Preserve the existing
+      // mail job selection rather than enrolling more editions in Kit.
+      { property: "Status", select: { equals: "Published" } },
+      ...newsletterFilter.and.slice(1),
       { property: "Send as newsletter", checkbox: { equals: true } },
       { property: "Kit broadcast id", rich_text: { is_empty: true } },
     ] });
