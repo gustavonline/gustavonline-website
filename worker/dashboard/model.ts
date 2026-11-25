@@ -1,5 +1,5 @@
 import seedJson from "../../content/dashboard/content-kpis.json" with { type: "json" };
-import { formatDay, formatInteger, isoWeek } from "./format";
+import { addDays, formatDate, formatDay, formatInteger, isoWeek, mondayOf, todayIn, weekMonday } from "./format";
 
 export { isoWeek } from "./format";
 
@@ -205,7 +205,7 @@ export function parseMetrics(input: unknown): MetricsPatch {
   return patch;
 }
 
-export function applyMonday(doc: Dashboard, update: MondayUpdate): Dashboard {
+export function applyMonday(doc: Dashboard, update: MondayUpdate, now = new Date()): Dashboard {
   const next = structuredClone(doc);
   const year = resolveYear(next, update.week, update.year);
   const week = ensureWeek(next, year, update.week);
@@ -217,19 +217,11 @@ export function applyMonday(doc: Dashboard, update: MondayUpdate): Dashboard {
     week.state = "closed";
     week.stateLabel = "Closed";
   }
-  if (update.xFollowers !== undefined && shouldReplaceNow(next, year, update.week)) {
-    next.xNow = {
-      followers: update.xFollowers,
-      measuredOn: null,
-      label: `Week ${update.week}`,
-      partOfDay: null,
-      source: { year, week: update.week },
-    };
-  }
+  if (update.xFollowers !== undefined) followWeek(next, week, update.xFollowers, now);
   return next;
 }
 
-export function applyMetrics(doc: Dashboard, patch: MetricsPatch): Dashboard {
+export function applyMetrics(doc: Dashboard, patch: MetricsPatch, now = new Date()): Dashboard {
   const next = structuredClone(doc);
   if (patch.goals) next.goals = { ...next.goals, ...patch.goals };
   if (patch.baseline) next.baseline = { ...next.baseline, ...patch.baseline };
@@ -249,6 +241,11 @@ export function applyMetrics(doc: Dashboard, patch: MetricsPatch): Dashboard {
     if (patch.partial !== undefined) week.partial = patch.partial;
     if (patch.x === null) week.x = null;
     else if (patch.x) week.x = { ...(week.x ?? emptyX()), ...patch.x };
+    // An explicit snapshot in the same update is the newer statement.
+    if (patch.xNow?.followers === undefined) {
+      if (typeof patch.x?.followers === "number") followWeek(next, week, patch.x.followers, now);
+      else if (patch.x === null || patch.x?.followers === null) forgetWeek(next, week);
+    }
     if (patch.linkedin === null) week.linkedin = null;
     else if (patch.linkedin) week.linkedin = { ...(week.linkedin ?? emptyLinkedIn()), ...patch.linkedin };
     if (patch.newsletter === null) week.newsletter = null;
@@ -260,7 +257,12 @@ export function applyMetrics(doc: Dashboard, patch: MetricsPatch): Dashboard {
 }
 
 export function resolveYear(doc: Dashboard, week: number, year?: number): number {
-  if (year !== undefined) return year;
+  const resolved = year ?? knownYear(doc, week);
+  requireIsoWeek(resolved, week);
+  return resolved;
+}
+
+function knownYear(doc: Dashboard, week: number): number {
   const matches = doc.weeks.filter((item) => item.week === week);
   if (matches.length === 1) return matches[0].year;
   const current = doc.weeks.find((item) => item.state === "current");
@@ -516,14 +518,33 @@ function ensureWeek(doc: Dashboard, year: number, weekNumber: number): Dashboard
   return created;
 }
 
-function shouldReplaceNow(doc: Dashboard, year: number, week: number): boolean {
-  const incoming = year * 100 + week;
-  if (doc.xNow.source) return incoming >= doc.xNow.source.year * 100 + doc.xNow.source.week;
-  if (doc.xNow.measuredOn) {
-    const current = isoWeek(doc.xNow.measuredOn);
-    return incoming >= current.year * 100 + current.week;
+// Keeps the current X count in step with the newest recorded week.
+function followWeek(doc: Dashboard, { year, week }: DashboardWeek, followers: number, now: Date) {
+  const monday = weekMonday(year, week);
+  if (monday > mondayOf(todayIn(doc.timezone, now))) return;
+  const current = nowMonday(doc);
+  if (current && monday < current) return;
+  doc.xNow = { followers, measuredOn: null, label: `Week ${week}`, partOfDay: null, source: { year, week } };
+}
+
+// Clearing the week the current X count came from falls back to the newest count that is left.
+function forgetWeek(doc: Dashboard, { year, week }: DashboardWeek) {
+  const { source } = doc.xNow;
+  if (source?.year !== year || source.week !== week) return;
+  const recorded = [...doc.weeks].reverse().find((item) => typeof item.x?.followers === "number" && weekMonday(item.year, item.week) < weekMonday(year, week));
+  const point = doc.xSeries.filter((item) => item.measuredOn !== null).sort((a, b) => (a.measuredOn as string).localeCompare(b.measuredOn as string)).pop();
+  if (point?.measuredOn && (!recorded || point.measuredOn >= addDays(weekMonday(recorded.year, recorded.week), 6))) {
+    doc.xNow = { followers: point.followers, measuredOn: point.measuredOn, label: formatDate(point.measuredOn), partOfDay: null, source: null };
+  } else if (recorded && typeof recorded.x?.followers === "number") {
+    doc.xNow = { followers: recorded.x.followers, measuredOn: null, label: `Week ${recorded.week}`, partOfDay: null, source: { year: recorded.year, week: recorded.week } };
   }
-  return true;
+}
+
+// A dated snapshot is always written after the week it replaced as the source.
+export function nowMonday(doc: Dashboard): string | null {
+  const { measuredOn, source } = doc.xNow;
+  if (measuredOn) return mondayOf(measuredOn);
+  return source ? weekMonday(source.year, source.week) : null;
 }
 
 function normalizeXNow(patch: Partial<Dashboard["xNow"]>, current: Dashboard["xNow"]): Dashboard["xNow"] {
@@ -532,7 +553,7 @@ function normalizeXNow(patch: Partial<Dashboard["xNow"]>, current: Dashboard["xN
     measuredOn: patch.measuredOn === undefined ? current.measuredOn : patch.measuredOn,
     label: patch.label ?? current.label,
     partOfDay: patch.partOfDay === undefined ? current.partOfDay : patch.partOfDay,
-    source: patch.source === undefined ? current.source : patch.source,
+    source: patch.source !== undefined ? patch.source : patch.measuredOn ? null : current.source,
   };
 }
 
@@ -565,7 +586,9 @@ function parseSource(input: unknown): { year: number; week: number } | null {
 
 function requireSource(input: unknown): { year: number; week: number } {
   const record = expectRecord(input, "Source");
-  return { year: requireYear(record.year), week: requireWeek(record.week) };
+  const source = { year: requireYear(record.year), week: requireWeek(record.week) };
+  requireIsoWeek(source.year, source.week);
+  return source;
 }
 
 function expectRecord(input: unknown, label: string): Record<string, unknown> {
@@ -591,6 +614,10 @@ function requireYear(value: unknown): number {
     throw new DashboardInputError("Year must be a whole number from 2020 to 2100.");
   }
   return value;
+}
+
+function requireIsoWeek(year: number, week: number) {
+  if (isoWeek(weekMonday(year, week)).year !== year) throw new DashboardInputError(`${year} has no week ${week}.`);
 }
 
 function requireCount(value: unknown, label: string): number {

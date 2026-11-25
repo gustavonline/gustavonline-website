@@ -80,7 +80,7 @@ The page renders `content/dashboard/content-kpis.json` until the `ContentDashboa
 
 The page is read-only and in English:
 
-- **Overview**: one card each for X, LinkedIn, YouTube and the newsletter. Followers or subscribers is the latest count; views or impressions is the latest week that has one.
+- **Overview**: one card each for X, LinkedIn, YouTube and the newsletter. Followers or subscribers is the latest count (for X the newest of the recorded weeks, `xNow` and `xSeries`); views or impressions is the latest week that has one.
 - **Platform details**: the latest week with engagement numbers, per platform.
 - **Monday review**: always the previous Monday–Sunday week in the document's timezone, next to the week before it.
 
@@ -96,7 +96,7 @@ Weekly counts, `POST /dashboard` (JSON or a normal form post), accepts only:
 
 Omit a number to leave it unchanged. `0` is a real zero. At least one of the four counts is required. Those four are the goal metrics: X followers, LinkedIn followers, newsletter subscribers, YouTube subscribers. This write does not accept any other metric; use the assistant update.
 
-Assistant updates use the same document. Prefer `POST /content-kpis` once Access is limited to `/dashboard`, so the login wall does not sit in front of the token. `POST /dashboard/metrics` is the same write. `GET /content-kpis` returns the current document. Send only keys you are changing. `null` clears a metric. Unknown keys are rejected. `openRatePercent` and `clickRatePercent` are `0`–`100`. `watchTimeHours` is hours. `partial: true` marks a week that was not counted in full.
+Assistant updates use the same document. Prefer `POST /content-kpis` once Access is limited to `/dashboard`, so the login wall does not sit in front of the token. `POST /dashboard/metrics` is the same write. `GET /content-kpis` returns the current document. Send only keys you are changing. `null` clears a metric. A weekly `x.followers` also moves `xNow`, unless `xNow` is from a later week or the week has not started; a dated `xNow` replaces the week it came from. Unknown keys are rejected. `openRatePercent` and `clickRatePercent` are `0`–`100`. `watchTimeHours` is hours. `partial: true` marks a week that was not counted in full.
 
 | Key | Metrics |
 | --- | --- |

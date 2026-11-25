@@ -72,7 +72,7 @@ function headline(reading: Reading, goal: PlatformCard["goal"]): string {
 }
 
 function detailPanel(panel: PlatformDetails): string {
-  const period = panel.period ? `<span class="period">${escapeHtml(panel.period)}${panel.partial ? " · partial week" : ""}</span>` : "";
+  const period = panel.period ? `<span class="period">${escapeHtml(panel.period)}</span>` : "";
   const body = panel.readings.length === 0
     ? `<div class="none-block"><p class="none">${NO_DATA}</p><p class="hint">${escapeHtml(panel.labels.join(" · "))}</p></div>`
     : `<dl>${panel.readings.map((reading) => `<div class="metric"><dt>${escapeHtml(reading.label)}${ownPeriod(reading, panel)}</dt><dd>${metricValue(reading)}</dd></div>`).join("")}</dl>`;
@@ -81,7 +81,7 @@ function detailPanel(panel: PlatformDetails): string {
 
 // A standing count can be newer than the week the rest of the panel shows.
 function ownPeriod(reading: Reading, panel: PlatformDetails): string {
-  return reading.period && reading.period !== panel.period ? ` <span class="own">${escapeHtml(reading.period)}</span>` : "";
+  return reading.period && reading.monday !== panel.monday ? ` <span class="own">${escapeHtml(reading.period)}</span>` : "";
 }
 
 function metricValue(reading: Reading): string {
@@ -96,10 +96,14 @@ function mondayReview(review: Summary["review"]): string {
     <h2 id="review">Monday review — week of ${formatLongDate(review.monday)}</h2>
     <p class="sub">${span} · week ${review.week}${review.partial ? " · partial week" : ""}</p>
     <table>
-      <thead><tr><th scope="col">Metric</th><th scope="col">Week ${review.week}</th><th scope="col">Week ${review.previousWeek}</th><th scope="col">Change</th></tr></thead>
+      <thead><tr><th scope="col">Metric</th>${weekHeading(review.week, review.partial)}${weekHeading(review.previousWeek, review.previousPartial)}<th scope="col">Change</th></tr></thead>
       ${review.platforms.map(reviewGroup).join("")}
     </table>
   </section>`;
+}
+
+function weekHeading(week: number, partial: boolean): string {
+  return `<th scope="col">Week ${week}${partial ? "<br>partial" : ""}</th>`;
 }
 
 function reviewGroup(platform: Summary["review"]["platforms"][number]): string {
@@ -108,13 +112,13 @@ function reviewGroup(platform: Summary["review"]["platforms"][number]): string {
   return `<tbody><tr class="group"><th scope="rowgroup" colspan="4">${name}</th></tr>${platform.rows.map((row) => `<tr>
     <th scope="row">${escapeHtml(row.label)}</th>
     <td>${row.value === null ? `<span class="none">${NO_DATA}</span>` : `<b>${number(row.value, row.unit)}</b>`}</td>
-    <td>${row.previous === null ? blank() : number(row.previous, row.unit)}</td>
-    <td>${row.delta ? `<span class="change${tone(row.delta)}">${changeText(row.delta)}</span>` : blank()}</td>
+    <td>${row.previous === null ? blank(NO_DATA) : number(row.previous, row.unit)}</td>
+    <td>${row.delta ? `<span class="change${tone(row.delta)}">${changeText(row.delta)}</span>` : blank("No comparison")}</td>
   </tr>`).join("")}</tbody>`;
 }
 
-function blank(): string {
-  return `<span class="blank" aria-label="${NO_DATA}">–</span>`;
+function blank(meaning: string): string {
+  return `<span class="blank" aria-hidden="true">–</span><span class="sr">${meaning}</span>`;
 }
 
 function trendPanel(trend: Trend): string {
@@ -142,13 +146,13 @@ function chart({ points }: Trend): string {
     last: index === points.length - 1,
   }));
   const line = placed.map((point) => `${point.left},${point.top}`).join(" ");
-  const described = points.map((point) => `${formatInteger(point.followers)}${point.label ? ` on ${point.label}` : ""}`).join(", ");
+  const described = points.map((point) => `${formatInteger(point.followers)}${point.label ? ` (${point.label})` : ""}`).join(", ");
   return `<div class="chart" role="img" aria-label="${escapeHtml(`X followers: ${described}`)}">
       <div class="plot">
         <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polyline points="${line}" class="line"></polyline></svg>
         ${placed.map((point) => `<i class="dot${point.last ? " last" : ""}" style="left:${point.left}%;top:${point.top}%"></i>${point.labelled ? `<span class="point${point.edge}" style="left:${point.left}%;top:${point.top}%">${formatCompact(point.followers)}</span>` : ""}`).join("")}
       </div>
-      <div class="axis">${placed.map((point) => point.labelled && point.label ? `<span class="${point.edge.trim()}" style="left:${point.left}%">${point.label}</span>` : "").join("")}</div>
+      <div class="axis">${placed.map((point) => point.labelled ? `<span class="${point.edge.trim()}" style="left:${point.left}%">${point.label}</span>` : "").join("")}</div>
     </div>`;
 }
 
@@ -167,8 +171,7 @@ function labelledPoints(positions: number[]): Set<number> {
 }
 
 function footer(doc: Dashboard): string {
-  const measured = doc.xNow.measuredOn ? ` X followers were last counted publicly on ${formatDate(doc.xNow.measuredOn)}.` : "";
-  return `Weeks run Monday to Sunday, ${safeTimezone(doc.timezone)}.${measured} Only counted numbers are shown. Changes are left out when a week is still running or only partly counted.`;
+  return `Weeks run Monday to Sunday, ${safeTimezone(doc.timezone)}. Only counted numbers are shown. Changes are left out when a week is still running or only partly counted.`;
 }
 
 function number(value: number, unit: Unit): string {
@@ -261,6 +264,7 @@ h3{font-size:15px;font-weight:600;letter-spacing:-0.02em;line-height:1.3}
 .period{font-size:13px;line-height:1.45;color:var(--muted)}
 .none{font-size:14px;line-height:1.45;color:var(--muted)}
 .headline .none{margin-top:8px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 .blank{color:var(--muted)}
 .goal{margin-top:10px;font-size:13px;color:var(--muted)}
 .bar{height:4px;background:var(--faint);overflow:hidden;margin-bottom:6px}

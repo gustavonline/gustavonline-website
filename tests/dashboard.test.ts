@@ -62,6 +62,7 @@ describe("private content dashboard", () => {
     expect(x).toContain("As of 24 Nov");
     expect(x).toContain('title="17,119">17.1K<');
     expect(x).toContain("Week of 16 Nov");
+    expect(x).toContain("Week of 16 Nov · partial week");
     const details = part(html, "details", "x");
     for (const label of ["Views / impressions", "Likes", "Replies", "Reposts", "Bookmarks", "Bookmarks per 100 likes"]) expect(details).toContain(label);
     for (const value of [">80<", ">17<", ">55<", ">68.8<"]) expect(details).toContain(value);
@@ -91,6 +92,7 @@ describe("private content dashboard", () => {
       expect(card.match(/No data yet/g)).toHaveLength(expected.length - 1);
       expect(part(html, "details", platform)).toContain("No data yet");
     }
+    expect(html).toContain('<span class="blank" aria-hidden="true">–</span><span class="sr">No data yet</span>');
     expect(html).not.toMatch(/<(form|input|textarea|select)\b/);
   });
 
@@ -121,36 +123,106 @@ describe("private content dashboard", () => {
 
   it("compares only full weeks that follow each other", async () => {
     const env = makeEnv();
-    const post = async (body: unknown) => expect((await worker.fetch(authed("/content-kpis", {
-      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body),
-    }), env)).status).toBe(200);
     const summary = async () => summarize(await (await worker.fetch(authed("/content-kpis"), env)).json() as ReturnType<typeof seedDashboard>, new Date());
     const impressions = async () => (await summary()).cards[0].readings[1];
-    await post({ year: 2026, week: 46, x: { followers: 31, impressions: 12000 }, linkedin: { impressions: 900 } });
+    await write(env, "/content-kpis", { year: 2026, week: 46, x: { followers: 31, impressions: 12000 }, linkedin: { impressions: 900 } });
     // Week 47 is marked partial in the seed, so its total has no comparison. Its follower count does.
-    expect(await impressions()).toMatchObject({ value: 17119, delta: null, period: "Week of 16 Nov" });
+    expect(await impressions()).toMatchObject({ value: 17119, delta: null, period: "Week of 16 Nov · partial week" });
     expect((await summary()).review.platforms[0].rows?.[0]).toMatchObject({ value: 44, previous: 31, delta: { amount: 13, percent: 42 } });
-    await post({ year: 2026, week: 47, partial: false });
+    await write(env, "/content-kpis", { year: 2026, week: 47, partial: false });
     expect(await impressions()).toMatchObject({ value: 17119, delta: { amount: 5119, percent: 43 } });
     // A running week is shown as such and never compared.
-    await post({ year: 2026, week: 48, x: { impressions: 300 }, linkedin: { impressions: 1000 } });
+    await write(env, "/content-kpis", { year: 2026, week: 48, x: { impressions: 300 }, linkedin: { impressions: 1000 } });
     expect(await impressions()).toMatchObject({ value: 300, delta: null, period: "This week so far" });
     // LinkedIn has weeks 46 and 48 only: no previous week to compare with, even once 48 is over.
     vi.setSystemTime(new Date("2026-11-30T09:00:00Z"));
     expect((await summary()).cards[1].readings[1]).toMatchObject({ value: 1000, delta: null, period: "Week of 23 Nov" });
     // A week that has not started cannot be the latest one.
-    await post({ year: 2026, week: 52, x: { impressions: 9 } });
+    await write(env, "/content-kpis", { year: 2026, week: 52, x: { impressions: 9 } });
     expect(await impressions()).toMatchObject({ value: 300 });
   });
 
-  it("prefers a finished week's X count over a snapshot from inside that week", () => {
+  it("marks a partial week wherever its total is shown", async () => {
+    vi.setSystemTime(new Date("2026-11-30T09:00:00Z"));
+    const env = makeEnv();
+    await write(env, "/content-kpis", { year: 2026, week: 48, x: { impressions: 21000 } });
+    const html = await (await worker.fetch(authed("/dashboard"), env)).text();
+    expect(html).toContain('<th scope="col">Week 48</th><th scope="col">Week 47<br>partial</th>');
+    expect(part(html, "platform", "x")).toContain("Week of 23 Nov<");
+  });
+
+  it("follows the newest X count through weekly writes and dated snapshots", async () => {
+    const env = makeEnv();
+    const summary = async () => summarize(await (await worker.fetch(authed("/content-kpis"), env)).json() as ReturnType<typeof seedDashboard>, new Date());
+    // The card, the line under the trend heading and the last chart point always agree.
+    const followers = async () => {
+      const { cards, trend } = await summary();
+      const [reading] = cards[0].readings;
+      expect(trend.points[trend.points.length - 1].followers).toBe(reading.value);
+      expect(trend.since?.amount).toBe((reading.value ?? 0) - 37);
+      return reading;
+    };
+    expect(await followers()).toMatchObject({ value: 60, period: "As of 24 Nov", delta: { amount: 16 } });
+    await write(env, "/content-kpis", { year: 2026, week: 48, x: { followers: 75 } });
+    expect(await followers()).toMatchObject({ value: 75, period: "This week" });
+    // Clearing that week falls back to the last dated count.
+    await write(env, "/content-kpis", { year: 2026, week: 48, x: { followers: null } });
+    expect(await followers()).toMatchObject({ value: 60, period: "As of 24 Nov" });
+    vi.setSystemTime(new Date("2026-11-30T09:00:00Z"));
+    await write(env, "/dashboard", { year: 2026, week: 48, xFollowers: 61 });
+    expect(await followers()).toMatchObject({ value: 61, period: "Week of 23 Nov", delta: { amount: 17 } });
+    expect((await summary()).trend.points.map((point) => point.label)).toEqual(["21 Nov", "23 Nov", "24 Nov", "Week 48"]);
+    vi.setSystemTime(new Date("2026-12-02T09:00:00Z"));
+    await write(env, "/content-kpis", { xNow: { followers: 80, measuredOn: "2026-12-02" } });
+    expect(await followers()).toMatchObject({ value: 80, period: "As of 2 Dec", delta: { amount: 19 } });
+    // Correcting an older week leaves the newer snapshot alone.
+    await write(env, "/content-kpis", { year: 2026, week: 48, x: { followers: 62 } });
+    expect(await followers()).toMatchObject({ value: 80, delta: { amount: 18 } });
+    await write(env, "/content-kpis", { xSeries: [{ followers: 80, measuredOn: "2026-12-01" }, { followers: 83, measuredOn: "2026-12-02" }, { followers: 90, measuredOn: "2026-12-09" }] });
+    expect(await followers()).toMatchObject({ value: 80, period: "As of 2 Dec" });
+  });
+
+  it("uses the dated snapshot from documents that also kept an older source week", () => {
     const doc = seedDashboard();
-    const week = doc.weeks.find((item) => item.week === 48);
-    if (!week) throw new Error("missing week");
-    week.x = { followers: 75, impressions: null, impressionsNote: null, likes: null, replies: null, reposts: null, bookmarks: null };
-    const followers = (now: string) => summarize(doc, new Date(now)).cards[0].readings[0];
-    expect(followers("2026-11-25T12:00:00Z")).toMatchObject({ value: 60, period: "As of 24 Nov" });
-    expect(followers("2026-11-30T09:00:00Z")).toMatchObject({ value: 75, period: "Week of 23 Nov", delta: { amount: 31 } });
+    doc.xNow = { followers: 80, measuredOn: "2026-12-02", label: "2. dec.", partOfDay: null, source: { year: 2026, week: 48 } };
+    expect(summarize(doc, new Date("2026-12-02T12:00:00Z")).cards[0].readings[0]).toMatchObject({ value: 80, period: "As of 2 Dec" });
+  });
+
+  it("does not let a week or date that has not come yet become the current X count", async () => {
+    for (const [path, body] of [
+      ["/dashboard", { year: 2026, week: 52, xFollowers: 99 }],
+      ["/content-kpis", { year: 2026, week: 52, x: { followers: 99 } }],
+      ["/content-kpis", { xNow: { followers: 99, measuredOn: "2026-12-05" } }],
+      ["/content-kpis", { xNow: { followers: 99, measuredOn: null, source: { year: 2026, week: 52 } } }],
+    ] as const) {
+      const env = makeEnv();
+      await write(env, path, body);
+      expect(part(await (await worker.fetch(authed("/dashboard"), env)).text(), "platform", "x")).toContain(">60<");
+    }
+  });
+
+  it("rejects week 53 in a year that has 52 weeks", async () => {
+    const env = makeEnv();
+    for (const [path, body] of [
+      ["/content-kpis", { year: 2027, week: 53, x: { followers: 100 } }],
+      ["/dashboard", { year: 2027, week: 53, xFollowers: 100 }],
+    ] as const) {
+      const response = await post(env, path, body);
+      expect(response.status).toBe(400);
+      expect(await response.json()).toEqual({ error: "2027 has no week 53." });
+    }
+    await write(env, "/content-kpis", { year: 2026, week: 53, x: { followers: 100 } });
+  });
+
+  it("labels a subscriber count only when it is from another week than its panel", async () => {
+    const env = makeEnv();
+    await write(env, "/content-kpis", { year: 2026, week: 48, newsletter: { subscribers: 156, openRatePercent: 50 } });
+    const panel = async () => part(await (await worker.fetch(authed("/dashboard"), env)).text(), "details", "newsletter");
+    expect(await panel()).toContain("This week so far");
+    expect(await panel()).not.toContain('class="own"');
+    vi.setSystemTime(new Date("2026-11-30T09:00:00Z"));
+    await write(env, "/content-kpis", { year: 2026, week: 49, newsletter: { subscribers: 160 } });
+    expect(await panel()).toContain('Subscribers <span class="own">This week</span>');
   });
 
   it("stores and shows every detail metric from the assistant", async () => {
@@ -447,6 +519,14 @@ function authed(path: string, init: RequestInit = {}) {
   const headers = new Headers(init.headers);
   if (!headers.has("Authorization")) headers.set("Authorization", `Bearer ${token}`);
   return new Request(`https://api.example.com${path}`, { ...init, headers });
+}
+
+function post(env: Env, path: string, body: unknown) {
+  return worker.fetch(authed(path, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }), env);
+}
+
+async function write(env: Env, path: string, body: unknown) {
+  expect((await post(env, path, body)).status).toBe(200);
 }
 
 function part(html: string, attribute: string, name: string): string {
