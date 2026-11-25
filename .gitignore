@@ -12,6 +12,7 @@ output/family-preview/
 output/playwright/
 .playwright-cli/
 .wrangler/
+.dev.vars
 
 # Own-site Fontshare asset; never redistribute through the public repository.
 /public/assets/fonts/switzer-variable.woff2

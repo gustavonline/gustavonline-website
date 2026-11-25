@@ -1,0 +1,68 @@
+{
+  "timezone": "Europe/Copenhagen",
+  "baseline": {
+    "followers": 37,
+    "measuredOn": "2026-11-21",
+    "label": "21. nov."
+  },
+  "xNow": {
+    "followers": 60,
+    "measuredOn": "2026-11-24",
+    "label": "24. nov. 2026",
+    "partOfDay": "aften"
+  },
+  "xSeries": [
+    { "measuredOn": "2026-11-21", "followers": 37 },
+    { "measuredOn": "2026-11-23", "followers": 44 },
+    { "measuredOn": "2026-11-24", "followers": 60 }
+  ],
+  "goals": {
+    "xFollowers": null,
+    "linkedinFollowers": null,
+    "newsletterSubscribers": null,
+    "youtubeSubscribers": null
+  },
+  "cadence": {
+    "label": "X op til 5/dag · LinkedIn man–tir–ons–fre",
+    "note": "Ingen opfundne post-tal. Tælles når ugen logges mandag."
+  },
+  "sourceNote": "X følger/1k er tom, fordi X nye ikke kunne beregnes. Ingen opfundne tal.",
+  "weeks": [
+    {
+      "year": 2026,
+      "week": 46,
+      "state": "empty",
+      "stateLabel": "Ingen log"
+    },
+    {
+      "year": 2026,
+      "week": 47,
+      "state": "closed",
+      "stateLabel": "Lukket",
+      "periodLabel": "16.–22. nov. 2026",
+      "footerPeriod": "16.–22. nov.",
+      "closingNote": "Uge 47 lukkede på 44 · ikke et helt ugetal",
+      "x": {
+        "followers": 44,
+        "impressions": 17119,
+        "impressionsNote": "Live fra Ugetal (Aktuel)",
+        "likes": 80,
+        "replies": 17,
+        "bookmarks": 55
+      }
+    },
+    {
+      "year": 2026,
+      "week": 48,
+      "state": "current",
+      "stateLabel": "Check-in 30. nov.",
+      "checkInLabel": "mandag 30. nov."
+    },
+    {
+      "year": 2026,
+      "week": 49,
+      "state": "upcoming",
+      "stateLabel": "—"
+    }
+  ]
+}
