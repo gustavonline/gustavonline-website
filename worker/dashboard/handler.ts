@@ -21,11 +21,11 @@ async function handlePage(request: Request, env: Env): Promise<Response> {
       const saved = new URL(request.url).searchParams.get("saved") === "1";
       return page(await readDashboard(env), request, { saved });
     } catch {
-      return privateJson({ error: "Dashboard-data kan ikke læses." }, 500);
+      return privateJson({ error: "Dashboard data cannot be read." }, 500);
     }
   }
   if (request.method !== "POST") return privateJson({ error: "Method not allowed" }, 405);
-  if (!allowsDashboardWrite(request)) return privateJson({ error: "Kunne ikke gemmes." }, 403);
+  if (!allowsDashboardWrite(request)) return privateJson({ error: "Could not save." }, 403);
   return writeMonday(request, env);
 }
 
@@ -35,16 +35,16 @@ async function handleMetrics(request: Request, env: Env): Promise<Response> {
       const body = JSON.stringify(await readDashboard(env));
       return privateJson(request.method === "HEAD" ? null : body, 200, true);
     } catch {
-      return privateJson({ error: "Dashboard-data kan ikke læses." }, 500);
+      return privateJson({ error: "Dashboard data cannot be read." }, 500);
     }
   }
   if (request.method !== "POST") return privateJson({ error: "Method not allowed" }, 405);
-  if (!allowsDashboardWrite(request)) return privateJson({ error: "Kunne ikke gemmes." }, 403);
+  if (!allowsDashboardWrite(request)) return privateJson({ error: "Could not save." }, 403);
   let payload: unknown;
   try {
     payload = await readJson(request);
   } catch (error) {
-    return privateJson({ error: error instanceof DashboardInputError ? error.message : "Ugyldig JSON." }, 400);
+    return privateJson({ error: error instanceof DashboardInputError ? error.message : "Invalid JSON." }, 400);
   }
   const result = await postStore(env, "/metrics", payload);
   if (!result.ok) return privateJson({ error: result.error }, result.status);
@@ -57,7 +57,7 @@ async function writeMonday(request: Request, env: Env): Promise<Response> {
   try {
     payload = wantsHtml ? mondayFromForm(new URLSearchParams(await readText(request))) : await readJson(request);
   } catch (error) {
-    const message = error instanceof DashboardInputError ? error.message : "Ugyldig JSON.";
+    const message = error instanceof DashboardInputError ? error.message : "Invalid JSON.";
     return wantsHtml ? page(await readOrSeed(env), request, { error: message }, 400) : privateJson({ error: message }, 400);
   }
   const result = await postStore(env, "/monday", payload);
@@ -72,7 +72,7 @@ async function readDashboard(env: Env): Promise<Dashboard> {
   const namespace = env.CONTENT_DASHBOARD;
   if (!namespace) return seedDashboard();
   const response = await namespace.get(namespace.idFromName(storeName)).fetch("https://dashboard.internal/document");
-  if (!response.ok) throw new DashboardDataError("Dashboard-data kan ikke læses.");
+  if (!response.ok) throw new DashboardDataError("Dashboard data cannot be read.");
   return response.json() as Promise<Dashboard>;
 }
 
@@ -86,7 +86,7 @@ async function readOrSeed(env: Env): Promise<Dashboard> {
 
 async function postStore(env: Env, pathname: string, payload: unknown): Promise<{ ok: true } | { ok: false; status: number; error: string }> {
   const namespace = env.CONTENT_DASHBOARD;
-  if (!namespace) return { ok: false, status: 503, error: "Dashboard-lageret er ikke konfigureret." };
+  if (!namespace) return { ok: false, status: 503, error: "Dashboard storage is not configured." };
   let response: Response;
   try {
     response = await namespace.get(namespace.idFromName(storeName)).fetch(`https://dashboard.internal${pathname}`, {
@@ -95,19 +95,19 @@ async function postStore(env: Env, pathname: string, payload: unknown): Promise<
     });
   } catch {
     console.error("dashboard_store_failed");
-    return { ok: false, status: 503, error: "Dashboard-lageret er ikke konfigureret." };
+    return { ok: false, status: 503, error: "Dashboard storage is not configured." };
   }
   if (response.ok) return { ok: true };
   const body = await response.json().catch(() => null) as { error?: unknown } | null;
-  const error = typeof body?.error === "string" ? body.error : "Kunne ikke gemmes.";
+  const error = typeof body?.error === "string" ? body.error : "Could not save.";
   return { ok: false, status: response.status === 400 ? 400 : 500, error };
 }
 
 async function readText(request: Request): Promise<string> {
   const declared = Number(request.headers.get("Content-Length") ?? "0");
-  if (Number.isFinite(declared) && declared > 32_000) throw new DashboardInputError("For stor forespørgsel.");
+  if (Number.isFinite(declared) && declared > 32_000) throw new DashboardInputError("Request is too large.");
   const text = await request.text();
-  if (text.length > 32_000) throw new DashboardInputError("For stor forespørgsel.");
+  if (text.length > 32_000) throw new DashboardInputError("Request is too large.");
   return text;
 }
 
@@ -116,7 +116,7 @@ async function readJson(request: Request): Promise<unknown> {
   try {
     return JSON.parse(text);
   } catch {
-    throw new DashboardInputError("Ugyldig JSON.");
+    throw new DashboardInputError("Invalid JSON.");
   }
 }
 

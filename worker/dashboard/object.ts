@@ -3,7 +3,6 @@
 import {
   applyMetrics,
   applyMonday,
-  DashboardDataError,
   DashboardInputError,
   parseDashboard,
   parseMetrics,
@@ -42,8 +41,7 @@ export class ContentDashboard {
         return Response.json({ error: error.message }, { status: 400 });
       }
       console.error("dashboard_data_invalid");
-      const message = error instanceof DashboardDataError ? "Dashboard-data kan ikke læses." : "Dashboard-data kan ikke læses.";
-      return Response.json({ error: message }, { status: 500 });
+      return Response.json({ error: "Dashboard data cannot be read." }, { status: 500 });
     }
   }
 
