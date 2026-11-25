@@ -244,7 +244,7 @@ export function applyMetrics(doc: Dashboard, patch: MetricsPatch, now = new Date
     // An explicit snapshot in the same update is the newer statement.
     if (patch.xNow?.followers === undefined) {
       if (typeof patch.x?.followers === "number") followWeek(next, week, patch.x.followers, now);
-      else if (patch.x === null || patch.x?.followers === null) forgetWeek(next, week);
+      else if (patch.x === null || patch.x?.followers === null) forgetWeek(next, week, now);
     }
     if (patch.linkedin === null) week.linkedin = null;
     else if (patch.linkedin) week.linkedin = { ...(week.linkedin ?? emptyLinkedIn()), ...patch.linkedin };
@@ -528,11 +528,12 @@ function followWeek(doc: Dashboard, { year, week }: DashboardWeek, followers: nu
 }
 
 // Clearing the week the current X count came from falls back to the newest count that is left.
-function forgetWeek(doc: Dashboard, { year, week }: DashboardWeek) {
-  const { source } = doc.xNow;
-  if (source?.year !== year || source.week !== week) return;
+function forgetWeek(doc: Dashboard, { year, week }: DashboardWeek, now: Date) {
+  const { measuredOn, source } = doc.xNow;
+  if (measuredOn || source?.year !== year || source.week !== week) return;
+  const today = todayIn(doc.timezone, now);
   const recorded = [...doc.weeks].reverse().find((item) => typeof item.x?.followers === "number" && weekMonday(item.year, item.week) < weekMonday(year, week));
-  const point = doc.xSeries.filter((item) => item.measuredOn !== null).sort((a, b) => (a.measuredOn as string).localeCompare(b.measuredOn as string)).pop();
+  const point = doc.xSeries.filter((item) => item.measuredOn !== null && item.measuredOn <= today).sort((a, b) => (a.measuredOn as string).localeCompare(b.measuredOn as string)).pop();
   if (point?.measuredOn && (!recorded || point.measuredOn >= addDays(weekMonday(recorded.year, recorded.week), 6))) {
     doc.xNow = { followers: point.followers, measuredOn: point.measuredOn, label: formatDate(point.measuredOn), partOfDay: null, source: null };
   } else if (recorded && typeof recorded.x?.followers === "number") {

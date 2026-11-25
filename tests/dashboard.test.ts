@@ -4,7 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { clearAccessKeyCache } from "../worker/dashboard/auth";
 import { formatCompact, formatExact, formatValue, mondayOf, todayIn, weekMonday } from "../worker/dashboard/format";
-import { isoWeek, parseDashboard, seedDashboard } from "../worker/dashboard/model";
+import { applyMetrics, isoWeek, parseDashboard, parseMetrics, seedDashboard } from "../worker/dashboard/model";
 import { summarize } from "../worker/dashboard/summary";
 import worker, { ContentDashboard } from "../worker/index";
 import type { Env } from "../worker/types";
@@ -185,7 +185,13 @@ describe("private content dashboard", () => {
   it("uses the dated snapshot from documents that also kept an older source week", () => {
     const doc = seedDashboard();
     doc.xNow = { followers: 80, measuredOn: "2026-12-02", label: "2. dec.", partOfDay: null, source: { year: 2026, week: 48 } };
-    expect(summarize(doc, new Date("2026-12-02T12:00:00Z")).cards[0].readings[0]).toMatchObject({ value: 80, period: "As of 2 Dec" });
+    const now = new Date("2026-12-02T12:00:00Z");
+    expect(summarize(doc, now).cards[0].readings[0]).toMatchObject({ value: 80, period: "As of 2 Dec" });
+    // Clearing the old source week must not touch the newer snapshot.
+    for (const x of [null, { followers: null }]) {
+      const cleared = applyMetrics(doc, parseMetrics({ year: 2026, week: 48, x }), now);
+      expect(cleared.xNow).toEqual(doc.xNow);
+    }
   });
 
   it("does not let a week or date that has not come yet become the current X count", async () => {
