@@ -3,13 +3,13 @@
   "baseline": {
     "followers": 37,
     "measuredOn": "2026-11-21",
-    "label": "21. nov."
+    "label": "21 Nov"
   },
   "xNow": {
     "followers": 60,
     "measuredOn": "2026-11-24",
-    "label": "24. nov. 2026",
-    "partOfDay": "aften"
+    "label": "24 Nov 2026",
+    "partOfDay": "evening"
   },
   "xSeries": [
     { "measuredOn": "2026-11-21", "followers": 37 },
@@ -23,29 +23,30 @@
     "youtubeSubscribers": null
   },
   "cadence": {
-    "label": "X op til 5/dag · LinkedIn man–tir–ons–fre",
-    "note": "Ingen opfundne post-tal. Tælles når ugen logges mandag."
+    "label": "X up to 5/day · LinkedIn Mon–Tue–Wed–Fri",
+    "note": "Counted when the week is recorded on Monday."
   },
-  "sourceNote": "X følger/1k er tom, fordi X nye ikke kunne beregnes. Ingen opfundne tal.",
+  "sourceNote": "X followers per 1K is empty because new X followers could not be calculated.",
   "weeks": [
     {
       "year": 2026,
       "week": 46,
       "state": "empty",
-      "stateLabel": "Ingen log"
+      "stateLabel": "No log"
     },
     {
       "year": 2026,
       "week": 47,
       "state": "closed",
-      "stateLabel": "Lukket",
-      "periodLabel": "16.–22. nov. 2026",
-      "footerPeriod": "16.–22. nov.",
-      "closingNote": "Uge 47 lukkede på 44 · ikke et helt ugetal",
+      "stateLabel": "Closed",
+      "periodLabel": "16–22 Nov 2026",
+      "footerPeriod": "16–22 Nov",
+      "closingNote": "Week 47 closed at 44 · not a full weekly figure",
+      "partial": true,
       "x": {
         "followers": 44,
         "impressions": 17119,
-        "impressionsNote": "Live fra Ugetal (Aktuel)",
+        "impressionsNote": "Live from the weekly numbers (current)",
         "likes": 80,
         "replies": 17,
         "bookmarks": 55
@@ -55,8 +56,8 @@
       "year": 2026,
       "week": 48,
       "state": "current",
-      "stateLabel": "Check-in 30. nov.",
-      "checkInLabel": "mandag 30. nov."
+      "stateLabel": "Check-in 30 Nov",
+      "checkInLabel": "Monday 30 Nov"
     },
     {
       "year": 2026,

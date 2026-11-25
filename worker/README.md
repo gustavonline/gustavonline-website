@@ -6,7 +6,7 @@ The frontend remains on GitHub Pages. This Worker owns:
 - `GET /posts`: public metadata; `?format=newsletter` selects the Bookshelf.
 - `GET /notes/:slug`: render a public newsletter edition from Notion.
 - A 15-minute cron: prepare **Kit drafts only** for published editions.
-- `GET` and `POST /dashboard`: private content KPI page and Monday log. `404` without Cloudflare Access or `DASHBOARD_TOKEN`.
+- `GET` and `POST /dashboard`: private content KPI page and weekly count write. `404` without Cloudflare Access or `DASHBOARD_TOKEN`.
 - `GET` and `POST /content-kpis`: the same private document for the assistant. `POST /dashboard/metrics` is the same write.
 
 Kit owns delivery, unsubscribe links and subscriber sync. Gustav reviews and
@@ -78,15 +78,35 @@ losing a response must not create a second broadcast.
 
 The page renders `content/dashboard/content-kpis.json` until the `ContentDashboard` Durable Object has saved a document. After the first Monday save or assistant update, the Durable Object wins. The seed file stays the starting point for a new store. Do not put measured numbers in the seed unless they were actually counted.
 
-Monday form, `POST /dashboard` (JSON or a normal form post), accepts only:
+The page is read-only and in English:
+
+- **Overview**: one card each for X, LinkedIn, YouTube and the newsletter. Followers or subscribers is the latest count (for X the newest of the recorded weeks, `xNow` and `xSeries`); views or impressions is the latest week that has one.
+- **Platform details**: the latest week with engagement numbers, per platform.
+- **Monday review**: always the previous Monday–Sunday week in the document's timezone, next to the week before it.
+
+Weeks come from the ISO `year` and `week` and the current date, not from `state`. A change is shown only when the week directly before has the same number; weekly totals are not compared while a week is running or when either week is `partial`. A missing number reads `No data yet`. Labels, notes, cadence and other free text stay in the document and the API, but the page does not print them: documents saved before the page was English hold Danish text.
+
+The page does not call X, LinkedIn, YouTube or Kit. It shows what has been written to the document.
+
+Weekly counts, `POST /dashboard` (JSON or a normal form post), accepts only:
 
 ```json
 { "year": 2026, "week": 48, "xFollowers": 60 }
 ```
 
-Omit a number to leave it unchanged. `0` is a real zero. At least one of the four counts is required. Those four are the goal metrics: X followers, LinkedIn followers, newsletter subscribers, YouTube subscribers. The form does not accept impressions, likes, replies, bookmarks, opens, clicks, or watch time.
+Omit a number to leave it unchanged. `0` is a real zero. At least one of the four counts is required. Those four are the goal metrics: X followers, LinkedIn followers, newsletter subscribers, YouTube subscribers. This write does not accept any other metric; use the assistant update.
 
-Assistant updates use the same document. Prefer `POST /content-kpis` once Access is limited to `/dashboard`, so the login wall does not sit in front of the token. `POST /dashboard/metrics` is the same write. `GET /content-kpis` returns the current document. Send only keys you are changing. `null` clears a metric. Unknown keys are rejected. `openRatePercent` is `0`–`100`. `watchTimeHours` is hours. Example, which changes nothing measured:
+Assistant updates use the same document. Prefer `POST /content-kpis` once Access is limited to `/dashboard`, so the login wall does not sit in front of the token. `POST /dashboard/metrics` is the same write. `GET /content-kpis` returns the current document. Send only keys you are changing. `null` clears a metric. A weekly `x.followers` also moves `xNow`, unless `xNow` is from a later week or the week has not started; a dated `xNow` replaces the week it came from. Unknown keys are rejected. `openRatePercent` and `clickRatePercent` are `0`–`100`. `watchTimeHours` is hours. `partial: true` marks a week that was not counted in full.
+
+| Key | Metrics |
+| --- | --- |
+| `x` | `followers`, `impressions`, `likes`, `replies`, `reposts`, `bookmarks` |
+| `linkedin` | `followers`, `impressions`, `reactions`, `comments`, `reposts` |
+| `youtube` | `subscribers`, `views`, `watchTimeHours`, `likes`, `comments`, `subscribersGained` |
+| `newsletter` | `subscribers`, `opens`, `openRatePercent`, `clicks`, `clickRatePercent` |
+| `goals` | `xFollowers`, `linkedinFollowers`, `newsletterSubscribers`, `youtubeSubscribers` |
+
+Example, which changes nothing measured:
 
 ```json
 { "year": 2026, "week": 48, "linkedin": { "impressions": null }, "goals": { "xFollowers": null } }

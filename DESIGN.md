@@ -1,5 +1,14 @@
 # Portfolio design
 
+## Content dashboard · 25 November 2026
+
+The private `/dashboard` page uses the site tokens: Figtree, `#f5f6f5` background,
+flat white panels, 1px borders and a 3px radius, in light and dark. Orange appears
+only on the brand dot and the last chart point. Each platform has the same
+card: followers or subscribers first, then views or impressions. Numbers are compact
+(`1.2K`) with the exact value as a tooltip. Missing numbers read “No data yet” in
+muted text; there are no input boxes. Cards go from four columns to two to one.
+
 ## Newsletter shelf · 23 November 2026
 
 The Bookshelf is an original CSS 3D implementation inspired by the interaction
