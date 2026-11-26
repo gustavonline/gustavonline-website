@@ -10,14 +10,14 @@ const pages = [
     title: "gustavonline | Gustav Anderson",
     description: "I help you organize your data and context so AI can do useful work. Projects, notes and experiments by Gustav Anderson.",
     lastmod: "2026-11-22",
-    body: `<section><h1>Gustav Anderson</h1><p>Founder</p><h2>See what I’m building. Take what’s useful.</h2><p>I work with data, AI and software and share what I learn along the way.</p><h2>Current work</h2><ul><li><a href="https://onlinesourdough.com/">onlinesourdough</a> — my online menu for building tools and workflows with AI in your business.</li><li><a href="https://arcitai.com/">Arc’IT AI</a> — data and AI solutions built around your team.</li><li><a href="/newsletter/">Newsletter</a> — ideas and lessons from my projects.</li></ul><h2>Find me</h2><ul><li><a href="https://www.youtube.com/@gustavonline">YouTube</a></li><li><a href="https://www.linkedin.com/in/gustavandersonn/">LinkedIn</a></li><li><a href="https://x.com/_gustavonline">X</a></li><li><a href="https://github.com/gustavonline">GitHub</a></li></ul></section>`,
+    body: `<section><h1>Gustav Anderson</h1><p>Founder</p><h2>See what I am building. Take what is useful.</h2><p>I work with data, AI and software and share what I learn along the way.</p><h2>Current work</h2><ul><li><a href="https://onlinesourdough.com/">onlinesourdough</a> — my online menu for building tools and workflows with AI in your business.</li><li><a href="https://arcitai.com/">Arc’IT AI</a> — data and AI solutions built around your team.</li><li><a href="/newsletter/">Newsletter</a> — ideas and lessons from my projects.</li></ul><h2>Find me</h2><ul><li><a href="https://www.youtube.com/@gustavonline">YouTube</a></li><li><a href="https://www.linkedin.com/in/gustavandersonn/">LinkedIn</a></li><li><a href="https://x.com/gustavonline">X</a></li><li><a href="https://github.com/gustavonline">GitHub</a></li></ul></section>`,
   },
   {
     path: "newsletter",
     title: "Newsletter | gustavonline",
     description: "Notes and ideas from putting data, AI and software to work. By Gustav Anderson.",
     lastmod: "2026-11-22",
-    body: `<section><h1>Notes from the work</h1><p>A newsletter by Gustav Anderson. Get ideas and lessons from my projects with data, AI and software. Take what fits the work you’re doing.</p><p><a href="/">Back to Gustav Anderson’s work</a></p><p>Explore <a href="https://onlinesourdough.com/">onlinesourdough</a> and <a href="https://arcitai.com/">Arc’IT AI</a>.</p></section>`,
+    body: `<section><h1>Notes from the work</h1><p>A newsletter by Gustav Anderson. Get ideas and lessons from my projects with data, AI and software. Take what fits the work you are doing.</p><p><a href="/">Back to Gustav Anderson’s work</a></p><p>Explore <a href="https://onlinesourdough.com/">onlinesourdough</a> and <a href="https://arcitai.com/">Arc’IT AI</a>.</p></section>`,
   },
   {
     path: "newsletter/thank-you",
@@ -148,7 +148,7 @@ function jsonLd(url, page) {
       "@type": "Person", "@id": personId, name: "Gustav Anderson",
       alternateName: ["gustavonline", "Gustav Online"], url: `${origin}/`,
       email: "hello@gustavonline.com", jobTitle: "Founder",
-      sameAs: ["https://www.youtube.com/@gustavonline", "https://www.linkedin.com/in/gustavandersonn/", "https://x.com/_gustavonline", "https://github.com/gustavonline"],
+      sameAs: ["https://www.youtube.com/@gustavonline", "https://www.linkedin.com/in/gustavandersonn/", "https://x.com/gustavonline", "https://github.com/gustavonline"],
       worksFor: [{ "@id": onlinesourdoughId }, { "@id": arcitId }],
     },
     {

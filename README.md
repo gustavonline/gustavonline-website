@@ -1,6 +1,6 @@
 # Gustav Anderson
 
-I'm Gustav, a founder working with data, AI and software.
+I am Gustav, a founder working with data, AI and software.
 
 Gustav Online brings together my projects, ideas and experiments, including the thinking behind onlinesourdough and Arc’IT AI.
 

@@ -218,4 +218,4 @@ and when the window grows past 760px. The panel scrolls within
 
 Public sharing uses the 1200×630 same-origin social-preview.png, with outlined
 brand fonts and the approved marks. Social links use YouTube, LinkedIn, X
-(@_gustavonline) and GitHub; Instagram is removed by the owner’s instruction.
+(@gustavonline) and GitHub; Instagram is removed by the owner’s instruction.

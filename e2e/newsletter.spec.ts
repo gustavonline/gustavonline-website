@@ -59,7 +59,7 @@ test(`signup from ${entry} confirms beside the visible bookshelf`, async ({ page
   await page.getByRole("textbox", { name: "Email address" }).fill("reader@example.com");
   await page.getByRole("button", { name: "Subscribe", exact: true }).click();
   await expect(page).toHaveURL("https://gustavonline.com/newsletter#bookshelf");
-  await expect(page.getByRole("status").filter({ hasText: "You’re on the list" })).toBeInViewport();
+  await expect(page.getByRole("status").filter({ hasText: "You are on the list" })).toBeInViewport();
   await expect(page.getByRole("button", { name: "Subscribe", exact: true })).toBeEnabled();
   await expect(page.getByRole("textbox", { name: "Email address" })).toHaveValue("");
   await expect(page.locator(".family-signup")).toHaveAttribute("aria-busy", "false");
@@ -85,7 +85,7 @@ test("successful signup is acknowledged even when session storage is unavailable
   await page.goto("/newsletter");
   await page.getByRole("textbox", { name: "Email address" }).fill("reader@example.com");
   await page.getByRole("button", { name: "Subscribe", exact: true }).click();
-  await expect(page.getByRole("status").filter({ hasText: "You’re on the list" })).toBeInViewport();
+  await expect(page.getByRole("status").filter({ hasText: "You are on the list" })).toBeInViewport();
   await expect(page.getByRole("button", { name: "Subscribe", exact: true })).toBeEnabled();
 });
 
@@ -96,14 +96,14 @@ test("a failed acknowledgement retains the email and shows no success", async ({
   await page.getByRole("button", { name: "Subscribe", exact: true }).click();
   await expect(page.getByRole("status").filter({ hasText: "could not be completed" })).toBeVisible();
   await expect(page.getByRole("textbox", { name: "Email address" })).toHaveValue("reader@example.com");
-  await expect(page.getByText("You’re on the list.", { exact: false })).toHaveCount(0);
+  await expect(page.getByText("You are on the list.", { exact: false })).toHaveCount(0);
 });
 
 test("a failed second signup keeps its error in view", async ({ page }) => {
   await page.goto("/newsletter");
   await page.getByRole("textbox", { name: "Email address" }).fill("reader@example.com");
   await page.getByRole("button", { name: "Subscribe", exact: true }).click();
-  await expect(page.getByRole("status").filter({ hasText: "You’re on the list" })).toBeInViewport();
+  await expect(page.getByRole("status").filter({ hasText: "You are on the list" })).toBeInViewport();
   await page.route(`${api}/newsletter`, (route) => route.fulfill({ status: 502, json: { error: "Unavailable" } }));
   await page.getByRole("textbox", { name: "Email address" }).fill("reader@example.com");
   await page.getByRole("button", { name: "Subscribe", exact: true }).click();
@@ -115,7 +115,7 @@ test("the old thank-you URL returns to the shelf without inventing a receipt", a
   await page.goto("/newsletter/thank-you/");
   await expect(page).toHaveURL("https://gustavonline.com/newsletter#bookshelf");
   await expect(page.getByRole("heading", { name: "The Bookshelf", exact: true })).toBeInViewport();
-  await expect(page.getByText("You’re on the list.", { exact: false })).toHaveCount(0);
+  await expect(page.getByText("You are on the list.", { exact: false })).toHaveCount(0);
 });
 
 test("the rendered issue is readable and links back to the Bookshelf", async ({ page }, testInfo) => {

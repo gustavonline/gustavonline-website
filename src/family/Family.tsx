@@ -10,7 +10,7 @@ import { siteData } from "../site-data";
 const labels = { onlinesourdough: "onlinesourdough", arcitai: "Arc’IT AI", gustavonline: "gustavonline" };
 const social = [
   ["YouTube", "https://www.youtube.com/@gustavonline", "youtube"],
-  ["X", "https://x.com/_gustavonline", "x"],
+  ["X", "https://x.com/gustavonline", "x"],
   ["LinkedIn", "https://www.linkedin.com/in/gustavandersonn/", "linkedin"],
   ["GitHub", "https://github.com/gustavonline", "github"],
 ];
@@ -81,8 +81,8 @@ export function NewsletterContent({ brand, children }: { brand: FamilyBrand; chi
   };
   if (thanks && brand === "gustavonline") return null;
   if (thanks && brand !== "gustavonline") return <section className="family-newsletter family-thanks">
-    <h1>{subscribed ? "You’re on the list" : "Notes from the work"}</h1>
-    <p>{subscribed ? "You’ll hear from Gustav when the next note is ready." : "Sign up to receive the next note from Gustav."}</p>
+    <h1>{subscribed ? "You are on the list" : "Notes from the work"}</h1>
+    <p>{subscribed ? "You will hear from Gustav when the next note is ready." : "Sign up to receive the next note from Gustav."}</p>
     <a className="family-button" href={subscribed ? "/" : "/newsletter"}>
       {subscribed ? (brand === "onlinesourdough" ? "Explore the menu" : `Back to ${labels[brand]}`) : "Subscribe"} <span aria-hidden="true"><ArrowIcon /></span>
     </a>
