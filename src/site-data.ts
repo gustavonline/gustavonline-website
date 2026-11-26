@@ -23,7 +23,7 @@ export const siteData = {
   },
   profile: {
     role: "Founder",
-    headline: "See what I’m building. Take what’s useful.",
+    headline: "See what I am building. Take what is useful.",
     intro:
       "I work with data, AI and software and share what I learn along the way.",
   },
@@ -33,7 +33,7 @@ export const siteData = {
   },
   newsletter: {
     label: "Notes from the work",
-    support: "Get ideas and lessons from my projects with data, AI and software. Take what fits the work you’re doing.",
+    support: "Get ideas and lessons from my projects with data, AI and software. Take what fits the work you are doing.",
     submitLabel: "Join free",
     placeholder: "Email address",
     loading: "Submitting...",
@@ -111,13 +111,13 @@ export const siteData = {
     ],
     social: [
       { label: "YouTube", href: "https://www.youtube.com/@gustavonline", icon: "youtube" },
-      { label: "X", href: "https://x.com/_gustavonline", icon: "x" },
+      { label: "X", href: "https://x.com/gustavonline", icon: "x" },
       { label: "LinkedIn", href: "https://www.linkedin.com/in/gustavandersonn/", icon: "linkedin" },
       { label: "GitHub", href: "https://github.com/gustavonline", icon: "github" },
     ],
     footerSocial: [
       { label: "YouTube", href: "https://www.youtube.com/@gustavonline", icon: "youtube" },
-      { label: "X", href: "https://x.com/_gustavonline", icon: "x" },
+      { label: "X", href: "https://x.com/gustavonline", icon: "x" },
       { label: "LinkedIn", href: "https://www.linkedin.com/in/gustavandersonn/", icon: "linkedin" },
       { label: "GitHub", href: "https://github.com/gustavonline", icon: "github" },
     ],
